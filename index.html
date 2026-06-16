@@ -13,338 +13,190 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --gold:    #F59E0B;
-      --amber:   #F97316;
-      --coral:   #FB7185;
-      --rose:    #F43F5E;
-      --peach:   #FED7AA;
-      --blush:   #FECACA;
-      --purple:  #C084FC;
-      --dusk:    #A855F7;
-      --bg:      #FFFFFF;
-      --bg2:     #FFF8F0;
-      --bg3:     #FFF1E6;
-      --text:    #1C1917;
-      --text2:   #78716C;
-      --text3:   #A8A29E;
-      --border:  rgba(249,115,22,0.15);
-      --border2: rgba(249,115,22,0.25);
-      --radius:  14px;
-      --radius-sm: 8px;
+      --gold:#F59E0B; --amber:#F97316; --coral:#FB7185; --rose:#F43F5E;
+      --peach:#FED7AA; --blush:#FECACA; --purple:#C084FC; --dusk:#A855F7;
+      --teal:#0D9488; --green:#16A34A;
+      --bg:#FFFFFF; --bg2:#FFF8F0; --bg3:#FFF1E6;
+      --text:#1C1917; --text2:#78716C; --text3:#A8A29E;
+      --border:rgba(249,115,22,0.15); --border2:rgba(249,115,22,0.25);
+      --radius:14px; --radius-sm:8px;
     }
+    html,body { height:100%; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
 
-    html, body {
-      height: 100%;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      overflow-x: hidden;
-    }
+    /* SPLASH */
+    #splash { position:fixed; inset:0; z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(180deg,#fff8f0 0%,#fff1e6 60%,#fde8d0 100%); transition:opacity 0.8s ease,transform 0.8s ease; }
+    #splash.hidden { opacity:0; pointer-events:none; transform:scale(1.04); }
+    .sun-wrap { position:relative; width:180px; height:180px; margin-bottom:40px; animation:rise 1.4s cubic-bezier(0.34,1.56,0.64,1) forwards; }
+    @keyframes rise { from{transform:translateY(60px);opacity:0} to{transform:translateY(0);opacity:1} }
+    .sun { position:absolute; inset:20px; border-radius:50%; background:radial-gradient(circle at 40% 40%,#FDE68A,#F59E0B 50%,#EA580C); animation:pulse 3s ease-in-out infinite; }
+    @keyframes pulse { 0%,100%{box-shadow:0 0 40px 10px rgba(245,158,11,0.3),0 0 80px 20px rgba(251,146,60,0.15)} 50%{box-shadow:0 0 60px 20px rgba(245,158,11,0.45),0 0 120px 40px rgba(251,146,60,0.2)} }
+    .rays { position:absolute; inset:0; animation:spin-rays 20s linear infinite; }
+    @keyframes spin-rays { to{transform:rotate(360deg)} }
+    .ray { position:absolute; left:50%; top:50%; width:3px; border-radius:2px; background:linear-gradient(to top,rgba(245,158,11,0.6),transparent); transform-origin:bottom center; }
+    .horizon { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:220px; height:2px; background:linear-gradient(90deg,transparent,rgba(249,115,22,0.4),transparent); }
+    .splash-title { font-size:32px; font-weight:300; letter-spacing:0.04em; color:var(--text); animation:fade-up 1s 0.4s both; }
+    .splash-sub { font-size:15px; color:var(--text2); margin-top:8px; animation:fade-up 1s 0.6s both; }
+    @keyframes fade-up { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+    .enter-btn { margin-top:48px; padding:14px 40px; border-radius:50px; border:none; background:linear-gradient(135deg,#F59E0B,#F97316,#FB7185); color:white; font-size:16px; font-weight:500; letter-spacing:0.03em; cursor:pointer; animation:fade-up 1s 0.9s both; box-shadow:0 8px 32px rgba(249,115,22,0.35); transition:transform 0.15s,box-shadow 0.15s; }
+    .enter-btn:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(249,115,22,0.45); }
+    .enter-btn:active { transform:scale(0.97); }
 
-    /* ── SPLASH ─────────────────────────────────── */
-    #splash {
-      position: fixed; inset: 0; z-index: 100;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      background: linear-gradient(180deg, #fff8f0 0%, #fff1e6 60%, #fde8d0 100%);
-      transition: opacity 0.8s ease, transform 0.8s ease;
-    }
-    #splash.hidden { opacity: 0; pointer-events: none; transform: scale(1.04); }
+    /* BACKGROUND */
+    #affirmations-bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
+    .aff-word { position:absolute; font-size:13px; color:rgba(249,115,22,0.07); white-space:nowrap; animation:drift linear infinite; font-style:italic; }
+    @keyframes drift { from{transform:translateY(100vh)} to{transform:translateY(-120px)} }
 
-    .sun-wrap {
-      position: relative; width: 180px; height: 180px; margin-bottom: 40px;
-      animation: rise 1.4s cubic-bezier(0.34,1.56,0.64,1) forwards;
-    }
+    /* APP */
+    #app { position:relative; z-index:1; max-width:680px; margin:0 auto; padding:0 0 100px; opacity:0; transition:opacity 0.6s ease; display:none; }
+    #app.visible { opacity:1; }
 
-    @keyframes rise {
-      from { transform: translateY(60px); opacity: 0; }
-      to   { transform: translateY(0);    opacity: 1; }
-    }
+    .app-header { padding:56px 20px 20px; background:linear-gradient(180deg,#fff8f0 0%,rgba(255,248,240,0) 100%); }
+    .app-date { font-size:13px; color:var(--text3); letter-spacing:0.05em; text-transform:uppercase; margin-bottom:4px; }
+    .app-greeting { font-size:26px; font-weight:400; color:var(--text); line-height:1.2; }
+    .app-greeting span { background:linear-gradient(90deg,#F59E0B,#F97316,#FB7185); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
 
-    .sun {
-      position: absolute; inset: 20px;
-      border-radius: 50%;
-      background: radial-gradient(circle at 40% 40%, #FDE68A, #F59E0B 50%, #EA580C);
-      animation: pulse 3s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%,100% { box-shadow: 0 0 40px 10px rgba(245,158,11,0.3), 0 0 80px 20px rgba(251,146,60,0.15); }
-      50%      { box-shadow: 0 0 60px 20px rgba(245,158,11,0.45), 0 0 120px 40px rgba(251,146,60,0.2); }
-    }
+    .day-progress { margin:0 20px 20px; }
+    .progress-label { display:flex; justify-content:space-between; font-size:12px; color:var(--text3); margin-bottom:6px; }
+    .progress-track { height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+    .progress-fill { height:100%; border-radius:3px; background:linear-gradient(90deg,#F59E0B,#F97316,#FB7185); transition:width 0.5s ease; }
 
-    .rays {
-      position: absolute; inset: 0;
-      animation: spin-rays 20s linear infinite;
-    }
-    @keyframes spin-rays { to { transform: rotate(360deg); } }
+    .sections { padding:0 16px; display:flex; flex-direction:column; gap:14px; }
 
-    .ray {
-      position: absolute; left: 50%; top: 50%;
-      width: 3px; border-radius: 2px;
-      background: linear-gradient(to top, rgba(245,158,11,0.6), transparent);
-      transform-origin: bottom center;
-    }
+    .section-card { background:var(--bg); border:0.5px solid var(--border2); border-radius:var(--radius); overflow:hidden; }
+    .section-header { display:flex; align-items:center; gap:12px; padding:16px 18px; cursor:pointer; user-select:none; }
+    .section-icon { width:36px; height:36px; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+    .icon-sport  { background:linear-gradient(135deg,#FDE68A,#F59E0B); color:#92400E; }
+    .icon-work   { background:linear-gradient(135deg,#FED7AA,#F97316); color:#7C2D12; }
+    .icon-social { background:linear-gradient(135deg,#FECACA,#FB7185); color:#881337; }
+    .icon-daily  { background:linear-gradient(135deg,#F5D0FE,#C084FC); color:#581C87; }
+    .section-title { flex:1; font-size:16px; font-weight:500; color:var(--text); }
+    .section-count { font-size:12px; color:var(--text3); }
+    .section-chevron { font-size:16px; color:var(--text3); transition:transform 0.25s; }
+    .section-card.open .section-chevron { transform:rotate(180deg); }
+    .section-body { display:none; }
+    .section-card.open .section-body { display:block; }
 
-    .horizon {
-      position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
-      width: 220px; height: 2px;
-      background: linear-gradient(90deg, transparent, rgba(249,115,22,0.4), transparent);
-    }
+    /* sport sub-tabs */
+    .sub-tabs { display:flex; gap:0; border-bottom:0.5px solid var(--border2); }
+    .sub-tab { flex:1; padding:10px 4px; text-align:center; font-size:12px; color:var(--text3); cursor:pointer; border:none; background:none; border-bottom:2px solid transparent; transition:all 0.15s; }
+    .sub-tab.active { color:#F97316; border-bottom-color:#F97316; font-weight:500; }
 
-    .splash-title {
-      font-size: 32px; font-weight: 300; letter-spacing: 0.04em;
-      color: var(--text);
-      animation: fade-up 1s 0.4s both;
-    }
-    .splash-sub {
-      font-size: 15px; color: var(--text2); margin-top: 8px;
-      animation: fade-up 1s 0.6s both;
-    }
-    @keyframes fade-up {
-      from { opacity: 0; transform: translateY(12px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
+    .sub-panel { display:none; padding:16px 18px 14px; }
+    .sub-panel.active { display:block; }
 
-    .enter-btn {
-      margin-top: 48px;
-      padding: 14px 40px;
-      border-radius: 50px;
-      border: none;
-      background: linear-gradient(135deg, #F59E0B, #F97316, #FB7185);
-      color: white;
-      font-size: 16px;
-      font-weight: 500;
-      letter-spacing: 0.03em;
-      cursor: pointer;
-      animation: fade-up 1s 0.9s both;
-      box-shadow: 0 8px 32px rgba(249,115,22,0.35);
-      transition: transform 0.15s, box-shadow 0.15s;
-    }
-    .enter-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(249,115,22,0.45); }
-    .enter-btn:active { transform: scale(0.97); }
+    /* tasks */
+    .task-list { list-style:none; }
+    .task-item { display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:0.5px solid var(--border); }
+    .task-item:last-child { border-bottom:none; }
+    .task-cb { width:22px; height:22px; border-radius:50%; border:1.5px solid var(--border2); cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; background:transparent; }
+    .task-cb.done { background:linear-gradient(135deg,#F59E0B,#F97316); border-color:transparent; }
+    .task-cb.done::after { content:''; width:5px; height:9px; border:1.5px solid white; border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px); display:block; }
+    .task-cb.habit { border-color:#C084FC; }
+    .task-cb.habit.done { background:linear-gradient(135deg,#C084FC,#A855F7); }
+    .task-text { flex:1; font-size:15px; color:var(--text); }
+    .task-text.done { text-decoration:line-through; color:var(--text3); }
+    .daily-badge { font-size:10px; padding:2px 7px; border-radius:10px; background:#F5D0FE; color:#7E22CE; }
+    .task-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; opacity:0; transition:opacity 0.15s; }
+    .task-item:hover .task-del { opacity:1; }
 
-    /* ── BACKGROUND AFFIRMATIONS ─────────────────── */
-    #affirmations-bg {
-      position: fixed; inset: 0; z-index: 0;
-      overflow: hidden; pointer-events: none;
-    }
-    .aff-word {
-      position: absolute;
-      font-size: 13px; font-weight: 400;
-      color: rgba(249,115,22,0.08);
-      white-space: nowrap;
-      animation: drift linear infinite;
-      font-style: italic;
-    }
-    @keyframes drift {
-      from { transform: translateY(100vh); }
-      to   { transform: translateY(-120px); }
-    }
+    .add-row { display:flex; gap:8px; margin-top:10px; }
+    .add-row input,
+    .add-row select { flex:1; padding:9px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text); font-size:14px; outline:none; font-family:inherit; }
+    .add-row input:focus,.add-row select:focus { border-color:#F97316; }
+    .add-row input::placeholder { color:var(--text3); }
+    .add-row button { padding:9px 14px; border-radius:var(--radius-sm); background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border:none; font-size:14px; cursor:pointer; white-space:nowrap; }
 
-    /* ── MAIN APP ────────────────────────────────── */
-    #app {
-      position: relative; z-index: 1;
-      max-width: 680px; margin: 0 auto;
-      padding: 0 0 100px;
-      opacity: 0; transition: opacity 0.6s ease;
-    }
-    #app.visible { opacity: 1; }
+    /* run training card */
+    .training-card { background:linear-gradient(135deg,#fff8f0,#fff1e6); border:0.5px solid var(--border2); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
+    .training-day-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text3); margin-bottom:8px; }
+    .training-option { background:var(--bg); border:0.5px solid var(--border2); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
+    .training-option:last-child { margin-bottom:0; }
+    .option-label { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
+    .option-tag { font-size:10px; padding:2px 8px; border-radius:10px; font-weight:500; }
+    .tag-a { background:#FDE68A; color:#92400E; }
+    .tag-b { background:#DBEAFE; color:#1E40AF; }
+    .tag-c { background:#DCF5DC; color:#14532D; }
+    .option-title { font-size:14px; font-weight:500; color:var(--text); }
+    .option-detail { font-size:13px; color:var(--text2); margin-top:2px; }
+    .option-rationale { font-size:12px; color:var(--text3); margin-top:4px; font-style:italic; }
+    .tip-box { background:var(--bg2); border-left:3px solid #F97316; border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:10px 14px; margin-top:12px; font-size:13px; color:var(--text2); line-height:1.5; }
 
-    /* header */
-    .app-header {
-      padding: 56px 20px 24px;
-      background: linear-gradient(180deg, #fff8f0 0%, rgba(255,248,240,0) 100%);
-    }
-    .app-date { font-size: 13px; color: var(--text3); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
-    .app-greeting { font-size: 26px; font-weight: 400; color: var(--text); line-height: 1.2; }
-    .app-greeting span { background: linear-gradient(90deg, #F59E0B, #F97316, #FB7185); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+    /* run log form */
+    .log-form { display:flex; flex-direction:column; gap:10px; }
+    .form-row { display:flex; gap:8px; }
+    .form-row input,.form-row select,.log-form input,.log-form select,.log-form textarea { width:100%; padding:9px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text); font-size:14px; outline:none; font-family:inherit; }
+    .form-row input:focus,.form-row select:focus,.log-form input:focus,.log-form select:focus,.log-form textarea:focus { border-color:#F97316; }
+    .form-row input::placeholder,.log-form input::placeholder,.log-form textarea::placeholder { color:var(--text3); }
+    .form-row input { flex:1; }
+    .log-form textarea { min-height:60px; resize:vertical; }
+    .form-label { font-size:11px; color:var(--text3); margin-bottom:2px; font-weight:500; text-transform:uppercase; letter-spacing:0.04em; }
+    .submit-btn { padding:11px; border-radius:var(--radius-sm); background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border:none; font-size:15px; font-weight:500; cursor:pointer; }
+    .effort-row { display:flex; gap:6px; }
+    .effort-btn { flex:1; padding:8px 4px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text2); font-size:12px; cursor:pointer; text-align:center; transition:all 0.15s; }
+    .effort-btn.selected { background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border-color:transparent; }
 
-    /* progress bar */
-    .day-progress { margin: 0 20px 24px; }
-    .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--text3); margin-bottom: 6px; }
-    .progress-track { height: 6px; background: var(--bg3); border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, #F59E0B, #F97316, #FB7185); transition: width 0.5s ease; }
+    /* run history */
+    .run-entry { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
+    .run-entry-top { display:flex; justify-content:space-between; align-items:flex-start; }
+    .run-date { font-size:12px; color:var(--text3); }
+    .run-type-badge { font-size:10px; padding:2px 8px; border-radius:10px; }
+    .type-easy { background:#DBEAFE; color:#1E40AF; }
+    .type-intervals { background:#FDE68A; color:#92400E; }
+    .type-tempo { background:#FECACA; color:#881337; }
+    .type-long { background:#DCF5DC; color:#14532D; }
+    .type-race { background:#F5D0FE; color:#7E22CE; }
+    .type-club { background:#FED7AA; color:#7C2D12; }
+    .run-stats { display:flex; gap:16px; margin-top:6px; }
+    .run-stat { text-align:center; }
+    .run-stat-val { font-size:18px; font-weight:500; color:var(--text); }
+    .run-stat-label { font-size:10px; color:var(--text3); }
+    .run-notes { font-size:13px; color:var(--text2); margin-top:6px; font-style:italic; }
+    .run-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; }
 
-    /* sections */
-    .sections { padding: 0 16px; display: flex; flex-direction: column; gap: 14px; }
-
-    .section-card {
-      background: var(--bg);
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: box-shadow 0.2s;
-    }
-    .section-card:hover { box-shadow: 0 4px 24px rgba(249,115,22,0.08); }
-
-    .section-header {
-      display: flex; align-items: center; gap: 12px;
-      padding: 16px 18px; cursor: pointer;
-      user-select: none;
-    }
-
-    .section-icon {
-      width: 36px; height: 36px; border-radius: 10px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
-    }
-    .icon-sport  { background: linear-gradient(135deg, #FDE68A, #F59E0B); color: #92400E; }
-    .icon-work   { background: linear-gradient(135deg, #FED7AA, #F97316); color: #7C2D12; }
-    .icon-social { background: linear-gradient(135deg, #FECACA, #FB7185); color: #881337; }
-    .icon-daily  { background: linear-gradient(135deg, #F5D0FE, #C084FC); color: #581C87; }
-
-    .section-title { flex: 1; font-size: 16px; font-weight: 500; color: var(--text); }
-    .section-count { font-size: 12px; color: var(--text3); }
-    .section-chevron { font-size: 16px; color: var(--text3); transition: transform 0.25s; }
-    .section-card.open .section-chevron { transform: rotate(180deg); }
-
-    .section-body { display: none; padding: 0 18px 14px; }
-    .section-card.open .section-body { display: block; }
-
-    .task-list { list-style: none; }
-    .task-item {
-      display: flex; align-items: center; gap: 12px;
-      padding: 10px 0;
-      border-bottom: 0.5px solid var(--border);
-    }
-    .task-item:last-child { border-bottom: none; }
-
-    .task-cb {
-      width: 22px; height: 22px; border-radius: 50%;
-      border: 1.5px solid var(--border2);
-      cursor: pointer; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.2s; background: transparent;
-    }
-    .task-cb.done {
-      background: linear-gradient(135deg, #F59E0B, #F97316);
-      border-color: transparent;
-    }
-    .task-cb.done::after {
-      content: ''; width: 5px; height: 9px;
-      border: 1.5px solid white; border-top: none; border-left: none;
-      transform: rotate(45deg) translateY(-1px); display: block;
-    }
-    .task-cb.habit { border-color: #C084FC; }
-    .task-cb.habit.done { background: linear-gradient(135deg, #C084FC, #A855F7); }
-
-    .task-text { flex: 1; font-size: 15px; color: var(--text); }
-    .task-text.done { text-decoration: line-through; color: var(--text3); }
-    .daily-badge {
-      font-size: 10px; padding: 2px 7px; border-radius: 10px;
-      background: #F5D0FE; color: #7E22CE;
-    }
-    .task-del {
-      background: none; border: none; color: var(--text3);
-      cursor: pointer; font-size: 16px; opacity: 0; transition: opacity 0.15s;
-    }
-    .task-item:hover .task-del { opacity: 1; }
-
-    .add-row { display: flex; gap: 8px; margin-top: 10px; }
-    .add-row input {
-      flex: 1; padding: 9px 12px;
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius-sm);
-      background: var(--bg2); color: var(--text);
-      font-size: 14px; outline: none;
-      font-family: inherit;
-    }
-    .add-row input:focus { border-color: #F97316; }
-    .add-row input::placeholder { color: var(--text3); }
-    .add-row button {
-      padding: 9px 14px; border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, #F59E0B, #F97316);
-      color: white; border: none; font-size: 14px;
-      cursor: pointer; white-space: nowrap;
-    }
+    /* weekly stats bar */
+    .week-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
+    .week-stat { background:var(--bg2); border-radius:var(--radius-sm); padding:10px; text-align:center; }
+    .week-stat-val { font-size:20px; font-weight:500; color:var(--text); }
+    .week-stat-label { font-size:10px; color:var(--text3); margin-top:2px; }
 
     /* bottom nav */
-    .bottom-nav {
-      position: fixed; bottom: 0; left: 0; right: 0; z-index: 10;
-      background: rgba(255,255,255,0.92);
-      backdrop-filter: blur(12px);
-      border-top: 0.5px solid var(--border2);
-      display: flex; justify-content: space-around;
-      padding: 10px 0 max(10px, env(safe-area-inset-bottom));
-    }
-    .nav-item {
-      display: flex; flex-direction: column; align-items: center; gap: 3px;
-      background: none; border: none; cursor: pointer;
-      font-size: 10px; color: var(--text3);
-      padding: 4px 12px; border-radius: 10px;
-      transition: color 0.15s;
-    }
-    .nav-item i { font-size: 22px; }
-    .nav-item.active { color: #F97316; }
+    .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:10; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-top:0.5px solid var(--border2); display:flex; justify-content:space-around; padding:10px 0 max(10px,env(safe-area-inset-bottom)); }
+    .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; font-size:10px; color:var(--text3); padding:4px 12px; border-radius:10px; transition:color 0.15s; }
+    .nav-item i { font-size:22px; }
+    .nav-item.active { color:#F97316; }
 
-    /* layers */
-    .layer { display: none; }
-    .layer.active { display: block; }
+    .layer { display:none; }
+    .layer.active { display:block; }
 
-    /* motivations / visions / visualisations */
-    .content-layer { padding: 20px 16px; }
-    .layer-title {
-      font-size: 11px; font-weight: 500; letter-spacing: 0.08em;
-      text-transform: uppercase; color: var(--text3); margin-bottom: 16px;
-    }
-    .card {
-      background: var(--bg2); border: 0.5px solid var(--border);
-      border-radius: var(--radius); padding: 16px 18px; margin-bottom: 12px;
-    }
-    .quote-card {
-      border-left: 3px solid #F97316; border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
-      background: var(--bg2); padding: 16px 18px; margin-bottom: 10px;
-    }
-    .quote-text { font-size: 16px; font-style: italic; color: var(--text); line-height: 1.6; }
-    .quote-attr { font-size: 13px; color: var(--text3); margin-top: 6px; }
-    .editable-list { list-style: none; }
-    .editable-list li {
-      display: flex; gap: 10px; align-items: flex-start;
-      padding: 10px 0; border-bottom: 0.5px solid var(--border);
-    }
-    .editable-list li:last-child { border-bottom: none; }
-    .list-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 7px; }
-    .list-text { flex: 1; font-size: 15px; color: var(--text); line-height: 1.5; }
-    .list-del { background: none; border: none; color: var(--text3); cursor: pointer; font-size: 16px; opacity: 0; transition: opacity 0.15s; }
-    .editable-list li:hover .list-del { opacity: 1; }
-    textarea {
-      width: 100%; padding: 10px 12px;
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius-sm);
-      background: var(--bg); color: var(--text);
-      font-size: 14px; resize: vertical; min-height: 80px;
-      font-family: inherit; outline: none;
-    }
-    textarea:focus { border-color: #F97316; }
-    textarea::placeholder { color: var(--text3); }
-    .save-btn {
-      margin-top: 8px; padding: 9px 18px;
-      border-radius: var(--radius-sm);
-      background: linear-gradient(135deg, #F59E0B, #F97316);
-      color: white; border: none; font-size: 14px; cursor: pointer;
-    }
-
-    .affirmation-card {
-      background: linear-gradient(135deg, #FFF8F0, #FFF1E6);
-      border: 0.5px solid var(--border2);
-      border-radius: var(--radius);
-      padding: 20px; margin-bottom: 12px;
-      text-align: center;
-    }
-    .affirmation-text {
-      font-size: 18px; font-weight: 400; color: var(--text);
-      line-height: 1.5; font-style: italic;
-    }
+    .content-layer { padding:20px 16px; }
+    .layer-title { font-size:11px; font-weight:500; letter-spacing:0.08em; text-transform:uppercase; color:var(--text3); margin-bottom:16px; }
+    .card { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin-bottom:12px; }
+    .quote-card { border-left:3px solid #F97316; border-radius:0 var(--radius-sm) var(--radius-sm) 0; background:var(--bg2); padding:16px 18px; margin-bottom:10px; }
+    .quote-text { font-size:16px; font-style:italic; color:var(--text); line-height:1.6; }
+    .quote-attr { font-size:13px; color:var(--text3); margin-top:6px; }
+    .editable-list { list-style:none; }
+    .editable-list li { display:flex; gap:10px; align-items:flex-start; padding:10px 0; border-bottom:0.5px solid var(--border); }
+    .editable-list li:last-child { border-bottom:none; }
+    .list-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:7px; }
+    .list-text { flex:1; font-size:15px; color:var(--text); line-height:1.5; }
+    .list-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:16px; opacity:0; transition:opacity 0.15s; }
+    .editable-list li:hover .list-del { opacity:1; }
+    textarea { width:100%; padding:10px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg); color:var(--text); font-size:14px; resize:vertical; min-height:80px; font-family:inherit; outline:none; }
+    textarea:focus { border-color:#F97316; }
+    textarea::placeholder { color:var(--text3); }
+    .save-btn { margin-top:8px; padding:9px 18px; border-radius:var(--radius-sm); background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border:none; font-size:14px; cursor:pointer; }
+    .affirmation-card { background:linear-gradient(135deg,#FFF8F0,#FFF1E6); border:0.5px solid var(--border2); border-radius:var(--radius); padding:20px; margin-bottom:12px; text-align:center; }
+    .affirmation-text { font-size:18px; font-weight:400; color:var(--text); line-height:1.5; font-style:italic; }
+    .notif-bar { background:linear-gradient(135deg,#FFF8F0,#fff1e6); border:0.5px solid var(--border2); border-radius:var(--radius-sm); padding:12px 14px; margin:0 16px 14px; display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text2); cursor:pointer; }
+    .notif-bar i { color:#F97316; font-size:18px; }
+    .empty-state { text-align:center; padding:24px; color:var(--text3); font-size:14px; }
   </style>
 </head>
 <body>
 
-<!-- BACKGROUND AFFIRMATIONS -->
 <div id="affirmations-bg"></div>
 
-<!-- SPLASH -->
 <div id="splash">
   <div class="sun-wrap" id="sun-wrap">
     <div class="rays" id="rays"></div>
@@ -356,83 +208,158 @@
   <button class="enter-btn" onclick="enterApp()">Begin your day</button>
 </div>
 
-<!-- MAIN APP -->
 <div id="app">
 
+  <!-- TODAY -->
   <div id="layer-today" class="layer active">
     <div class="app-header">
       <div class="app-date" id="app-date"></div>
       <div class="app-greeting">Good <span id="time-of-day">morning</span>, Eabha</div>
     </div>
+    <div id="notif-prompt" class="notif-bar" onclick="requestNotifications()" style="display:none">
+      <i class="ti ti-bell"></i>
+      <span>Tap to enable 8am daily reminders</span>
+    </div>
     <div class="day-progress">
-      <div class="progress-label">
-        <span>Today's progress</span>
-        <span id="progress-label">0 of 0 done</span>
-      </div>
+      <div class="progress-label"><span>Today's progress</span><span id="progress-label">0 of 0 done</span></div>
       <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
     </div>
     <div class="sections">
 
+      <!-- SPORT -->
       <div class="section-card" id="sec-sport">
         <div class="section-header" onclick="toggleSection('sport')">
           <div class="section-icon icon-sport"><i class="ti ti-run" aria-hidden="true"></i></div>
           <span class="section-title">Sport & Training</span>
           <span class="section-count" id="count-sport"></span>
-          <i class="ti ti-chevron-down section-chevron" aria-hidden="true"></i>
+          <i class="ti ti-chevron-down section-chevron"></i>
         </div>
         <div class="section-body">
-          <ul class="task-list" id="list-sport"></ul>
-          <div class="add-row">
-            <input type="text" id="input-sport" placeholder="Add training task…" onkeydown="if(event.key==='Enter')addTask('sport')" />
-            <button onclick="addTask('sport')"><i class="ti ti-plus"></i></button>
+          <div class="sub-tabs">
+            <button class="sub-tab active" onclick="showSubTab('sport','tasks',this)">Tasks</button>
+            <button class="sub-tab" onclick="showSubTab('sport','today',this)">Today's Run</button>
+            <button class="sub-tab" onclick="showSubTab('sport','log',this)">Log Run</button>
+            <button class="sub-tab" onclick="showSubTab('sport','history',this)">History</button>
+          </div>
+
+          <div id="sport-tasks" class="sub-panel active">
+            <ul class="task-list" id="list-sport"></ul>
+            <div class="add-row">
+              <input type="text" id="input-sport" placeholder="Add training task…" onkeydown="if(event.key==='Enter')addTask('sport')" />
+              <button onclick="addTask('sport')"><i class="ti ti-plus"></i></button>
+            </div>
+          </div>
+
+          <div id="sport-today" class="sub-panel">
+            <div id="training-recommendation"></div>
+          </div>
+
+          <div id="sport-log" class="sub-panel">
+            <div class="log-form">
+              <div>
+                <div class="form-label">Date</div>
+                <input type="date" id="log-date" />
+              </div>
+              <div class="form-row">
+                <div style="flex:1">
+                  <div class="form-label">Distance (km)</div>
+                  <input type="number" id="log-dist" placeholder="5.2" step="0.1" min="0" />
+                </div>
+                <div style="flex:1">
+                  <div class="form-label">Time (mm:ss)</div>
+                  <input type="text" id="log-time" placeholder="28:30" />
+                </div>
+              </div>
+              <div>
+                <div class="form-label">Type</div>
+                <select id="log-type">
+                  <option value="easy">Easy</option>
+                  <option value="intervals">Intervals</option>
+                  <option value="tempo">Tempo</option>
+                  <option value="long">Long run</option>
+                  <option value="club">Run club</option>
+                  <option value="race">Race</option>
+                </select>
+              </div>
+              <div>
+                <div class="form-label">Effort</div>
+                <div class="effort-row" id="effort-row">
+                  <button class="effort-btn" onclick="setEffort(1,this)">1</button>
+                  <button class="effort-btn" onclick="setEffort(2,this)">2</button>
+                  <button class="effort-btn" onclick="setEffort(3,this)">3</button>
+                  <button class="effort-btn" onclick="setEffort(4,this)">4</button>
+                  <button class="effort-btn" onclick="setEffort(5,this)">5</button>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px"><span>Very easy</span><span>Max effort</span></div>
+              </div>
+              <div>
+                <div class="form-label">Notes</div>
+                <textarea id="log-notes" placeholder="How did it feel? Any PRs? Route?"></textarea>
+              </div>
+              <button class="submit-btn" onclick="logRun()">Save run</button>
+            </div>
+          </div>
+
+          <div id="sport-history" class="sub-panel">
+            <div class="week-stats" id="week-stats"></div>
+            <div id="run-history"></div>
           </div>
         </div>
       </div>
 
+      <!-- WORK -->
       <div class="section-card" id="sec-work">
         <div class="section-header" onclick="toggleSection('work')">
           <div class="section-icon icon-work"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
           <span class="section-title">Work</span>
           <span class="section-count" id="count-work"></span>
-          <i class="ti ti-chevron-down section-chevron" aria-hidden="true"></i>
+          <i class="ti ti-chevron-down section-chevron"></i>
         </div>
         <div class="section-body">
-          <ul class="task-list" id="list-work"></ul>
-          <div class="add-row">
-            <input type="text" id="input-work" placeholder="Add work task…" onkeydown="if(event.key==='Enter')addTask('work')" />
-            <button onclick="addTask('work')"><i class="ti ti-plus"></i></button>
+          <div class="sub-panel active" style="padding:16px 18px 14px">
+            <ul class="task-list" id="list-work"></ul>
+            <div class="add-row">
+              <input type="text" id="input-work" placeholder="Add work task…" onkeydown="if(event.key==='Enter')addTask('work')" />
+              <button onclick="addTask('work')"><i class="ti ti-plus"></i></button>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- SOCIAL -->
       <div class="section-card" id="sec-social">
         <div class="section-header" onclick="toggleSection('social')">
           <div class="section-icon icon-social"><i class="ti ti-users" aria-hidden="true"></i></div>
           <span class="section-title">Social</span>
           <span class="section-count" id="count-social"></span>
-          <i class="ti ti-chevron-down section-chevron" aria-hidden="true"></i>
+          <i class="ti ti-chevron-down section-chevron"></i>
         </div>
         <div class="section-body">
-          <ul class="task-list" id="list-social"></ul>
-          <div class="add-row">
-            <input type="text" id="input-social" placeholder="Add social task…" onkeydown="if(event.key==='Enter')addTask('social')" />
-            <button onclick="addTask('social')"><i class="ti ti-plus"></i></button>
+          <div class="sub-panel active" style="padding:16px 18px 14px">
+            <ul class="task-list" id="list-social"></ul>
+            <div class="add-row">
+              <input type="text" id="input-social" placeholder="Add social task…" onkeydown="if(event.key==='Enter')addTask('social')" />
+              <button onclick="addTask('social')"><i class="ti ti-plus"></i></button>
+            </div>
           </div>
         </div>
       </div>
 
+      <!-- DAILY -->
       <div class="section-card" id="sec-daily">
         <div class="section-header" onclick="toggleSection('daily')">
           <div class="section-icon icon-daily"><i class="ti ti-sun" aria-hidden="true"></i></div>
           <span class="section-title">Daily Tasks</span>
           <span class="section-count" id="count-daily"></span>
-          <i class="ti ti-chevron-down section-chevron" aria-hidden="true"></i>
+          <i class="ti ti-chevron-down section-chevron"></i>
         </div>
         <div class="section-body">
-          <ul class="task-list" id="list-daily"></ul>
-          <div class="add-row">
-            <input type="text" id="input-daily" placeholder="Add daily task…" onkeydown="if(event.key==='Enter')addTask('daily')" />
-            <button onclick="addTask('daily')"><i class="ti ti-plus"></i></button>
+          <div class="sub-panel active" style="padding:16px 18px 14px">
+            <ul class="task-list" id="list-daily"></ul>
+            <div class="add-row">
+              <input type="text" id="input-daily" placeholder="Add daily task…" onkeydown="if(event.key==='Enter')addTask('daily')" />
+              <button onclick="addTask('daily')"><i class="ti ti-plus"></i></button>
+            </div>
           </div>
         </div>
       </div>
@@ -440,6 +367,7 @@
     </div>
   </div>
 
+  <!-- MOTIVATIONS -->
   <div id="layer-motivations" class="layer">
     <div class="content-layer">
       <div class="layer-title">Motivations</div>
@@ -451,17 +379,19 @@
     </div>
   </div>
 
+  <!-- AFFIRMATIONS -->
   <div id="layer-affirmations" class="layer">
     <div class="content-layer">
       <div class="layer-title">Daily Affirmations</div>
       <div id="affirmations-list"></div>
       <div class="card">
-        <textarea id="affirmation-input" placeholder="Write an affirmation — e.g. I am strong, focused and full of purpose…"></textarea>
+        <textarea id="affirmation-input" placeholder="I am strong, focused and full of purpose…"></textarea>
         <button class="save-btn" onclick="addAffirmation()">Save</button>
       </div>
     </div>
   </div>
 
+  <!-- VISUALISATIONS -->
   <div id="layer-visualisations" class="layer">
     <div class="content-layer">
       <div class="layer-title">Visualisations</div>
@@ -482,41 +412,31 @@
 </div>
 
 <script>
-const KEY = 'daily_life_v4';
-
+const KEY = 'daily_life_v5';
 const CW_HABITS = [
-  { id: 'cw1', text: 'Meditate', section: 'daily' },
-  { id: 'cw2', text: 'Work out / Run', section: 'sport' }
+  { id:'cw1', text:'Meditate', section:'daily' },
+  { id:'cw2', text:'Work out / Run', section:'sport' }
 ];
 
-const DEFAULT = {
-  sport:  [],
-  work:   [],
-  social: [],
-  daily:  [],
-  cwDone: {},
-  lastDay: '',
-  motivations: [
-    { text: "Every action you take today is a vote for the person you want to become.", attr: "James Clear" }
-  ],
-  affirmations: [],
-  visualisations: []
+let data = JSON.parse(localStorage.getItem(KEY) || 'null') || {
+  sport:[], work:[], social:[], daily:[],
+  cwDone:{}, lastDay:'',
+  runLog:[],
+  selectedEffort: 3,
+  motivations:[{ text:"Every action you take today is a vote for the person you want to become.", attr:"James Clear" }],
+  affirmations:[],
+  visualisations:[]
 };
-
-let data = JSON.parse(localStorage.getItem(KEY) || 'null') || JSON.parse(JSON.stringify(DEFAULT));
 
 function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-
 function todayKey() { return new Date().toISOString().slice(0,10); }
 
 function resetIfNewDay() {
   if (data.lastDay !== todayKey()) {
-    ['sport','work','social','daily'].forEach(s => {
-      data[s] = (data[s]||[]).map(t => ({ ...t, done: false }));
-    });
-    data.cwDone = {};
-    data.lastDay = todayKey();
+    ['sport','work','social','daily'].forEach(s => { data[s]=(data[s]||[]).map(t=>({...t,done:false})); });
+    data.cwDone={};
+    data.lastDay=todayKey();
     save();
   }
 }
@@ -529,221 +449,336 @@ function enterApp() {
   resetIfNewDay();
   renderAll();
   startAffirmationBg();
+  checkNotificationPrompt();
+  scheduleEightAmNotification();
 }
 
 function showLayer(id, btn) {
-  document.querySelectorAll('.layer').forEach(l => l.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-  document.getElementById('layer-' + id).classList.add('active');
+  document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('layer-'+id).classList.add('active');
   btn.classList.add('active');
 }
 
 function toggleSection(id) {
-  document.getElementById('sec-' + id).classList.toggle('open');
+  document.getElementById('sec-'+id).classList.toggle('open');
 }
 
+function showSubTab(section, tab, btn) {
+  const body = document.getElementById('sec-'+section).querySelector('.section-body');
+  body.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));
+  body.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(section+'-'+tab).classList.add('active');
+  btn.classList.add('active');
+  if (tab==='today') renderTrainingRec();
+  if (tab==='history') renderRunHistory();
+  if (tab==='log') { document.getElementById('log-date').value = todayKey(); }
+}
+
+/* ── TRAINING PLAN ──────────────────────────────────────── */
+const TRAINING_PLAN = {
+  0: { // Sunday — KIIN Run Club
+    label: 'Sunday — Long Run / KIIN Run Club',
+    options: [
+      { tag:'A', cls:'tag-a', title:'KIIN Run Club long run', detail:'8–10km at easy conversational pace (6:30–7:00/km)', rationale:'Build your long run base. This is your big aerobic session of the week.' },
+      { tag:'B', cls:'tag-b', title:'Easy 6km', detail:'6km at relaxed pace (6:45–7:15/km)', rationale:'If energy is low, still get the long run stimulus at reduced volume.' },
+      { tag:'C', cls:'tag-c', title:'Rest', detail:'Full rest or 20 min walk', rationale:'Take it if your legs are heavy from Saturday\'s run club.' }
+    ],
+    tip: '10K training tip: Long runs should be truly easy — you should be able to hold a full conversation. Running too fast on long runs is the most common mistake and slows your overall progress.'
+  },
+  1: { // Monday
+    label: 'Monday — Rest or Active Recovery',
+    options: [
+      { tag:'A', cls:'tag-a', title:'Active recovery walk', detail:'20–30 min easy walk or yoga', rationale:'Light movement clears lactate from the weekend and primes you for Tuesday intervals.' },
+      { tag:'B', cls:'tag-b', title:'Very easy jog', detail:'3km at very easy pace (7:00+/km)', rationale:'Keep the legs moving gently if you feel good.' },
+      { tag:'C', cls:'tag-c', title:'Full rest', detail:'Rest completely', rationale:'You ran Sat + Sun — your body has earned it.' }
+    ],
+    tip: '10K training tip: Research shows that full rest days are as important as training days. Your aerobic capacity improves during recovery, not during the run itself.'
+  },
+  2: { // Tuesday — INTERVALS
+    label: 'Tuesday — Interval Session',
+    options: [
+      { tag:'A', cls:'tag-a', title:'6 × 400m intervals', detail:'6 reps of 400m at 5K race pace (~5:40/km) with 90 sec rest between each', rationale:'This is your PR-making session. You\'ve improved with every interval session — trust it.' },
+      { tag:'B', cls:'tag-b', title:'4 × 400m intervals', detail:'4 reps at 5K pace with 2 min rest', rationale:'Same quality, less volume — good when you\'re a bit tired.' },
+      { tag:'C', cls:'tag-c', title:'Easy 4km', detail:'4km easy (6:30–7:00/km) with 4 × 20 sec strides at end', rationale:'If intervals feel too hard today, strides still give a speed stimulus.' }
+    ],
+    tip: '10K training tip: Interval training at or slightly faster than 5K pace is the single most effective tool for improving your 10K time. Aim for consistent splits across all reps, not fast-then-fade.'
+  },
+  3: { // Wednesday
+    label: 'Wednesday — Easy Run',
+    options: [
+      { tag:'A', cls:'tag-a', title:'5km easy', detail:'5km at easy conversational pace (6:30–7:00/km)', rationale:'Aerobic base building. Keep it truly easy to absorb Tuesday\'s intervals.' },
+      { tag:'B', cls:'tag-b', title:'3–4km easy', detail:'Shorter easy run at same pace', rationale:'Volume reduction if legs are still heavy from intervals.' },
+      { tag:'C', cls:'tag-c', title:'Rest', detail:'Skip today', rationale:'If you\'re unusually sore or fatigued, rest is the correct choice.' }
+    ],
+    tip: '10K training tip: 80% of your weekly running should be at easy pace. Most runners run their easy runs too fast, which blunts the benefit of hard sessions.'
+  },
+  4: { // Thursday
+    label: 'Thursday — Rest or Easy',
+    options: [
+      { tag:'A', cls:'tag-a', title:'Easy 4km + drills', detail:'4km easy + 10 min of running drills (high knees, A-skips, bounding)', rationale:'Midweek easy day. Drills improve form and efficiency which directly improves 10K time.' },
+      { tag:'B', cls:'tag-b', title:'Easy 3km', detail:'Short easy run to keep momentum', rationale:'Lighter version for when energy is moderate.' },
+      { tag:'C', cls:'tag-c', title:'Full rest', detail:'Rest day', rationale:'Rest now so you\'re fresh for Friday + Saturday.' }
+    ],
+    tip: '10K training tip: Running form drills 2–3 times a week can improve running economy by up to 5% over 8 weeks, translating directly to faster times without extra fitness.'
+  },
+  5: { // Friday
+    label: 'Friday — Easy Shakeout',
+    options: [
+      { tag:'A', cls:'tag-a', title:'4km easy shakeout', detail:'4km very easy (6:45–7:15/km) with 4 × 15 sec strides at end', rationale:'Keeps legs fresh and loose before Saturday run club.' },
+      { tag:'B', cls:'tag-b', title:'20 min easy jog', detail:'Very light jog, no pressure on pace', rationale:'Just move — the goal is to feel good for Saturday.' },
+      { tag:'C', cls:'tag-c', title:'Rest', detail:'Save everything for Saturday run club', rationale:'If tomorrow is a big run club session, full rest today is valid.' }
+    ],
+    tip: '10K training tip: A short easy run the day before a key session or race (a "shakeout") has been shown to reduce stiffness and improve next-day performance compared to full rest.'
+  },
+  6: { // Saturday — Paris 11 RC
+    label: 'Saturday — Paris 11 Run Club',
+    options: [
+      { tag:'A', cls:'tag-a', title:'Paris 11 RC — push the pace', detail:'Run with the group, aim to hold a slightly uncomfortable but sustainable pace', rationale:'Run club gives you a social speed stimulus you can\'t replicate alone. Use the group.' },
+      { tag:'B', cls:'tag-b', title:'Paris 11 RC — easy effort', detail:'Run at the back or with slower group, focus on enjoying it', rationale:'Social run at easy effort still counts as a quality session.' },
+      { tag:'C', cls:'tag-c', title:'Solo easy 5km', detail:'Skip club, do solo easy 5km', rationale:'If you\'re not feeling social or are under the weather.' }
+    ],
+    tip: '10K training tip: Group running consistently produces faster paces than solo running at equivalent effort. The social element suppresses perceived exertion — lean into it.'
+  }
+};
+
+function renderTrainingRec() {
+  const day = new Date().getDay();
+  const plan = TRAINING_PLAN[day];
+  const cont = document.getElementById('training-recommendation');
+  cont.innerHTML = `
+    <div class="training-card">
+      <div class="training-day-label">${plan.label}</div>
+      ${plan.options.map(o => `
+        <div class="training-option">
+          <div class="option-label">
+            <span class="option-tag ${o.cls}">Option ${o.tag}</span>
+            <span class="option-title">${esc(o.title)}</span>
+          </div>
+          <div class="option-detail">${esc(o.detail)}</div>
+          <div class="option-rationale">${esc(o.rationale)}</div>
+        </div>
+      `).join('')}
+      <div class="tip-box"><strong>Training tip:</strong> ${esc(plan.tip)}</div>
+    </div>
+  `;
+}
+
+/* ── RUN LOG ──────────────────────────────────────────── */
+let selectedEffort = 3;
+function setEffort(val, btn) {
+  selectedEffort = val;
+  document.querySelectorAll('.effort-btn').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function parsePace(dist, timeStr) {
+  if (!dist || !timeStr) return null;
+  const parts = timeStr.split(':');
+  if (parts.length < 2) return null;
+  const totalSecs = parseInt(parts[0])*60 + parseInt(parts[1]);
+  const paceSecPerKm = totalSecs / parseFloat(dist);
+  const paceMin = Math.floor(paceSecPerKm/60);
+  const paceSec = Math.round(paceSecPerKm%60);
+  return `${paceMin}:${paceSec.toString().padStart(2,'0')}/km`;
+}
+
+function logRun() {
+  const date = document.getElementById('log-date').value;
+  const dist = parseFloat(document.getElementById('log-dist').value);
+  const time = document.getElementById('log-time').value.trim();
+  const type = document.getElementById('log-type').value;
+  const notes = document.getElementById('log-notes').value.trim();
+  if (!date || !dist) { alert('Please enter at least a date and distance.'); return; }
+  const pace = parsePace(dist, time);
+  const run = { date, dist, time, type, effort: selectedEffort, notes, pace };
+  if (!data.runLog) data.runLog = [];
+  data.runLog.unshift(run);
+  save();
+  document.getElementById('log-dist').value = '';
+  document.getElementById('log-time').value = '';
+  document.getElementById('log-notes').value = '';
+  document.querySelectorAll('.effort-btn').forEach(b=>b.classList.remove('selected'));
+  showSubTab('sport','history', document.querySelector('#sec-sport .sub-tab:nth-child(4)'));
+  document.getElementById('sec-sport').classList.add('open');
+}
+
+function deleteRun(i) {
+  data.runLog.splice(i,1);
+  save(); renderRunHistory();
+}
+
+function renderRunHistory() {
+  const runs = data.runLog || [];
+  const hist = document.getElementById('run-history');
+
+  // weekly stats
+  const weekStart = new Date();
+  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
+  const weekKey = weekStart.toISOString().slice(0,10);
+  const weekRuns = runs.filter(r => r.date >= weekKey);
+  const weekKm = weekRuns.reduce((s,r)=>s+(r.dist||0),0);
+  document.getElementById('week-stats').innerHTML = `
+    <div class="week-stat"><div class="week-stat-val">${weekKm.toFixed(1)}</div><div class="week-stat-label">km this week</div></div>
+    <div class="week-stat"><div class="week-stat-val">${weekRuns.length}</div><div class="week-stat-label">runs this week</div></div>
+    <div class="week-stat"><div class="week-stat-val">${runs.length}</div><div class="week-stat-label">total runs</div></div>
+  `;
+
+  if (!runs.length) { hist.innerHTML = '<div class="empty-state">No runs logged yet.<br>Log your first run above.</div>'; return; }
+
+  const typeClass = { easy:'type-easy', intervals:'type-intervals', tempo:'type-tempo', long:'type-long', club:'type-club', race:'type-race' };
+  hist.innerHTML = runs.map((r,i) => `
+    <div class="run-entry">
+      <div class="run-entry-top">
+        <div>
+          <span class="run-type-badge ${typeClass[r.type]||'type-easy'}">${r.type}</span>
+          <span class="run-date" style="margin-left:8px">${r.date}</span>
+        </div>
+        <button class="run-del" onclick="deleteRun(${i})" aria-label="Delete run"><i class="ti ti-trash"></i></button>
+      </div>
+      <div class="run-stats">
+        <div class="run-stat"><div class="run-stat-val">${r.dist ? r.dist.toFixed(1) : '—'}</div><div class="run-stat-label">km</div></div>
+        ${r.time ? `<div class="run-stat"><div class="run-stat-val">${esc(r.time)}</div><div class="run-stat-label">time</div></div>` : ''}
+        ${r.pace ? `<div class="run-stat"><div class="run-stat-val">${esc(r.pace)}</div><div class="run-stat-label">pace</div></div>` : ''}
+        <div class="run-stat"><div class="run-stat-val">${r.effort||'—'}/5</div><div class="run-stat-label">effort</div></div>
+      </div>
+      ${r.notes ? `<div class="run-notes">${esc(r.notes)}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+/* ── TASKS ────────────────────────────────────────────── */
 function renderHeader() {
   const d = new Date();
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
   document.getElementById('app-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
   const h = d.getHours();
-  document.getElementById('time-of-day').textContent = h < 12 ? 'morning' : h < 17 ? 'afternoon' : 'evening';
+  document.getElementById('time-of-day').textContent = h<12?'morning':h<17?'afternoon':'evening';
 }
 
 function renderTasks() {
-  const sections = ['sport','work','social','daily'];
-  let totalDone = 0, totalAll = 0;
-
+  const sections=['sport','work','social','daily'];
+  let totalDone=0, totalAll=0;
   sections.forEach(sec => {
-    const list = document.getElementById('list-' + sec);
-    list.innerHTML = '';
-
-    const habits = CW_HABITS.filter(h => h.section === sec);
+    const list = document.getElementById('list-'+sec);
+    list.innerHTML='';
+    const habits = CW_HABITS.filter(h=>h.section===sec);
     habits.forEach(habit => {
-      const done = !!(data.cwDone && data.cwDone[habit.id]);
-      if (done) totalDone++;
-      totalAll++;
-      const li = document.createElement('li');
-      li.className = 'task-item';
-      li.innerHTML = `
-        <div class="task-cb habit ${done?'done':''}" onclick="toggleCW('${habit.id}')" tabindex="0"></div>
-        <span class="task-text ${done?'done':''}">${esc(habit.text)}</span>
-        <span class="daily-badge">daily</span>
-      `;
+      const done=!!(data.cwDone&&data.cwDone[habit.id]);
+      if(done) totalDone++; totalAll++;
+      const li=document.createElement('li'); li.className='task-item';
+      li.innerHTML=`<div class="task-cb habit ${done?'done':''}" onclick="toggleCW('${habit.id}')" tabindex="0"></div><span class="task-text ${done?'done':''}">${esc(habit.text)}</span><span class="daily-badge">daily</span>`;
       list.appendChild(li);
     });
-
-    (data[sec]||[]).forEach((t, i) => {
-      if (t.done) totalDone++;
-      totalAll++;
-      const li = document.createElement('li');
-      li.className = 'task-item';
-      li.innerHTML = `
-        <div class="task-cb ${t.done?'done':''}" onclick="toggleTask('${sec}',${i})" tabindex="0"></div>
-        <span class="task-text ${t.done?'done':''}">${esc(t.text)}</span>
-        <button class="task-del" onclick="deleteTask('${sec}',${i})" aria-label="Delete"><i class="ti ti-x"></i></button>
-      `;
+    (data[sec]||[]).forEach((t,i) => {
+      if(t.done) totalDone++; totalAll++;
+      const li=document.createElement('li'); li.className='task-item';
+      li.innerHTML=`<div class="task-cb ${t.done?'done':''}" onclick="toggleTask('${sec}',${i})" tabindex="0"></div><span class="task-text ${t.done?'done':''}">${esc(t.text)}</span><button class="task-del" onclick="deleteTask('${sec}',${i})" aria-label="Delete"><i class="ti ti-x"></i></button>`;
       list.appendChild(li);
     });
-
-    const count = habits.length + (data[sec]||[]).length;
-    const done = habits.filter(h => data.cwDone && data.cwDone[h.id]).length + (data[sec]||[]).filter(t=>t.done).length;
-    document.getElementById('count-' + sec).textContent = count ? `${done}/${count}` : '';
+    const count=habits.length+(data[sec]||[]).length;
+    const done=habits.filter(h=>data.cwDone&&data.cwDone[h.id]).length+(data[sec]||[]).filter(t=>t.done).length;
+    document.getElementById('count-'+sec).textContent=count?`${done}/${count}`:'';
   });
-
-  const pct = totalAll ? Math.round(totalDone / totalAll * 100) : 0;
-  document.getElementById('progress-fill').style.width = pct + '%';
-  document.getElementById('progress-label').textContent = `${totalDone} of ${totalAll} done`;
+  const pct=totalAll?Math.round(totalDone/totalAll*100):0;
+  document.getElementById('progress-fill').style.width=pct+'%';
+  document.getElementById('progress-label').textContent=`${totalDone} of ${totalAll} done`;
 }
 
-function toggleCW(id) {
-  if (!data.cwDone) data.cwDone = {};
-  data.cwDone[id] = !data.cwDone[id];
-  save(); renderTasks();
-}
+function toggleCW(id) { if(!data.cwDone)data.cwDone={}; data.cwDone[id]=!data.cwDone[id]; save(); renderTasks(); }
+function addTask(sec) { const inp=document.getElementById('input-'+sec); const text=inp.value.trim(); if(!text)return; if(!data[sec])data[sec]=[]; data[sec].push({text,done:false}); inp.value=''; save(); renderTasks(); }
+function toggleTask(sec,i) { data[sec][i].done=!data[sec][i].done; save(); renderTasks(); }
+function deleteTask(sec,i) { data[sec].splice(i,1); save(); renderTasks(); }
 
-function addTask(sec) {
-  const inp = document.getElementById('input-' + sec);
-  const text = inp.value.trim();
-  if (!text) return;
-  if (!data[sec]) data[sec] = [];
-  data[sec].push({ text, done: false });
-  inp.value = '';
-  save(); renderTasks();
-}
-
-function toggleTask(sec, i) {
-  data[sec][i].done = !data[sec][i].done;
-  save(); renderTasks();
-}
-
-function deleteTask(sec, i) {
-  data[sec].splice(i, 1);
-  save(); renderTasks();
-}
-
+/* ── MOTIVATIONS ───────────────────────────────────────── */
 function renderMotivations() {
-  const cont = document.getElementById('motivations-list');
-  cont.innerHTML = '';
-  (data.motivations||[]).forEach((m, i) => {
-    const d = document.createElement('div');
-    d.className = 'quote-card';
-    d.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <p class="quote-text">"${esc(m.text)}"</p>
-        <button onclick="deleteMotivation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button>
-      </div>
-      ${m.attr ? `<p class="quote-attr">— ${esc(m.attr)}</p>` : ''}
-    `;
+  const cont=document.getElementById('motivations-list'); cont.innerHTML='';
+  (data.motivations||[]).forEach((m,i)=>{
+    const d=document.createElement('div'); d.className='quote-card';
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p class="quote-text">"${esc(m.text)}"</p><button onclick="deleteMotivation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>${m.attr?`<p class="quote-attr">— ${esc(m.attr)}</p>`:''}`;
     cont.appendChild(d);
   });
 }
-
-function addMotivation() {
-  const inp = document.getElementById('motivation-input');
-  const text = inp.value.trim();
-  if (!text) return;
-  if (!data.motivations) data.motivations = [];
-  data.motivations.push({ text });
-  inp.value = '';
-  save(); renderMotivations(); startAffirmationBg();
-}
-
+function addMotivation() { const inp=document.getElementById('motivation-input'); const text=inp.value.trim(); if(!text)return; if(!data.motivations)data.motivations=[]; data.motivations.push({text}); inp.value=''; save(); renderMotivations(); startAffirmationBg(); }
 function deleteMotivation(i) { data.motivations.splice(i,1); save(); renderMotivations(); }
 
+/* ── AFFIRMATIONS ──────────────────────────────────────── */
 function renderAffirmations() {
-  const cont = document.getElementById('affirmations-list');
-  cont.innerHTML = '';
-  (data.affirmations||[]).forEach((a, i) => {
-    const d = document.createElement('div');
-    d.className = 'affirmation-card';
-    d.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <p class="affirmation-text">${esc(a)}</p>
-        <button onclick="deleteAffirmation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button>
-      </div>
-    `;
+  const cont=document.getElementById('affirmations-list'); cont.innerHTML='';
+  (data.affirmations||[]).forEach((a,i)=>{
+    const d=document.createElement('div'); d.className='affirmation-card';
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p class="affirmation-text">${esc(a)}</p><button onclick="deleteAffirmation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>`;
     cont.appendChild(d);
   });
 }
-
-function addAffirmation() {
-  const inp = document.getElementById('affirmation-input');
-  const text = inp.value.trim();
-  if (!text) return;
-  if (!data.affirmations) data.affirmations = [];
-  data.affirmations.push(text);
-  inp.value = '';
-  save(); renderAffirmations(); startAffirmationBg();
-}
-
+function addAffirmation() { const inp=document.getElementById('affirmation-input'); const text=inp.value.trim(); if(!text)return; if(!data.affirmations)data.affirmations=[]; data.affirmations.push(text); inp.value=''; save(); renderAffirmations(); startAffirmationBg(); }
 function deleteAffirmation(i) { data.affirmations.splice(i,1); save(); renderAffirmations(); }
 
+/* ── VISUALISATIONS ────────────────────────────────────── */
 function renderVis() {
-  const cont = document.getElementById('visualisations-list');
-  cont.innerHTML = '';
-  (data.visualisations||[]).forEach((v, i) => {
-    const d = document.createElement('div');
-    d.className = 'card';
-    d.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:flex-start">
-        <p style="font-size:15px;color:var(--text);line-height:1.6;flex:1">${esc(v)}</p>
-        <button onclick="deleteVis(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button>
-      </div>
-    `;
+  const cont=document.getElementById('visualisations-list'); cont.innerHTML='';
+  (data.visualisations||[]).forEach((v,i)=>{
+    const d=document.createElement('div'); d.className='card';
+    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p style="font-size:15px;color:var(--text);line-height:1.6;flex:1">${esc(v)}</p><button onclick="deleteVis(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>`;
     cont.appendChild(d);
   });
 }
-
-function addVis() {
-  const inp = document.getElementById('vis-input');
-  const text = inp.value.trim();
-  if (!text) return;
-  if (!data.visualisations) data.visualisations = [];
-  data.visualisations.push(text);
-  inp.value = '';
-  save(); renderVis();
-}
-
+function addVis() { const inp=document.getElementById('vis-input'); const text=inp.value.trim(); if(!text)return; if(!data.visualisations)data.visualisations=[]; data.visualisations.push(text); inp.value=''; save(); renderVis(); }
 function deleteVis(i) { data.visualisations.splice(i,1); save(); renderVis(); }
 
+/* ── BACKGROUND ────────────────────────────────────────── */
 function startAffirmationBg() {
-  const bg = document.getElementById('affirmations-bg');
-  bg.innerHTML = '';
-  const words = [
-    ...(data.motivations||[]).map(m => m.text.split(' ').slice(0,4).join(' ')),
-    ...(data.affirmations||[]).map(a => a.split(' ').slice(0,4).join(' ')),
-    'focus', 'strength', 'intention', 'growth', 'presence', 'clarity', 'courage', 'joy'
-  ];
-  words.forEach((word, i) => {
-    const el = document.createElement('div');
-    el.className = 'aff-word';
-    el.textContent = word;
-    const left = 5 + (i * 17) % 85;
-    const delay = (i * 3.7) % 25;
-    const duration = 18 + (i * 2.3) % 14;
-    el.style.cssText = `left:${left}%;animation-duration:${duration}s;animation-delay:-${delay}s;`;
+  const bg=document.getElementById('affirmations-bg'); bg.innerHTML='';
+  const words=[...(data.motivations||[]).map(m=>m.text.split(' ').slice(0,4).join(' ')), ...(data.affirmations||[]).map(a=>a.split(' ').slice(0,4).join(' ')),'focus','strength','intention','growth','presence','clarity','courage','joy','consistency','progress'];
+  words.forEach((word,i)=>{
+    const el=document.createElement('div'); el.className='aff-word'; el.textContent=word;
+    el.style.cssText=`left:${5+(i*17)%85}%;animation-duration:${18+(i*2.3)%14}s;animation-delay:-${(i*3.7)%25}s;`;
     bg.appendChild(el);
   });
 }
 
-function renderAll() {
-  renderHeader();
-  renderTasks();
-  renderMotivations();
-  renderAffirmations();
-  renderVis();
+/* ── NOTIFICATIONS ─────────────────────────────────────── */
+function checkNotificationPrompt() {
+  if ('Notification' in window && Notification.permission === 'default') {
+    document.getElementById('notif-prompt').style.display = 'flex';
+  }
 }
 
+function requestNotifications() {
+  if (!('Notification' in window)) return;
+  Notification.requestPermission().then(perm => {
+    document.getElementById('notif-prompt').style.display = 'none';
+    if (perm === 'granted') scheduleEightAmNotification();
+  });
+}
+
+function scheduleEightAmNotification() {
+  if (!('Notification' in window) || Notification.permission !== 'granted') return;
+  const now = new Date();
+  const next8am = new Date(now);
+  next8am.setHours(8, 0, 0, 0);
+  if (next8am <= now) next8am.setDate(next8am.getDate() + 1);
+  const msUntil = next8am - now;
+  clearTimeout(window._notifTimer);
+  window._notifTimer = setTimeout(() => {
+    new Notification('Good morning, Eabha ☀️', {
+      body: "Your day is ready. Open the app to see today's tasks and training plan.",
+      icon: '/icons/icon-192.png'
+    });
+    scheduleEightAmNotification();
+  }, msUntil);
+}
+
+/* ── INIT ──────────────────────────────────────────────── */
+function renderAll() { renderHeader(); renderTasks(); renderMotivations(); renderAffirmations(); renderVis(); }
+
 function buildSunRays() {
-  const rays = document.getElementById('rays');
-  for (let i = 0; i < 12; i++) {
-    const ray = document.createElement('div');
-    ray.className = 'ray';
-    const angle = i * 30;
-    const len = 30 + (i % 3) * 12;
-    ray.style.cssText = `height:${len}px;transform:rotate(${angle}deg) translateX(-50%);margin-left:50%;margin-top:calc(50% - ${len}px);`;
+  const rays=document.getElementById('rays');
+  for(let i=0;i<12;i++){
+    const ray=document.createElement('div'); ray.className='ray';
+    const len=30+(i%3)*12;
+    ray.style.cssText=`height:${len}px;transform:rotate(${i*30}deg) translateX(-50%);margin-left:50%;margin-top:calc(50% - ${len}px);`;
     rays.appendChild(ray);
   }
 }
@@ -752,7 +787,7 @@ buildSunRays();
 startAffirmationBg();
 
 if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(() => {});
+  navigator.serviceWorker.register('/sw.js').catch(()=>{});
 }
 </script>
 </body>
