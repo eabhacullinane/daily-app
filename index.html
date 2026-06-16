@@ -107,6 +107,31 @@
     .add-row input::placeholder { color:var(--text3); }
     .add-row button { padding:9px 14px; border-radius:var(--radius-sm); background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border:none; font-size:14px; cursor:pointer; white-space:nowrap; }
 
+    /* weekly plan picker */
+    .week-planner { margin-bottom:12px; }
+    .week-planner-title { font-size:13px; font-weight:500; color:var(--text2); margin-bottom:10px; }
+    .day-grid { display:grid; grid-template-columns:repeat(7,1fr); gap:6px; margin-bottom:12px; }
+    .day-pill { display:flex; flex-direction:column; align-items:center; gap:4px; padding:8px 4px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); cursor:pointer; transition:all 0.15s; background:var(--bg2); }
+    .day-pill.selected { background:linear-gradient(135deg,#F59E0B,#F97316); border-color:transparent; }
+    .day-pill.run-club { background:linear-gradient(135deg,#F5D0FE,#C084FC); border-color:transparent; }
+    .day-name { font-size:10px; font-weight:500; color:var(--text3); }
+    .day-pill.selected .day-name, .day-pill.run-club .day-name { color:white; }
+    .day-dot { width:6px; height:6px; border-radius:50%; background:var(--border2); }
+    .day-pill.selected .day-dot { background:rgba(255,255,255,0.7); }
+    .day-pill.run-club .day-dot { background:rgba(255,255,255,0.7); }
+    .session-select { width:100%; padding:8px 10px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text); font-size:16px; outline:none; font-family:inherit; margin-bottom:8px; }
+    .session-select:focus { border-color:#F97316; }
+    .plan-row { display:flex; align-items:center; gap:8px; padding:8px 0; border-bottom:0.5px solid var(--border); }
+    .plan-row:last-child { border-bottom:none; }
+    .plan-day-name { font-size:13px; font-weight:500; color:var(--text); width:32px; }
+    .plan-session-badge { font-size:11px; padding:3px 10px; border-radius:10px; }
+    .plan-save-btn { width:100%; padding:11px; border-radius:var(--radius-sm); background:linear-gradient(135deg,#F59E0B,#F97316); color:white; border:none; font-size:15px; font-weight:500; cursor:pointer; margin-top:10px; }
+    .planned-session-banner { background:linear-gradient(135deg,#FDE68A,#FED7AA); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:12px; display:flex; align-items:center; gap:10px; }
+    .planned-session-banner i { font-size:20px; color:#92400E; }
+    .planned-banner-text { font-size:14px; font-weight:500; color:#7C2D12; }
+    .planned-banner-sub { font-size:12px; color:#92400E; margin-top:2px; }
+    .rest-day-msg { text-align:center; padding:20px; color:var(--text3); font-size:14px; }
+
     /* run training card */
     .training-card { background:linear-gradient(135deg,#fff8f0,#fff1e6); border:0.5px solid var(--border2); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
     .training-day-label { font-size:11px; font-weight:500; text-transform:uppercase; letter-spacing:0.06em; color:var(--text3); margin-bottom:8px; }
@@ -238,6 +263,7 @@
           <div class="sub-tabs">
             <button class="sub-tab active" onclick="showSubTab('sport','tasks',this)">Tasks</button>
             <button class="sub-tab" onclick="showSubTab('sport','today',this)">Today's Run</button>
+            <button class="sub-tab" onclick="showSubTab('sport','plan',this)">Week Plan</button>
             <button class="sub-tab" onclick="showSubTab('sport','log',this)">Log Run</button>
             <button class="sub-tab" onclick="showSubTab('sport','history',this)">History</button>
           </div>
@@ -252,6 +278,16 @@
 
           <div id="sport-today" class="sub-panel">
             <div id="training-recommendation"></div>
+          </div>
+
+          <div id="sport-plan" class="sub-panel">
+            <div class="week-planner">
+              <div class="week-planner-title">Pick your 3 run days this week</div>
+              <div class="day-grid" id="day-grid"></div>
+              <div id="session-selectors"></div>
+              <button class="plan-save-btn" onclick="saveWeekPlan()">Save week plan</button>
+            </div>
+            <div id="week-plan-summary"></div>
           </div>
 
           <div id="sport-log" class="sub-panel">
@@ -471,6 +507,7 @@ function showSubTab(section, tab, btn) {
   document.getElementById(section+'-'+tab).classList.add('active');
   btn.classList.add('active');
   if (tab==='today') renderTrainingRec();
+  if (tab==='plan') renderWeekPlanner();
   if (tab==='history') renderRunHistory();
   if (tab==='log') { document.getElementById('log-date').value = todayKey(); }
 }
@@ -546,7 +583,21 @@ function renderTrainingRec() {
   const day = new Date().getDay();
   const plan = TRAINING_PLAN[day];
   const cont = document.getElementById('training-recommendation');
+  const planned = getTodayPlanSession();
+  let banner = '';
+  if (planned) {
+    const sd = SESSION_DETAIL[planned.type] || SESSION_DETAIL.easy;
+    banner = `
+      <div class="planned-session-banner">
+        <i class="ti ti-calendar-check"></i>
+        <div>
+          <div class="planned-banner-text">Planned: ${sd.title}</div>
+          <div class="planned-banner-sub">${sd.detail}</div>
+        </div>
+      </div>`;
+  }
   cont.innerHTML = `
+    ${banner}
     <div class="training-card">
       <div class="training-day-label">${plan.label}</div>
       ${plan.options.map(o => `
@@ -562,6 +613,135 @@ function renderTrainingRec() {
       <div class="tip-box"><strong>Training tip:</strong> ${esc(plan.tip)}</div>
     </div>
   `;
+}
+
+/* ── WEEKLY PLAN PICKER ───────────────────────────────── */
+const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DAY_DATES = () => {
+  const today = new Date();
+  const mon = new Date(today);
+  mon.setDate(today.getDate() - ((today.getDay()+6)%7));
+  return DAYS.map((_,i) => { const d=new Date(mon); d.setDate(mon.getDate()+i); return d.toISOString().slice(0,10); });
+};
+
+const SESSION_TYPES = [
+  { value:'intervals', label:'Intervals', desc:'4–6×400m at 5K pace', color:'#FDE68A', textColor:'#92400E' },
+  { value:'tempo',     label:'Tempo run', desc:'20–25 min at comfortably hard pace', color:'#FECACA', textColor:'#881337' },
+  { value:'long',      label:'Long run',  desc:'7–10km easy pace', color:'#DCF5DC', textColor:'#14532D' },
+  { value:'easy',      label:'Easy run',  desc:'4–5km at conversational pace', color:'#DBEAFE', textColor:'#1E40AF' },
+  { value:'club',      label:'Run club',  desc:'Group run — social/moderate effort', color:'#F5D0FE', textColor:'#7E22CE' }
+];
+
+const SESSION_DETAIL = {
+  intervals: { title:'Interval session', detail:'Warm up 1km easy → 6×400m at 5K pace (aim ~5:35/km) with 90 sec rest → cool down 1km', rationale:'Your PR-maker. Every interval session has moved your 5K PB. Trust the process.' },
+  tempo:     { title:'Tempo run', detail:'1km easy warm up → 20–25 min at comfortably hard pace (5:50–6:10/km) → 1km cool down', rationale:'Raises your lactate threshold — the key to running faster for longer in a 10K.' },
+  long:      { title:'Long run', detail:'7–10km at easy conversational pace (6:30–7:00/km). No pressure on speed.', rationale:'Builds the aerobic base and mental confidence you need to cover 10K distance.' },
+  easy:      { title:'Easy run', detail:'4–5km at a pace you can hold a full conversation (6:30–7:00/km)', rationale:'Aerobic base building. Keeps legs moving without accumulating fatigue.' },
+  club:      { title:'Run club', detail:'Paris 11 RC or KIIN — run with the group at a sustainable effort', rationale:'Group running produces faster paces at equivalent effort. Use the energy of the crowd.' }
+};
+
+let selectedPlanDays = {};
+
+function weekKey() {
+  const dates = DAY_DATES();
+  return dates[0];
+}
+
+function renderWeekPlanner() {
+  const dates = DAY_DATES();
+  const savedPlan = (data.weekPlans||{})[weekKey()] || {};
+  selectedPlanDays = { ...savedPlan };
+
+  // pre-select Sat/Sun as club/long if not already set
+  if (!selectedPlanDays['Sat']) selectedPlanDays['Sat'] = 'club';
+  if (!selectedPlanDays['Sun']) selectedPlanDays['Sun'] = 'long';
+
+  const grid = document.getElementById('day-grid');
+  grid.innerHTML = '';
+  dates.forEach((date, i) => {
+    const dayName = DAYS[i];
+    const isSelected = !!selectedPlanDays[dayName];
+    const isClub = dayName === 'Sat' || dayName === 'Sun';
+    const pill = document.createElement('div');
+    pill.className = `day-pill ${isSelected ? (isClub ? 'run-club' : 'selected') : ''}`;
+    pill.id = 'day-pill-' + dayName;
+    pill.innerHTML = `<span class="day-name">${dayName}</span><div class="day-dot"></div>`;
+    pill.onclick = () => togglePlanDay(dayName);
+    grid.appendChild(pill);
+  });
+
+  renderSessionSelectors();
+  renderWeekPlanSummary();
+}
+
+function togglePlanDay(dayName) {
+  if (selectedPlanDays[dayName]) {
+    delete selectedPlanDays[dayName];
+  } else {
+    const count = Object.keys(selectedPlanDays).length;
+    if (count >= 3) { alert('Pick a maximum of 3 run days.'); return; }
+    const defaults = { Tue:'intervals', Thu:'tempo', Sat:'club', Sun:'long', Mon:'easy', Wed:'easy', Fri:'easy' };
+    selectedPlanDays[dayName] = defaults[dayName] || 'easy';
+  }
+  const pill = document.getElementById('day-pill-' + dayName);
+  const isClub = dayName === 'Sat' || dayName === 'Sun';
+  pill.className = `day-pill ${selectedPlanDays[dayName] ? (isClub ? 'run-club' : 'selected') : ''}`;
+  renderSessionSelectors();
+}
+
+function renderSessionSelectors() {
+  const cont = document.getElementById('session-selectors');
+  const selected = Object.entries(selectedPlanDays);
+  if (!selected.length) { cont.innerHTML = '<p style="font-size:13px;color:var(--text3);text-align:center;padding:10px 0">Tap days above to add them</p>'; return; }
+
+  const dayOrder = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  selected.sort((a,b) => dayOrder.indexOf(a[0]) - dayOrder.indexOf(b[0]));
+
+  cont.innerHTML = selected.map(([day, type]) => `
+    <div class="plan-row">
+      <span class="plan-day-name">${day}</span>
+      <select class="session-select" onchange="selectedPlanDays['${day}']=this.value" style="flex:1;margin-bottom:0">
+        ${SESSION_TYPES.map(s => `<option value="${s.value}" ${type===s.value?'selected':''}>${s.label} — ${s.desc}</option>`).join('')}
+      </select>
+    </div>
+  `).join('');
+}
+
+function saveWeekPlan() {
+  if (!data.weekPlans) data.weekPlans = {};
+  data.weekPlans[weekKey()] = { ...selectedPlanDays };
+  save();
+  renderWeekPlanSummary();
+  renderTrainingRec();
+  alert('Week plan saved!');
+}
+
+function renderWeekPlanSummary() {
+  const plan = (data.weekPlans||{})[weekKey()] || selectedPlanDays || {};
+  const cont = document.getElementById('week-plan-summary');
+  const entries = Object.entries(plan);
+  if (!entries.length) { cont.innerHTML = ''; return; }
+  const dayOrder = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  entries.sort((a,b) => dayOrder.indexOf(a[0]) - dayOrder.indexOf(b[0]));
+  const colors = { intervals:'#FDE68A', tempo:'#FECACA', long:'#DCF5DC', easy:'#DBEAFE', club:'#F5D0FE' };
+  const textColors = { intervals:'#92400E', tempo:'#881337', long:'#14532D', easy:'#1E40AF', club:'#7E22CE' };
+  cont.innerHTML = `
+    <div style="font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.06em;color:var(--text3);margin-bottom:8px">This week's plan</div>
+    ${entries.map(([day,type]) => {
+      const s = SESSION_TYPES.find(x=>x.value===type)||SESSION_TYPES[0];
+      return `<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--border)">
+        <span style="font-size:13px;font-weight:500;color:var(--text);width:32px">${day}</span>
+        <span style="font-size:11px;padding:3px 10px;border-radius:10px;background:${colors[type]||'#FDE68A'};color:${textColors[type]||'#92400E'}">${s.label}</span>
+        <span style="font-size:12px;color:var(--text3);flex:1">${s.desc}</span>
+      </div>`;
+    }).join('')}
+  `;
+}
+
+function getTodayPlanSession() {
+  const plan = (data.weekPlans||{})[weekKey()] || {};
+  const todayName = DAYS[(new Date().getDay()+6)%7];
+  return plan[todayName] ? { day: todayName, type: plan[todayName] } : null;
 }
 
 /* ── RUN LOG ──────────────────────────────────────────── */
