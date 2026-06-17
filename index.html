@@ -598,11 +598,20 @@ function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function todayKey() { return new Date().toISOString().slice(0,10); }
 
-// Historical runs from Strava — seeded once if run log is empty
+// Full Strava run history — merged non-destructively on each load
 const SEED_RUNS = [
+  { date:'2026-06-14', dist:4.29, time:'26:35', pace:'6:12/km', type:'easy',      effort:3, notes:"Run when I thought I wouldn't ❤️💪" },
+  { date:'2026-06-12', dist:5.51, time:'34:48', pace:'6:19/km', type:'easy',      effort:3, notes:'' },
+  { date:'2026-06-11', dist:8.00, time:'50:40', pace:'6:20/km', type:'long',      effort:4, notes:'Long runnn' },
   { date:'2026-06-09', dist:6.09, time:'34:30', pace:'5:40/km', type:'intervals', effort:4, notes:'Wowww really good pace!!! interval seshhhh' },
   { date:'2026-06-07', dist:4.34, time:'27:29', pace:'6:20/km', type:'club',      effort:3, notes:'KIIN Run Club Paris' },
-  { date:'2026-05-10', dist:5.00, time:'29:10', pace:'5:50/km', type:'easy',      effort:3, notes:'Wohoooo' },
+  { date:'2026-06-05', dist:8.00, time:'49:36', pace:'6:12/km', type:'long',      effort:4, notes:'8kkkkkkk OMGGG 🎉' },
+  { date:'2026-06-02', dist:5.20, time:'31:06', pace:'5:59/km', type:'intervals', effort:4, notes:'First intervallll run' },
+  { date:'2026-05-31', dist:4.50, time:'28:57', pace:'6:26/km', type:'easy',      effort:3, notes:'Runnn (20th activity on Strava!)' },
+  { date:'2026-05-29', dist:5.39, time:'40:04', pace:'7:26/km', type:'easy',      effort:2, notes:'Evening Run' },
+  { date:'2026-05-28', dist:3.00, time:'17:51', pace:'5:57/km', type:'easy',      effort:3, notes:'Back to it' },
+  { date:'2026-05-10', dist:4.01, time:'24:00', pace:'5:59/km', type:'club',      effort:3, notes:'4k!! Run & Coffee with Paris 11 RC' },
+  { date:'2026-05-05', dist:5.00, time:'29:10', pace:'5:50/km', type:'easy',      effort:3, notes:'Wohoooo' },
   { date:'2026-04-29', dist:2.45, time:'14:39', pace:'5:59/km', type:'easy',      effort:2, notes:'Morning Run' },
   { date:'2026-04-21', dist:6.01, time:'35:51', pace:'5:58/km', type:'long',      effort:3, notes:'6kkkkkkk' },
   { date:'2026-04-17', dist:5.04, time:'31:04', pace:'6:10/km', type:'easy',      effort:3, notes:'FIRST 5kkkk OMGGGG 🎉' },
@@ -621,8 +630,13 @@ const SEED_RUNS = [
 ];
 
 function seedRunLogIfEmpty() {
-  if (!data.runLog || data.runLog.length === 0) {
-    data.runLog = SEED_RUNS;
+  if (!data.runLog) data.runLog = [];
+  // Merge: add any seed run whose date+dist combo doesn't already exist
+  const existing = new Set(data.runLog.map(r => r.date + '|' + r.dist));
+  const toAdd = SEED_RUNS.filter(r => !existing.has(r.date + '|' + r.dist));
+  if (toAdd.length > 0) {
+    data.runLog = [...data.runLog, ...toAdd];
+    data.runLog.sort((a, b) => b.date.localeCompare(a.date));
     save();
   }
 }
