@@ -552,9 +552,10 @@
     <div class="mb-body" id="disc-body"></div>
   </div>
 
-  <!-- MOTIVATIONS (hidden, kept for data compatibility) -->
-  <div id="layer-motivations" class="layer" style="display:none">
+  <!-- MOTIVATIONS -->
+  <div id="layer-motivations" class="layer">
     <div class="content-layer">
+      <div class="layer-title">Motivations</div>
       <div id="motivations-list"></div>
       <div class="card">
         <textarea id="motivation-input" placeholder="Write something that motivates you…"></textarea>
@@ -610,7 +611,7 @@
 
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="showLayer('today',this)" data-layer="today"><i class="ti ti-calendar"></i>Today</button>
-    <button class="nav-item" onclick="showLayer('briefing',this)" data-layer="briefing"><i class="ti ti-sun"></i>Briefing</button>
+    <button class="nav-item" onclick="showLayer('motivations',this)" data-layer="motivations"><i class="ti ti-flame"></i>Motivate</button>
     <button class="nav-fab" id="nav-fab-progress" onclick="showLayerFab('progress')">
       <div class="nav-fab-ring">
         <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -641,7 +642,7 @@ let data = JSON.parse(localStorage.getItem(KEY) || 'null') || {
   affirmations:[],
   visualisations:[],
   morningBriefings:{},
-  discoverBriefings:{}
+  vicalviLeads:{}
 };
 
 function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
@@ -1372,39 +1373,66 @@ function submitBriefingPaste() {
 }
 
 /* ── DISCOVER LAYER ───────────────────────────────────── */
-const DISCOVER_SECTIONS = [
-  { key:'podcasts', emoji:'🎧', label:'Podcast Picks' },
-  { key:'news',     emoji:'🌍', label:'Latest News' },
-  { key:'pe',       emoji:'💼', label:'PE & Health' },
-  { key:'vicalvi',  emoji:'🏢', label:'Vicalvi Intelligence' },
-];
+const DISCOVER_CONTENT = {
+  updated: '17 Jun 2026',
+  listen: {
+    show: 'Huberman Lab',
+    title: 'Andy Stumpf: Discipline, Resilience & Mental Clarity',
+    desc: 'Retired Navy SEAL breaks down the exact mental frameworks elite operators use to perform under pressure — discipline as a skill you build, not a trait you have. Unusually honest on high-performer mental health.',
+    url: 'https://www.hubermanlab.com/podcast',
+    why: 'Perfect this week — what separates people who show up from those who don\'t.'
+  },
+  news: [
+    {
+      source: 'WEF / EY Geostrategic',
+      headline: 'US-China tariffs: importers bearing 64% of the burden',
+      summary: 'Three months since "Liberation Day" tariffs, US importers are absorbing most costs — not exporters. Markets watching for negotiation signals. Geoeconomic confrontation now rated the most likely trigger of a global crisis in 2026.',
+      url: 'https://www.ey.com/en_gl/insights/geostrategy/geostrategic-analysis'
+    },
+    {
+      source: 'WEF',
+      headline: 'Iran blockade diplomacy intensifies',
+      summary: 'US tightening pressure on Iranian ports; Iran continuing to threaten Strait of Hormuz. Significant implications for global oil prices and shipping routes — worth watching for supply chain impact.',
+      url: 'https://www.weforum.org/stories/2026/05/blockade-diplomacy-and-other-geopolitical-stories-to-know-this-month/'
+    },
+    {
+      source: 'VivaTech Paris — happening today',
+      headline: 'France & Germany define "sovereign technology" at VivaTech',
+      summary: 'Major joint policy announcement in Paris (VivaTech, June 17–20) on European AI sovereignty — a real shift in EU tech regulation with implications for where capital flows in digital infrastructure.',
+      url: 'https://vivatechnology.com'
+    }
+  ],
+  pe: [
+    {
+      headline: 'Nest + IFM: £200m into climate private credit',
+      summary: 'UK\'s largest DC pension partnered with IFM Investors to deploy £200m into climate-focused private credit. Landmark signal that mainstream pension capital is moving into impact at scale.',
+      source: 'New Private Markets',
+      url: 'https://www.newprivatemarkets.com/impact-investing-private-equity/'
+    },
+    {
+      headline: 'Impact PE: competitive returns finally materialising',
+      summary: 'Lightrock, Nest and Galvanize are demonstrating that private credit impact strategies can match mainstream PE returns. Institutional allocators starting to shift allocation accordingly.',
+      source: 'New Private Markets',
+      url: 'https://www.newprivatemarkets.com/'
+    },
+    {
+      headline: 'PE International June 2026: operational value creation',
+      summary: 'With higher rates compressing leverage-driven returns, top PE firms are doubling down on operational improvement. ESG and impact metrics increasingly central to value creation plans.',
+      source: 'Private Equity International',
+      url: 'https://www.privateequityinternational.com/download-the-june-2026-issue-of-private-equity-international/'
+    }
+  ]
+};
 
-function getTodayDiscover() {
-  return (data.discoverBriefings || {})[todayKey()] || null;
+function getVicalviLeads() {
+  return (data.vicalviLeads || {})[todayKey()] || null;
 }
 
-function saveDiscoverText(raw) {
-  if (!data.discoverBriefings) data.discoverBriefings = {};
-  data.discoverBriefings[todayKey()] = raw.trim();
+function saveVicalviLeads(raw) {
+  if (!data.vicalviLeads) data.vicalviLeads = {};
+  data.vicalviLeads[todayKey()] = raw.trim();
   save();
   renderDiscoverLayer();
-}
-
-function parseDiscoverText(raw) {
-  const sections = {};
-  const lines = raw.split('\n');
-  let current = null, buf = [];
-  const flush = () => { if (current) sections[current] = buf.join('\n').trim(); };
-  lines.forEach(line => {
-    const stripped = line.replace(/^#+\s*/, '').trim();
-    const found = DISCOVER_SECTIONS.find(s =>
-      stripped.startsWith(s.emoji) || stripped.toLowerCase().includes(s.label.toLowerCase())
-    );
-    if (found) { flush(); current = found.key; buf = []; }
-    else if (current) buf.push(line);
-  });
-  flush();
-  return sections;
 }
 
 function renderDiscoverLayer() {
@@ -1416,51 +1444,72 @@ function renderDiscoverLayer() {
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   if (dateEl) dateEl.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
 
-  const raw = getTodayDiscover();
+  const vicalvi = getVicalviLeads();
+  const C = DISCOVER_CONTENT;
 
-  if (!raw) {
-    body.innerHTML = `
-      <div class="mb-empty">
-        <div class="mb-empty-icon">🧭</div>
-        <div class="mb-empty-title">No intelligence yet today</div>
-        <div class="mb-empty-sub">Run your daily Discover prompt in Claude,<br>then paste the output below.</div>
-        <button class="mb-paste-btn" onclick="showDiscPasteArea()"><i class="ti ti-clipboard" style="font-size:16px"></i> Paste today's intelligence</button>
+  body.innerHTML = `
+    <div class="mb-section-card">
+      <div class="mb-section-emoji">🎧</div>
+      <div class="mb-section-title">Today's Listen</div>
+      <div class="mb-section-content">
+        <div style="font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">${esc(C.listen.show)}</div>
+        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);line-height:1.3;margin-bottom:8px">${esc(C.listen.title)}</div>
+        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:6px">${esc(C.listen.desc)}</div>
+        <div style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:10px">${esc(C.listen.why)}</div>
+        <a class="briefing-link" href="${C.listen.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen</a>
       </div>
-      <div class="mb-paste-area" id="disc-paste-area" style="display:none;padding:0 0 20px">
-        <textarea id="disc-paste-input" placeholder="Paste your Discover intelligence here…"></textarea>
+    </div>
+
+    <div class="mb-section-card">
+      <div class="mb-section-emoji">🌍</div>
+      <div class="mb-section-title">Morning News Digest</div>
+      <div class="mb-section-content">
+        ${C.news.map(n => `<div class="news-item">
+          <div class="news-source">${esc(n.source)}</div>
+          <div class="news-headline">${esc(n.headline)}</div>
+          <div class="news-summary">${esc(n.summary)}</div>
+          <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="mb-section-card">
+      <div class="mb-section-emoji">💼</div>
+      <div class="mb-section-title">PE & Impact Investing</div>
+      <div class="mb-section-content">
+        ${C.pe.map(p => `<div class="news-item">
+          <div style="font-size:14px;font-weight:400;color:var(--text);margin-bottom:4px">${esc(p.headline)}</div>
+          <div class="news-summary">${esc(p.summary)}</div>
+          <div style="font-size:9px;color:var(--text3);margin-top:4px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase">${esc(p.source)}</div>
+          ${p.url ? `<a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>` : ''}
+        </div>`).join('')}
+      </div>
+    </div>
+
+    <div class="mb-section-card">
+      <div class="mb-section-emoji">🏢</div>
+      <div class="mb-section-title">Vicalvi Intelligence</div>
+      <div class="mb-section-content" id="disc-vicalvi-content">
+        ${vicalvi
+          ? mdToHtml(vicalvi)
+          : `<div style="color:var(--text3);font-size:13px;line-height:1.6;margin-bottom:14px">Run the Vicalvi research prompt in Claude each morning — Italian, French, Portuguese & UK hospitality leads — then paste below.</div>`}
+      </div>
+      <div style="margin-top:12px">
+        <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
+          <i class="ti ti-clipboard" style="font-size:13px"></i> ${vicalvi ? 'Update leads' : 'Paste today\'s leads'}
+        </button>
+      </div>
+      <div class="mb-paste-area" id="disc-paste-area" style="display:none;margin-top:12px">
+        <textarea id="disc-paste-input" placeholder="Paste Vicalvi leads here…">${vicalvi || ''}</textarea>
         <div class="mb-paste-actions">
           <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
           <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
         </div>
-      </div>`;
-    return;
-  }
-
-  const sections = parseDiscoverText(raw);
-  const cards = DISCOVER_SECTIONS.map(s => {
-    const content = sections[s.key];
-    if (!content) return '';
-    return `<div class="mb-section-card">
-      <div class="mb-section-emoji">${s.emoji}</div>
-      <div class="mb-section-title">${s.label}</div>
-      <div class="mb-section-content">${mdToHtml(content)}</div>
-    </div>`;
-  }).join('');
-
-  body.innerHTML = `
-    ${cards}
-    <div style="text-align:center;padding:8px 0 20px">
-      <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
-        <i class="ti ti-pencil" style="font-size:14px"></i> Update
-      </button>
-    </div>
-    <div class="mb-paste-area" id="disc-paste-area" style="display:none">
-      <textarea id="disc-paste-input" placeholder="Paste updated intelligence…">${raw}</textarea>
-      <div class="mb-paste-actions">
-        <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
-        <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
       </div>
-    </div>`;
+    </div>
+
+    <div class="briefing-updated">Curated content · Updated ${C.updated}</div>
+  `;
 }
 
 function showDiscPasteArea() {
@@ -1474,7 +1523,7 @@ function hideDiscPasteArea() {
 function submitDiscoverPaste() {
   const val = document.getElementById('disc-paste-input')?.value?.trim();
   if (!val) return;
-  saveDiscoverText(val);
+  saveVicalviLeads(val);
 }
 
 /* ── STATIC BRIEFING FALLBACK ──────────────────────────── */
@@ -1530,8 +1579,7 @@ function renderBriefing() {
 
 /* ── INIT ──────────────────────────────────────────────── */
 function renderAll() { renderHeader(); renderTasks(); renderMotivations(); renderAffirmations(); renderVis(); updateMbTodayCard(); }
-// discoverBriefings migration: ensure field exists on old data
-if (!data.discoverBriefings) { data.discoverBriefings = {}; }
+if (!data.vicalviLeads) { data.vicalviLeads = {}; }
 
 function buildSunRays() {
   const rays=document.getElementById('rays');
