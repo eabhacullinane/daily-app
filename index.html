@@ -577,6 +577,35 @@ function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
 function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
 function todayKey() { return new Date().toISOString().slice(0,10); }
 
+// Historical runs from Strava — seeded once if run log is empty
+const SEED_RUNS = [
+  { date:'2026-06-09', dist:6.09, time:'34:30', pace:'5:40/km', type:'intervals', effort:4, notes:'Wowww really good pace!!! interval seshhhh' },
+  { date:'2026-06-07', dist:4.34, time:'27:29', pace:'6:20/km', type:'club',      effort:3, notes:'KIIN Run Club Paris' },
+  { date:'2026-05-10', dist:5.00, time:'29:10', pace:'5:50/km', type:'easy',      effort:3, notes:'Wohoooo' },
+  { date:'2026-04-29', dist:2.45, time:'14:39', pace:'5:59/km', type:'easy',      effort:2, notes:'Morning Run' },
+  { date:'2026-04-21', dist:6.01, time:'35:51', pace:'5:58/km', type:'long',      effort:3, notes:'6kkkkkkk' },
+  { date:'2026-04-17', dist:5.04, time:'31:04', pace:'6:10/km', type:'easy',      effort:3, notes:'FIRST 5kkkk OMGGGG 🎉' },
+  { date:'2026-04-14', dist:3.07, time:'17:29', pace:'5:42/km', type:'easy',      effort:3, notes:"Runnnnn when I thought I wouldn't" },
+  { date:'2026-04-11', dist:4.01, time:'24:07', pace:'6:01/km', type:'easy',      effort:3, notes:'Afternoon Run' },
+  { date:'2026-04-07', dist:2.98, time:'19:16', pace:'6:28/km', type:'easy',      effort:2, notes:'Evening Run' },
+  { date:'2026-03-30', dist:3.55, time:'18:48', pace:'5:18/km', type:'easy',      effort:3, notes:'Lunch Run' },
+  { date:'2026-03-28', dist:2.76, time:'15:32', pace:'5:38/km', type:'easy',      effort:3, notes:'Lunch Run' },
+  { date:'2026-03-25', dist:2.52, time:'12:40', pace:'5:02/km', type:'easy',      effort:4, notes:'Morning Run' },
+  { date:'2026-03-23', dist:2.68, time:'14:14', pace:'5:19/km', type:'easy',      effort:3, notes:'Evening Run' },
+  { date:'2026-03-20', dist:2.51, time:'14:30', pace:'5:47/km', type:'easy',      effort:3, notes:'Morning Run' },
+  { date:'2026-03-12', dist:2.49, time:'14:56', pace:'6:00/km', type:'easy',      effort:2, notes:'Lunch Ride' },
+  { date:'2026-03-05', dist:2.16, time:'17:01', pace:'7:53/km', type:'easy',      effort:2, notes:'Morning Run' },
+  { date:'2026-02-25', dist:1.55, time:'10:27', pace:'6:45/km', type:'easy',      effort:2, notes:'Morning Ride' },
+  { date:'2026-02-25', dist:1.79, time:'10:38', pace:'5:57/km', type:'easy',      effort:2, notes:'Afternoon Run' },
+];
+
+function seedRunLogIfEmpty() {
+  if (!data.runLog || data.runLog.length === 0) {
+    data.runLog = SEED_RUNS;
+    save();
+  }
+}
+
 function resetIfNewDay() {
   if (data.lastDay !== todayKey()) {
     ['sport','work','social','daily'].forEach(s => { data[s]=(data[s]||[]).map(t=>({...t,done:false})); });
@@ -592,6 +621,7 @@ function enterApp() {
   app.style.display = 'block';
   setTimeout(() => app.classList.add('visible'), 50);
   resetIfNewDay();
+  seedRunLogIfEmpty();
   renderAll();
   startAffirmationBg();
   checkNotificationPrompt();
