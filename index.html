@@ -1277,6 +1277,19 @@ function saveBriefingText(raw) {
   updateMbTodayCard();
 }
 
+async function fetchBriefingJson() {
+  try {
+    const resp = await fetch('/briefing.json?v=' + todayKey(), { cache: 'no-store' });
+    if (!resp.ok) return;
+    const json = await resp.json();
+    if (json.date === todayKey() && json.content) {
+      saveBriefingText(json.content);
+    }
+  } catch (e) {
+    // Network error or invalid JSON — silently ignore, paste fallback still works
+  }
+}
+
 function updateMbTodayCard() {
   const card = document.getElementById('mb-today-card');
   if (!card) return;
@@ -1314,20 +1327,40 @@ function renderBriefingLayer() {
   const raw = getTodayBriefing();
 
   if (!raw) {
+    // Show loading state and try to fetch automatically
     body.innerHTML = `
-      <div class="mb-empty">
-        <div class="mb-empty-icon">☀️</div>
-        <div class="mb-empty-title">No briefing yet today</div>
-        <div class="mb-empty-sub">Your CoWork morning briefing runs at 8am.<br>Open Claude, run it, then paste the output below.</div>
-        <button class="mb-paste-btn" onclick="showPasteArea()"><i class="ti ti-clipboard" style="font-size:16px"></i> Paste today's briefing</button>
-      </div>
-      <div class="mb-paste-area" id="mb-paste-area" style="display:none;padding:0 0 20px">
-        <textarea id="mb-paste-input" placeholder="Paste your CoWork morning briefing here…"></textarea>
-        <div class="mb-paste-actions">
-          <button class="mb-cancel-btn" onclick="hidePasteArea()">Cancel</button>
-          <button class="mb-save-btn" onclick="submitBriefingPaste()">Save briefing</button>
-        </div>
+      <div class="mb-empty" id="mb-loading-state">
+        <div class="mb-empty-icon" style="animation:pulse 2s ease-in-out infinite">☀️</div>
+        <div class="mb-empty-title">Loading today's briefing…</div>
+        <div class="mb-empty-sub">Checking for this morning's update.</div>
       </div>`;
+
+    fetchBriefingJson().then(() => {
+      // If fetch succeeded and saved, renderBriefingLayer re-runs automatically via saveBriefingText
+      // If still no briefing after fetch, show the fallback UI
+      if (!getTodayBriefing()) {
+        const hour = new Date().getHours();
+        const notYetMsg = hour < 8
+          ? 'Your briefing generates automatically at 8am.'
+          : 'Today\'s briefing is generating — check back in a few minutes.';
+        body.innerHTML = `
+          <div class="mb-empty">
+            <div class="mb-empty-icon">☀️</div>
+            <div class="mb-empty-title">Briefing not ready yet</div>
+            <div class="mb-empty-sub">${notYetMsg}</div>
+            <button class="mb-paste-btn" onclick="renderBriefingLayer()" style="margin-bottom:12px">
+              <i class="ti ti-refresh" style="font-size:15px"></i> Retry
+            </button>
+            <div style="margin-top:8px;font-size:12px;color:var(--text3)">Or paste manually:</div>
+          </div>
+          <div style="padding:0 0 20px">
+            <textarea id="mb-paste-input" placeholder="Paste briefing here…" style="width:100%;min-height:160px;padding:12px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.5"></textarea>
+            <div class="mb-paste-actions" style="margin-top:8px">
+              <button class="mb-save-btn" onclick="submitBriefingPaste()" style="flex:1">Save</button>
+            </div>
+          </div>`;
+      }
+    });
     return;
   }
 
@@ -1344,18 +1377,7 @@ function renderBriefingLayer() {
 
   body.innerHTML = `
     ${cards}
-    <div style="text-align:center;padding:8px 0 20px">
-      <button class="mb-paste-btn" onclick="showPasteArea()" style="font-size:11px;padding:9px 18px">
-        <i class="ti ti-pencil" style="font-size:14px"></i> Update briefing
-      </button>
-    </div>
-    <div class="mb-paste-area" id="mb-paste-area" style="display:none">
-      <textarea id="mb-paste-input" placeholder="Paste updated briefing…">${raw}</textarea>
-      <div class="mb-paste-actions">
-        <button class="mb-cancel-btn" onclick="hidePasteArea()">Cancel</button>
-        <button class="mb-save-btn" onclick="submitBriefingPaste()">Save</button>
-      </div>
-    </div>`;
+    <div class="briefing-updated" style="margin-bottom:20px">Auto-generated · ${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}</div>`;
 }
 
 function showPasteArea() {
