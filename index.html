@@ -543,10 +543,18 @@
     <div class="mb-body" id="mb-body"></div>
   </div>
 
-  <!-- MOTIVATIONS -->
-  <div id="layer-motivations" class="layer">
+  <!-- DISCOVER LAYER -->
+  <div id="layer-discover" class="layer">
+    <div class="mb-header">
+      <div class="mb-date-label" id="disc-date-label"></div>
+      <div class="mb-title">Discover</div>
+    </div>
+    <div class="mb-body" id="disc-body"></div>
+  </div>
+
+  <!-- MOTIVATIONS (hidden, kept for data compatibility) -->
+  <div id="layer-motivations" class="layer" style="display:none">
     <div class="content-layer">
-      <div class="layer-title">Motivations</div>
       <div id="motivations-list"></div>
       <div class="card">
         <textarea id="motivation-input" placeholder="Write something that motivates you…"></textarea>
@@ -555,22 +563,19 @@
     </div>
   </div>
 
-  <!-- AFFIRMATIONS -->
-  <div id="layer-affirmations" class="layer">
+  <!-- AFFIRM + VISION (merged) -->
+  <div id="layer-affirm" class="layer">
     <div class="content-layer">
-      <div class="layer-title">Daily Affirmations</div>
+      <div class="layer-title">Affirm & Vision</div>
+
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px">Daily Affirmations</div>
       <div id="affirmations-list"></div>
-      <div class="card">
+      <div class="card" style="margin-bottom:28px">
         <textarea id="affirmation-input" placeholder="I am strong, focused and full of purpose…"></textarea>
         <button class="save-btn" onclick="addAffirmation()">Save</button>
       </div>
-    </div>
-  </div>
 
-  <!-- VISUALISATIONS -->
-  <div id="layer-visualisations" class="layer">
-    <div class="content-layer">
-      <div class="layer-title">Visualisations</div>
+      <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px">Visualisations</div>
       <div id="visualisations-list"></div>
       <div class="card">
         <textarea id="vis-input" placeholder="Describe your ideal future self or life in vivid detail…"></textarea>
@@ -615,8 +620,8 @@
       </div>
       <span class="nav-fab-label">Progress</span>
     </button>
-    <button class="nav-item" onclick="showLayer('affirmations',this)"><i class="ti ti-heart"></i>Affirm</button>
-    <button class="nav-item" onclick="showLayer('visualisations',this)"><i class="ti ti-sparkles"></i>Vision</button>
+    <button class="nav-item" onclick="showLayer('discover',this)" data-layer="discover"><i class="ti ti-compass"></i>Discover</button>
+    <button class="nav-item" onclick="showLayer('affirm',this)" data-layer="affirm"><i class="ti ti-heart"></i>Affirm</button>
   </nav>
 </div>
 
@@ -635,7 +640,8 @@ let data = JSON.parse(localStorage.getItem(KEY) || 'null') || {
   motivations:[{ text:"Every action you take today is a vote for the person you want to become.", attr:"James Clear" }],
   affirmations:[],
   visualisations:[],
-  morningBriefings:{}
+  morningBriefings:{},
+  discoverBriefings:{}
 };
 
 function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
@@ -714,6 +720,7 @@ function showLayer(id, btn) {
   document.getElementById('layer-'+id).classList.add('active');
   if (btn) btn.classList.add('active');
   if (id === 'briefing') renderBriefingLayer();
+  if (id === 'discover') renderDiscoverLayer();
 }
 
 function showLayerFab(id) {
@@ -1364,6 +1371,112 @@ function submitBriefingPaste() {
   saveBriefingText(val);
 }
 
+/* ── DISCOVER LAYER ───────────────────────────────────── */
+const DISCOVER_SECTIONS = [
+  { key:'podcasts', emoji:'🎧', label:'Podcast Picks' },
+  { key:'news',     emoji:'🌍', label:'Latest News' },
+  { key:'pe',       emoji:'💼', label:'PE & Health' },
+  { key:'vicalvi',  emoji:'🏢', label:'Vicalvi Intelligence' },
+];
+
+function getTodayDiscover() {
+  return (data.discoverBriefings || {})[todayKey()] || null;
+}
+
+function saveDiscoverText(raw) {
+  if (!data.discoverBriefings) data.discoverBriefings = {};
+  data.discoverBriefings[todayKey()] = raw.trim();
+  save();
+  renderDiscoverLayer();
+}
+
+function parseDiscoverText(raw) {
+  const sections = {};
+  const lines = raw.split('\n');
+  let current = null, buf = [];
+  const flush = () => { if (current) sections[current] = buf.join('\n').trim(); };
+  lines.forEach(line => {
+    const stripped = line.replace(/^#+\s*/, '').trim();
+    const found = DISCOVER_SECTIONS.find(s =>
+      stripped.startsWith(s.emoji) || stripped.toLowerCase().includes(s.label.toLowerCase())
+    );
+    if (found) { flush(); current = found.key; buf = []; }
+    else if (current) buf.push(line);
+  });
+  flush();
+  return sections;
+}
+
+function renderDiscoverLayer() {
+  const body = document.getElementById('disc-body');
+  const dateEl = document.getElementById('disc-date-label');
+  if (!body) return;
+  const d = new Date();
+  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  if (dateEl) dateEl.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
+
+  const raw = getTodayDiscover();
+
+  if (!raw) {
+    body.innerHTML = `
+      <div class="mb-empty">
+        <div class="mb-empty-icon">🧭</div>
+        <div class="mb-empty-title">No intelligence yet today</div>
+        <div class="mb-empty-sub">Run your daily Discover prompt in Claude,<br>then paste the output below.</div>
+        <button class="mb-paste-btn" onclick="showDiscPasteArea()"><i class="ti ti-clipboard" style="font-size:16px"></i> Paste today's intelligence</button>
+      </div>
+      <div class="mb-paste-area" id="disc-paste-area" style="display:none;padding:0 0 20px">
+        <textarea id="disc-paste-input" placeholder="Paste your Discover intelligence here…"></textarea>
+        <div class="mb-paste-actions">
+          <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
+          <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
+        </div>
+      </div>`;
+    return;
+  }
+
+  const sections = parseDiscoverText(raw);
+  const cards = DISCOVER_SECTIONS.map(s => {
+    const content = sections[s.key];
+    if (!content) return '';
+    return `<div class="mb-section-card">
+      <div class="mb-section-emoji">${s.emoji}</div>
+      <div class="mb-section-title">${s.label}</div>
+      <div class="mb-section-content">${mdToHtml(content)}</div>
+    </div>`;
+  }).join('');
+
+  body.innerHTML = `
+    ${cards}
+    <div style="text-align:center;padding:8px 0 20px">
+      <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
+        <i class="ti ti-pencil" style="font-size:14px"></i> Update
+      </button>
+    </div>
+    <div class="mb-paste-area" id="disc-paste-area" style="display:none">
+      <textarea id="disc-paste-input" placeholder="Paste updated intelligence…">${raw}</textarea>
+      <div class="mb-paste-actions">
+        <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
+        <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
+      </div>
+    </div>`;
+}
+
+function showDiscPasteArea() {
+  const el = document.getElementById('disc-paste-area');
+  if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior:'smooth', block:'start' }); }
+}
+function hideDiscPasteArea() {
+  const el = document.getElementById('disc-paste-area');
+  if (el) el.style.display = 'none';
+}
+function submitDiscoverPaste() {
+  const val = document.getElementById('disc-paste-input')?.value?.trim();
+  if (!val) return;
+  saveDiscoverText(val);
+}
+
 /* ── STATIC BRIEFING FALLBACK ──────────────────────────── */
 const BRIEFING = {
   updated: '17 Jun 2026',
@@ -1417,6 +1530,8 @@ function renderBriefing() {
 
 /* ── INIT ──────────────────────────────────────────────── */
 function renderAll() { renderHeader(); renderTasks(); renderMotivations(); renderAffirmations(); renderVis(); updateMbTodayCard(); }
+// discoverBriefings migration: ensure field exists on old data
+if (!data.discoverBriefings) { data.discoverBriefings = {}; }
 
 function buildSunRays() {
   const rays=document.getElementById('rays');
