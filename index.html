@@ -219,6 +219,76 @@
     .notif-bar { background:linear-gradient(135deg,#FFF8F0,#fff1e6); border:0.5px solid var(--border2); border-radius:var(--radius-sm); padding:12px 14px; margin:0 16px 14px; display:flex; align-items:center; gap:10px; font-size:13px; color:var(--text2); cursor:pointer; }
     .notif-bar i { color:#F97316; font-size:18px; }
     .empty-state { text-align:center; padding:24px; color:var(--text3); font-size:14px; }
+
+    /* BRIEFING */
+    .briefing-toggle { margin:0 16px 14px; background:linear-gradient(135deg,#fff8f0,#fff1e6); border:0.5px solid var(--border2); border-radius:var(--radius); padding:14px 16px; cursor:pointer; user-select:none; }
+    .briefing-toggle-header { display:flex; align-items:center; justify-content:space-between; }
+    .briefing-toggle-left { display:flex; align-items:center; gap:10px; }
+    .briefing-icon { width:36px; height:36px; border-radius:10px; background:linear-gradient(135deg,#DBEAFE,#60A5FA); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; color:#1E40AF; }
+    .briefing-toggle-title { font-size:15px; font-weight:500; color:var(--text); }
+    .briefing-toggle-sub { font-size:11px; color:var(--text3); margin-top:1px; }
+    .briefing-body { margin:0 16px 14px; background:var(--bg); border:0.5px solid var(--border2); border-radius:0 0 var(--radius) var(--radius); border-top:none; padding:16px; display:none; }
+    .briefing-body.open { display:block; }
+    .briefing-section-label { font-size:10px; font-weight:600; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:10px; margin-top:14px; }
+    .briefing-section-label:first-child { margin-top:0; }
+    .podcast-item { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:0.5px solid var(--border); }
+    .podcast-item:last-child { border-bottom:none; }
+    .podcast-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; margin-top:5px; }
+    .podcast-info { flex:1; }
+    .podcast-show { font-size:11px; color:var(--text3); font-weight:500; text-transform:uppercase; letter-spacing:0.04em; }
+    .podcast-title { font-size:14px; color:var(--text); line-height:1.4; margin:2px 0; font-weight:500; }
+    .podcast-desc { font-size:12px; color:var(--text2); line-height:1.4; }
+    .briefing-link { display:inline-flex; align-items:center; gap:4px; font-size:11px; color:#F97316; text-decoration:none; margin-top:5px; font-weight:500; }
+    .briefing-link:hover { text-decoration:underline; }
+    .news-item { padding:10px 0; border-bottom:0.5px solid var(--border); }
+    .news-item:last-child { border-bottom:none; }
+    .news-source { font-size:10px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:3px; }
+    .news-headline { font-size:14px; font-weight:500; color:var(--text); line-height:1.4; margin-bottom:4px; }
+    .news-summary { font-size:12px; color:var(--text2); line-height:1.5; }
+    .briefing-updated { font-size:10px; color:var(--text3); text-align:right; margin-top:12px; font-style:italic; }
+
+    /* PROGRESS LAYER */
+    .progress-ring-wrap { display:flex; flex-direction:column; align-items:center; padding:24px 0 16px; }
+    .progress-ring-svg { width:160px; height:160px; }
+    .prog-pct-text { font-size:36px; font-weight:300; fill:var(--text); }
+    .prog-done-text { font-size:13px; fill:var(--text3); }
+    .prog-label-main { font-size:13px; color:var(--text2); margin-top:10px; }
+    .prog-sections { padding:0 16px 20px; display:flex; flex-direction:column; gap:10px; }
+    .prog-section-row { display:flex; align-items:center; gap:12px; padding:12px 14px; background:var(--bg2); border-radius:var(--radius-sm); }
+    .prog-section-name { font-size:14px; color:var(--text); width:60px; flex-shrink:0; }
+    .prog-mini-track { flex:1; height:6px; background:var(--bg3); border-radius:3px; overflow:hidden; }
+    .prog-mini-fill { height:100%; border-radius:3px; transition:width 0.5s ease; }
+    .prog-section-count { font-size:12px; color:var(--text3); width:36px; text-align:right; flex-shrink:0; }
+
+    /* BOTTOM NAV — 5 items with center FAB */
+    .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:10; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-top:0.5px solid var(--border2); display:flex; align-items:flex-end; justify-content:space-around; padding:8px 0 max(10px,env(safe-area-inset-bottom)); }
+    .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; font-size:10px; color:var(--text3); padding:4px 10px; border-radius:10px; transition:color 0.15s; }
+    .nav-item i { font-size:22px; }
+    .nav-item.active { color:#F97316; }
+    .nav-fab { position:relative; top:-14px; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; padding:0; }
+    .nav-fab-ring { width:52px; height:52px; border-radius:50%; background:linear-gradient(135deg,#F59E0B,#F97316,#FB7185); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 16px rgba(249,115,22,0.4); transition:transform 0.15s,box-shadow 0.15s; }
+    .nav-fab-ring:active { transform:scale(0.94); }
+    .nav-fab-ring svg { width:28px; height:28px; }
+    .nav-fab-label { font-size:10px; color:var(--text3); margin-top:2px; }
+    .nav-fab.active .nav-fab-label { color:#F97316; }
+    .nav-fab.active .nav-fab-ring { box-shadow:0 4px 20px rgba(249,115,22,0.6); }
+
+    /* COMPACT WEEKLY RUNS */
+    .wr-runclub-box { background:var(--bg2); border:0.5px solid var(--border2); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:14px; }
+    .wr-runclub-label { font-size:11px; font-weight:600; color:var(--text2); text-transform:uppercase; letter-spacing:0.04em; margin-bottom:8px; }
+    .wr-runclub-days { display:flex; gap:6px; flex-wrap:wrap; }
+    .wr-rc-day { padding:5px 10px; border-radius:20px; border:1px solid var(--border2); background:var(--bg); font-size:12px; color:var(--text2); cursor:pointer; transition:all 0.15s; user-select:none; }
+    .wr-rc-day.selected { background:linear-gradient(135deg,#C084FC,#A855F7); color:white; border-color:transparent; }
+    .session-pills { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+    .session-pill { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:1.5px solid var(--border2); border-radius:20px; background:var(--bg2); cursor:pointer; font-size:12px; font-weight:500; color:var(--text2); transition:all 0.15s; user-select:none; white-space:nowrap; }
+    .session-pill-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+    .session-pill.active-pill { border-color:#F97316; background:#FFF8F0; color:#F97316; }
+    .wr-day { display:flex; align-items:center; gap:8px; padding:8px 12px; border:0.5px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; transition:all 0.15s; min-height:42px; }
+    .wr-day.today-day { border-color:#F97316; background:#FFF8F0; }
+    .wr-day.has-session { background:var(--bg); }
+    .wr-day-name { font-size:13px; font-weight:500; color:var(--text2); width:28px; flex-shrink:0; }
+    .wr-day.today-day .wr-day-name { color:#F97316; }
+    .wr-today-badge { font-size:9px; padding:1px 5px; border-radius:5px; background:#F97316; color:white; flex-shrink:0; }
   </style>
 </head>
 <body>
@@ -248,10 +318,24 @@
       <i class="ti ti-bell"></i>
       <span>Tap to enable 8am daily reminders</span>
     </div>
-    <div class="day-progress">
-      <div class="progress-label"><span>Today's progress</span><span id="progress-label">0 of 0 done</span></div>
-      <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <!-- BRIEFING CARD -->
+    <div class="briefing-toggle" onclick="toggleBriefing()">
+      <div class="briefing-toggle-header">
+        <div class="briefing-toggle-left">
+          <div class="briefing-icon"><i class="ti ti-news"></i></div>
+          <div>
+            <div class="briefing-toggle-title">Daily Briefing</div>
+            <div class="briefing-toggle-sub" id="briefing-sub-label">Podcasts · News · PE & Investing</div>
+          </div>
+        </div>
+        <i class="ti ti-chevron-down" id="briefing-chevron" style="color:var(--text3);font-size:16px;transition:transform 0.25s"></i>
+      </div>
     </div>
+    <div class="briefing-body" id="briefing-body">
+      <div id="briefing-content"></div>
+    </div>
+
     <div class="sections">
 
       <!-- SPORT -->
@@ -431,10 +515,43 @@
     </div>
   </div>
 
+  <!-- PROGRESS LAYER -->
+  <div id="layer-progress" class="layer">
+    <div class="app-header" style="padding-bottom:10px">
+      <div class="app-date" id="prog-date-label"></div>
+      <div class="app-greeting">Today's <span>Progress</span></div>
+    </div>
+    <div class="progress-ring-wrap">
+      <svg class="progress-ring-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#F59E0B"/>
+            <stop offset="50%" stop-color="#F97316"/>
+            <stop offset="100%" stop-color="#FB7185"/>
+          </linearGradient>
+        </defs>
+        <circle cx="60" cy="60" r="50" fill="none" stroke="#FFF1E6" stroke-width="10"/>
+        <circle id="prog-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.7s ease"/>
+        <text id="prog-pct" x="60" y="56" text-anchor="middle" class="prog-pct-text">0%</text>
+        <text id="prog-done-txt" x="60" y="72" text-anchor="middle" class="prog-done-text">0 of 0 done</text>
+      </svg>
+    </div>
+    <div class="prog-sections" id="prog-sections"></div>
+  </div>
+
   <nav class="bottom-nav">
     <button class="nav-item active" onclick="showLayer('today',this)"><i class="ti ti-calendar"></i>Today</button>
-    <button class="nav-item" onclick="showLayer('motivations',this)"><i class="ti ti-flame"></i>Motivations</button>
-    <button class="nav-item" onclick="showLayer('affirmations',this)"><i class="ti ti-heart"></i>Affirmations</button>
+    <button class="nav-item" onclick="showLayer('motivations',this)"><i class="ti ti-flame"></i>Motivate</button>
+    <button class="nav-fab" id="nav-fab-progress" onclick="showLayerFab('progress')">
+      <div class="nav-fab-ring">
+        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="14" cy="14" r="11" stroke="rgba(255,255,255,0.4)" stroke-width="2.5"/>
+          <circle id="nav-ring" cx="14" cy="14" r="11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="69.1" stroke-dashoffset="69.1" transform="rotate(-90 14 14)" style="transition:stroke-dashoffset 0.5s ease"/>
+        </svg>
+      </div>
+      <span class="nav-fab-label">Progress</span>
+    </button>
+    <button class="nav-item" onclick="showLayer('affirmations',this)"><i class="ti ti-heart"></i>Affirm</button>
     <button class="nav-item" onclick="showLayer('visualisations',this)"><i class="ti ti-sparkles"></i>Vision</button>
   </nav>
 </div>
@@ -484,8 +601,17 @@ function enterApp() {
 function showLayer(id, btn) {
   document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('nav-fab-progress').classList.remove('active');
   document.getElementById('layer-'+id).classList.add('active');
   btn.classList.add('active');
+}
+
+function showLayerFab(id) {
+  document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+  document.getElementById('layer-'+id).classList.add('active');
+  document.getElementById('nav-fab-progress').classList.add('active');
+  if (id==='progress') renderProgressLayer();
 }
 
 function toggleSection(id) {
@@ -609,50 +735,65 @@ function saveAssignment(dayName, type) {
 function renderWeeklyRuns() {
   activeSessionType = null;
   const plan = getWeekPlan();
+  const runClubDays = plan._runClubDays || [];
   const todayName = DAYS[(new Date().getDay()+6)%7];
-  const dates = weekDates();
 
   const wrap = document.getElementById('weekly-runs-view');
   wrap.innerHTML = `<div class="weekly-runs-wrap">
-    <p class="wr-hint">Tap a session below, then tap a day to place it</p>
-    <div class="session-cards" id="wr-session-cards">
-      ${SESSION_OPTIONS.map(s => `
-        <div class="session-card" id="sc-${s.value}" onclick="selectSessionCard('${s.value}')">
-          <div class="session-card-dot" style="background:${s.dot}"></div>
-          <div class="session-card-body">
-            <div class="session-card-title">${s.label}</div>
-            <div class="session-card-desc">${s.desc}</div>
-            <div class="session-card-detail">${s.detail}</div>
-          </div>
-          <i class="ti ti-check session-card-check"></i>
-        </div>
-      `).join('')}
+    <div class="wr-runclub-box">
+      <div class="wr-runclub-label">Run clubs this week?</div>
+      <div class="wr-runclub-days">
+        ${DAYS.map(d=>`<div class="wr-rc-day ${runClubDays.includes(d)?'selected':''}" onclick="toggleRunClubDay('${d}')">${d}</div>`).join('')}
+      </div>
+    </div>
+    <p class="wr-hint" style="margin-bottom:10px">Tap a session type, then tap a day to assign</p>
+    <div class="session-pills" id="wr-session-pills">
+      ${SESSION_OPTIONS.map(s=>`
+        <div class="session-pill" id="sc-${s.value}" onclick="selectSessionCard('${s.value}')">
+          <span class="session-pill-dot" style="background:${s.dot}"></span>${s.label}
+        </div>`).join('')}
     </div>
     <div class="wr-calendar-label">This week — assign your runs</div>
-    <div class="wr-calendar" id="wr-calendar">
-      ${DAYS.map((day, i) => {
+    <div class="wr-calendar" id="wr-calendar" style="display:flex;flex-direction:column;gap:5px">
+      ${DAYS.map(day => {
         const assigned = plan[day];
         const sess = SESSION_OPTIONS.find(s=>s.value===assigned);
         const isToday = day === todayName;
+        const isRC = runClubDays.includes(day);
         return `
           <div class="wr-day ${isToday?'today-day':''} ${assigned?'has-session':''}" onclick="assignDay('${day}')" id="wr-day-${day}">
-            <span class="wr-day-name">${day}${isToday?'<span class="wr-today-badge">today</span>':''}</span>
-            <div class="wr-day-content">
+            <span class="wr-day-name">${day}</span>
+            ${isToday?'<span class="wr-today-badge">today</span>':''}
+            ${isRC&&!assigned?'<span style="font-size:10px;color:#A855F7;font-weight:500">run club</span>':''}
+            <div class="wr-day-content" style="flex:1">
               ${assigned && sess
-                ? `<span class="wr-session-pill" style="background:${sess.bg};color:${sess.text}"><span class="wr-session-dot" style="background:${sess.dot}"></span>${sess.label}</span>`
-                : `<span class="wr-empty-slot">— rest</span>`}
+                ? `<span class="wr-session-pill" style="background:${sess.bg};color:${sess.text};padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:${sess.dot};display:inline-block"></span>${sess.label}</span>`
+                : `<span style="font-size:12px;color:var(--text3)">— rest</span>`}
             </div>
-            ${assigned ? `<button class="wr-day-clear" onclick="clearDay(event,'${day}')" aria-label="Clear"><i class="ti ti-x"></i></button>` : ''}
+            ${assigned?`<button class="wr-day-clear" onclick="clearDay(event,'${day}')" style="opacity:1;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px"><i class="ti ti-x"></i></button>`:''}
           </div>`;
       }).join('')}
     </div>
   </div>`;
 }
 
+function toggleRunClubDay(day) {
+  if(!data.weekPlans) data.weekPlans={};
+  if(!data.weekPlans[weekKey()]) data.weekPlans[weekKey()]={};
+  const plan=data.weekPlans[weekKey()];
+  const days=plan._runClubDays||[];
+  const idx=days.indexOf(day);
+  if(idx>-1) days.splice(idx,1); else days.push(day);
+  plan._runClubDays=days;
+  save();
+  renderWeeklyRuns();
+  if(activeSessionType) document.getElementById('sc-'+activeSessionType)?.classList.add('active-pill');
+}
+
 function selectSessionCard(type) {
   activeSessionType = activeSessionType === type ? null : type;
-  document.querySelectorAll('.session-card').forEach(c => c.classList.remove('active-card'));
-  if (activeSessionType) document.getElementById('sc-' + activeSessionType).classList.add('active-card');
+  document.querySelectorAll('.session-pill').forEach(c => c.classList.remove('active-pill'));
+  if (activeSessionType) document.getElementById('sc-' + activeSessionType)?.classList.add('active-pill');
 }
 
 function assignDay(dayName) {
@@ -787,8 +928,19 @@ function renderTasks() {
     document.getElementById('count-'+sec).textContent=count?`${done}/${count}`:'';
   });
   const pct=totalAll?Math.round(totalDone/totalAll*100):0;
-  document.getElementById('progress-fill').style.width=pct+'%';
-  document.getElementById('progress-label').textContent=`${totalDone} of ${totalAll} done`;
+  // update nav FAB ring
+  const circumNav=69.1;
+  const navRing=document.getElementById('nav-ring');
+  if(navRing) navRing.style.strokeDashoffset=circumNav-(circumNav*pct/100);
+  // store for progress layer
+  window._progState={totalDone,totalAll,pct,sections:{}};
+  sections.forEach(sec=>{
+    const habits=CW_HABITS.filter(h=>h.section===sec);
+    const hDone=habits.filter(h=>data.cwDone&&data.cwDone[h.id]).length;
+    const tDone=(data[sec]||[]).filter(t=>t.done).length;
+    const total=habits.length+(data[sec]||[]).length;
+    window._progState.sections[sec]={done:hDone+tDone,total};
+  });
 }
 
 function toggleCW(id) { if(!data.cwDone)data.cwDone={}; data.cwDone[id]=!data.cwDone[id]; save(); renderTasks(); }
@@ -873,6 +1025,84 @@ function scheduleEightAmNotification() {
     });
     scheduleEightAmNotification();
   }, msUntil);
+}
+
+/* ── PROGRESS LAYER ────────────────────────────────────── */
+function renderProgressLayer() {
+  const s=window._progState||{totalDone:0,totalAll:0,pct:0,sections:{}};
+  const circ=314;
+  const offset=circ-(circ*s.pct/100);
+  const ring=document.getElementById('prog-ring-circle');
+  if(ring) { ring.style.strokeDashoffset=offset; }
+  const pctEl=document.getElementById('prog-pct'); if(pctEl) pctEl.textContent=s.pct+'%';
+  const doneEl=document.getElementById('prog-done-txt'); if(doneEl) doneEl.textContent=`${s.totalDone} of ${s.totalAll} done`;
+  const dateEl=document.getElementById('prog-date-label'); if(dateEl){
+    const d=new Date(); const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    dateEl.textContent=`${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
+  }
+  const sectionMeta={sport:{label:'Sport',color:'#F59E0B'},work:{label:'Work',color:'#F97316'},social:{label:'Social',color:'#FB7185'},daily:{label:'Daily',color:'#C084FC'}};
+  const cont=document.getElementById('prog-sections'); if(!cont)return;
+  cont.innerHTML=Object.entries(sectionMeta).map(([key,meta])=>{
+    const sec=s.sections[key]||{done:0,total:0};
+    const pct=sec.total?Math.round(sec.done/sec.total*100):0;
+    return `<div class="prog-section-row">
+      <span class="prog-section-name">${meta.label}</span>
+      <div class="prog-mini-track"><div class="prog-mini-fill" style="width:${pct}%;background:${meta.color}"></div></div>
+      <span class="prog-section-count">${sec.done}/${sec.total||0}</span>
+    </div>`;
+  }).join('');
+}
+
+/* ── BRIEFING ──────────────────────────────────────────── */
+const BRIEFING = {
+  updated: '17 Jun 2026',
+  podcasts: [
+    { show:'BBC Global News Podcast', title:'The latest world news and analysis', desc:'Comprehensive 30-min daily wrap of global politics, economics and breaking news. Perfect morning listen.', url:'https://www.bbc.co.uk/programmes/p02nq0gn/episodes/downloads', dot:'#3B82F6' },
+    { show:'The Daily — NYT', title:'Today\'s top story in depth', desc:'The New York Times flagship daily podcast — one major story explored deeply in 20 minutes.', url:'https://www.nytimes.com/column/the-daily', dot:'#1C1917' },
+    { show:'Huberman Lab', title:'Science-based tools for everyday life', desc:'Professor Andrew Huberman (Stanford) breaks down neuroscience, sleep, performance and health with rigorous sourcing.', url:'https://www.hubermanlab.com/podcast', dot:'#0D9488' },
+    { show:'Diary of a CEO — Steven Bartlett', title:'The habits of world-class performers', desc:'Candid, long-form conversations with entrepreneurs, scientists and leaders on what actually drives success.', url:'https://www.stevenbartlett.com/the-diary-of-a-ceo-podcast/', dot:'#A855F7' },
+    { show:'Planet Money — NPR', title:'The economy, explained', desc:'NPR\'s brilliant economics storytelling — accessible, smart and always surprising. Great for PE/investing context.', url:'https://www.npr.org/podcasts/510289/planet-money', dot:'#F59E0B' }
+  ],
+  news: [
+    { source:'The Economist', headline:'Global trade routes are being redrawn', summary:'New geopolitical alignments are reshaping supply chains, with emerging markets capturing manufacturing share previously held by China. The implications for private capital are significant.', url:'https://www.economist.com/international' },
+    { source:'BBC World News', headline:'Climate finance gap remains a critical challenge', summary:'Despite COP pledges, the gap between climate finance commitments and actual flows to developing nations remains vast — an area where impact investing is increasingly being called upon.', url:'https://www.bbc.com/news/science-environment' },
+    { source:'Financial Times', headline:'Private equity pivots to operational value creation', summary:'With higher interest rates compressing leverage-driven returns, top PE firms are doubling down on operational improvements. ESG and impact metrics are increasingly part of value creation plans.', url:'https://www.ft.com/private-equity' }
+  ]
+};
+
+function toggleBriefing() {
+  const body=document.getElementById('briefing-body');
+  const chevron=document.getElementById('briefing-chevron');
+  const isOpen=body.classList.contains('open');
+  if(!isOpen) renderBriefing();
+  body.classList.toggle('open');
+  chevron.style.transform=isOpen?'':'rotate(180deg)';
+}
+
+function renderBriefing() {
+  const cont=document.getElementById('briefing-content');
+  cont.innerHTML=`
+    <div class="briefing-section-label">🎧 Recommended Listens</div>
+    ${BRIEFING.podcasts.map(p=>`
+      <div class="podcast-item">
+        <div class="podcast-dot" style="background:${p.dot}"></div>
+        <div class="podcast-info">
+          <div class="podcast-show">${esc(p.show)}</div>
+          <div class="podcast-title">${esc(p.title)}</div>
+          <div class="podcast-desc">${esc(p.desc)}</div>
+          <a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen / Subscribe</a>
+        </div>
+      </div>`).join('')}
+    <div class="briefing-section-label">🌍 News Highlights</div>
+    ${BRIEFING.news.map(n=>`
+      <div class="news-item">
+        <div class="news-source">${esc(n.source)}</div>
+        <div class="news-headline">${esc(n.headline)}</div>
+        <div class="news-summary">${esc(n.summary)}</div>
+        <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>
+      </div>`).join('')}
+    <div class="briefing-updated">Curated content · Updated ${BRIEFING.updated}</div>`;
 }
 
 /* ── INIT ──────────────────────────────────────────────── */
