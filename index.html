@@ -346,6 +346,18 @@
     .wr-day-name { font-size:12px; font-weight:500; color:var(--text2); width:28px; flex-shrink:0; letter-spacing:0.02em; }
     .wr-day.today-day .wr-day-name { color:var(--sage); }
     .wr-today-badge { font-size:9px; padding:1px 5px; border-radius:2px; background:var(--sage); color:white; flex-shrink:0; letter-spacing:0.04em; }
+
+    /* DISCOVER SECTIONS */
+    .disc-section { background:var(--card); border:0.5px solid var(--border2); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; }
+    .disc-section-header { display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer; user-select:none; }
+    .disc-section-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+    .disc-section-meta { flex:1; }
+    .disc-section-title { font-size:14px; font-weight:400; color:var(--text); letter-spacing:0.01em; }
+    .disc-section-sub { font-size:10px; color:var(--text3); margin-top:2px; letter-spacing:0.04em; }
+    .disc-chevron { font-size:14px; color:var(--text3); transition:transform 0.25s; }
+    .disc-section.open .disc-chevron { transform:rotate(180deg); }
+    .disc-section-body { display:none; border-top:0.5px solid var(--border); background:var(--bg2); }
+    .disc-section.open .disc-section-body { display:block; }
   </style>
 </head>
 <body>
@@ -1397,51 +1409,88 @@ function submitBriefingPaste() {
 /* ── DISCOVER LAYER ───────────────────────────────────── */
 const DISCOVER_CONTENT = {
   updated: '17 Jun 2026',
-  listen: {
-    show: 'Huberman Lab',
-    title: 'Andy Stumpf: Discipline, Resilience & Mental Clarity',
-    desc: 'Retired Navy SEAL breaks down the exact mental frameworks elite operators use to perform under pressure — discipline as a skill you build, not a trait you have. Unusually honest on high-performer mental health.',
-    url: 'https://www.hubermanlab.com/podcast',
-    why: 'Perfect this week — what separates people who show up from those who don\'t.'
-  },
-  news: [
+  podcasts: [
     {
-      source: 'WEF / EY Geostrategic',
-      headline: 'US-China tariffs: importers bearing 64% of the burden',
-      summary: 'Three months since "Liberation Day" tariffs, US importers are absorbing most costs — not exporters. Markets watching for negotiation signals. Geoeconomic confrontation now rated the most likely trigger of a global crisis in 2026.',
-      url: 'https://www.ey.com/en_gl/insights/geostrategy/geostrategic-analysis'
+      show: 'The Daily — NYT',
+      title: 'Today\'s top story, in depth',
+      desc: 'The New York Times flagship daily — one major story explored in 20 minutes. Essential morning listen.',
+      url: 'https://www.nytimes.com/column/the-daily',
+      dot: '#1C1917',
+      tag: 'Daily · 20 min'
     },
     {
-      source: 'WEF',
-      headline: 'Iran blockade diplomacy intensifies',
-      summary: 'US tightening pressure on Iranian ports; Iran continuing to threaten Strait of Hormuz. Significant implications for global oil prices and shipping routes — worth watching for supply chain impact.',
-      url: 'https://www.weforum.org/stories/2026/05/blockade-diplomacy-and-other-geopolitical-stories-to-know-this-month/'
+      show: 'BBC Global News Podcast',
+      title: 'World news & analysis',
+      desc: 'Comprehensive daily wrap of global politics, economics and breaking news from BBC correspondents worldwide.',
+      url: 'https://www.bbc.co.uk/programmes/p02nq0gn/episodes/downloads',
+      dot: '#B91C1C',
+      tag: 'Daily · 30 min'
     },
     {
-      source: 'VivaTech Paris — happening today',
-      headline: 'France & Germany define "sovereign technology" at VivaTech',
-      summary: 'Major joint policy announcement in Paris (VivaTech, June 17–20) on European AI sovereignty — a real shift in EU tech regulation with implications for where capital flows in digital infrastructure.',
-      url: 'https://vivatechnology.com'
+      show: 'Huberman Lab',
+      title: 'Andy Stumpf: Discipline, Resilience & Mental Clarity',
+      desc: 'Retired Navy SEAL breaks down battle-tested mental frameworks — discipline as a skill you build, not a trait you\'re born with.',
+      url: 'https://www.hubermanlab.com/podcast',
+      dot: '#0D9488',
+      tag: 'Latest episode · 2h'
+    },
+    {
+      show: 'Diary of a CEO — Steven Bartlett',
+      title: 'Graham Hancock: Lost civilizations',
+      desc: 'Archaeological findings that challenge mainstream history. Long-form and gripping — perfect for a commute or long run.',
+      url: 'https://www.stevenbartlett.com/the-diary-of-a-ceo-podcast/',
+      dot: '#7C3AED',
+      tag: 'Latest episode · 2h 20 min'
+    },
+    {
+      show: 'Planet Money — NPR',
+      title: 'The economy, explained',
+      desc: 'NPR\'s economics storytelling — always accessible, always surprising. Great context for PE and impact investing.',
+      url: 'https://www.npr.org/podcasts/510289/planet-money',
+      dot: '#D97706',
+      tag: 'Weekly'
+    },
+    {
+      show: 'Invest Like the Best',
+      title: 'PE, VC & private markets deep dives',
+      desc: 'Patrick O\'Shaughnessy interviews the world\'s top investors — private equity, growth, venture and impact. Indispensable for the industry.',
+      url: 'https://www.joincolossus.com/episodes?prod=invest-like-the-best',
+      dot: '#1D4ED8',
+      tag: 'Weekly'
     }
   ],
-  pe: [
+  bbc: [
     {
-      headline: 'Nest + IFM: £200m into climate private credit',
-      summary: 'UK\'s largest DC pension partnered with IFM Investors to deploy £200m into climate-focused private credit. Landmark signal that mainstream pension capital is moving into impact at scale.',
-      source: 'New Private Markets',
-      url: 'https://www.newprivatemarkets.com/impact-investing-private-equity/'
+      headline: 'Iran blockade diplomacy escalates',
+      summary: 'US tightening pressure on Iranian ports; Iran threatening Strait of Hormuz shipping. Significant implications for global oil and supply chains.',
+      url: 'https://www.bbc.com/news/world-middle-east'
     },
     {
-      headline: 'Impact PE: competitive returns finally materialising',
-      summary: 'Lightrock, Nest and Galvanize are demonstrating that private credit impact strategies can match mainstream PE returns. Institutional allocators starting to shift allocation accordingly.',
-      source: 'New Private Markets',
-      url: 'https://www.newprivatemarkets.com/'
+      headline: 'World Cup 2026: Portugal & England in action today',
+      summary: 'Portugal vs DR Congo and England vs Croatia are today\'s Group Stage fixtures. Messi already equalled the all-time World Cup scoring record (16 goals) with a hat-trick against Algeria.',
+      url: 'https://www.bbc.com/sport/football/world-cup'
     },
     {
-      headline: 'PE International June 2026: operational value creation',
-      summary: 'With higher rates compressing leverage-driven returns, top PE firms are doubling down on operational improvement. ESG and impact metrics increasingly central to value creation plans.',
-      source: 'Private Equity International',
-      url: 'https://www.privateequityinternational.com/download-the-june-2026-issue-of-private-equity-international/'
+      headline: 'Climate finance gap: pledges vs reality',
+      summary: 'Despite COP pledges, flows of climate finance to developing nations remain far below what\'s needed. Impact capital increasingly being called on to fill the gap.',
+      url: 'https://www.bbc.com/news/science-environment'
+    }
+  ],
+  economist: [
+    {
+      headline: 'US-China tariffs: 3 months in, importers absorb 64% of the burden',
+      summary: 'Since "Liberation Day" tariffs in April, American importers — not Chinese exporters — are bearing most of the cost. Geoeconomic confrontation now rated the most likely trigger of a global crisis.',
+      url: 'https://www.economist.com/finance-and-economics'
+    },
+    {
+      headline: 'Global trade routes are being redrawn',
+      summary: 'New geopolitical alignments are reshaping supply chains. Emerging markets are capturing manufacturing share previously held by China — significant implications for private capital allocation.',
+      url: 'https://www.economist.com/international'
+    },
+    {
+      headline: 'VivaTech Paris: Europe defines "sovereign technology"',
+      summary: 'France and Germany announced a joint definition of sovereign technology at VivaTech (June 17–20) — a major shift in EU AI policy with real consequences for where digital infrastructure capital flows.',
+      url: 'https://www.economist.com/europe'
     }
   ]
 };
@@ -1457,6 +1506,10 @@ function saveVicalviLeads(raw) {
   renderDiscoverLayer();
 }
 
+function toggleDiscSection(id) {
+  document.getElementById(id).classList.toggle('open');
+}
+
 function renderDiscoverLayer() {
   const body = document.getElementById('disc-body');
   const dateEl = document.getElementById('disc-date-label');
@@ -1469,69 +1522,100 @@ function renderDiscoverLayer() {
   const vicalvi = getVicalviLeads();
   const C = DISCOVER_CONTENT;
 
+  const podcastsHtml = C.podcasts.map(p => `
+    <div class="podcast-item">
+      <div class="podcast-dot" style="background:${p.dot}"></div>
+      <div class="podcast-info">
+        <div class="podcast-show">${esc(p.show)} <span style="font-weight:300;color:var(--text3)">· ${esc(p.tag)}</span></div>
+        <div class="podcast-title">${esc(p.title)}</div>
+        <div class="podcast-desc">${esc(p.desc)}</div>
+        <a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen</a>
+      </div>
+    </div>`).join('');
+
+  const bbcHtml = C.bbc.map(n => `
+    <div class="news-item">
+      <div class="news-headline">${esc(n.headline)}</div>
+      <div class="news-summary">${esc(n.summary)}</div>
+      <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read on BBC</a>
+    </div>`).join('');
+
+  const econHtml = C.economist.map(n => `
+    <div class="news-item">
+      <div class="news-headline">${esc(n.headline)}</div>
+      <div class="news-summary">${esc(n.summary)}</div>
+      <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read on The Economist</a>
+    </div>`).join('');
+
   body.innerHTML = `
-    <div class="mb-section-card">
-      <div class="mb-section-emoji">🎧</div>
-      <div class="mb-section-title">Today's Listen</div>
-      <div class="mb-section-content">
-        <div style="font-size:9px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px">${esc(C.listen.show)}</div>
-        <div style="font-family:'Cormorant Garamond',serif;font-size:18px;color:var(--text);line-height:1.3;margin-bottom:8px">${esc(C.listen.title)}</div>
-        <div style="font-size:13px;color:var(--text2);line-height:1.65;margin-bottom:6px">${esc(C.listen.desc)}</div>
-        <div style="font-size:12px;color:var(--text3);font-style:italic;margin-bottom:10px">${esc(C.listen.why)}</div>
-        <a class="briefing-link" href="${C.listen.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen</a>
-      </div>
-    </div>
+    <div style="padding:0 0 100px">
 
-    <div class="mb-section-card">
-      <div class="mb-section-emoji">🌍</div>
-      <div class="mb-section-title">Morning News Digest</div>
-      <div class="mb-section-content">
-        ${C.news.map(n => `<div class="news-item">
-          <div class="news-source">${esc(n.source)}</div>
-          <div class="news-headline">${esc(n.headline)}</div>
-          <div class="news-summary">${esc(n.summary)}</div>
-          <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>
-        </div>`).join('')}
-      </div>
-    </div>
-
-    <div class="mb-section-card">
-      <div class="mb-section-emoji">💼</div>
-      <div class="mb-section-title">PE & Impact Investing</div>
-      <div class="mb-section-content">
-        ${C.pe.map(p => `<div class="news-item">
-          <div style="font-size:14px;font-weight:400;color:var(--text);margin-bottom:4px">${esc(p.headline)}</div>
-          <div class="news-summary">${esc(p.summary)}</div>
-          <div style="font-size:9px;color:var(--text3);margin-top:4px;font-weight:600;letter-spacing:0.06em;text-transform:uppercase">${esc(p.source)}</div>
-          ${p.url ? `<a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>` : ''}
-        </div>`).join('')}
-      </div>
-    </div>
-
-    <div class="mb-section-card">
-      <div class="mb-section-emoji">🏢</div>
-      <div class="mb-section-title">Vicalvi Intelligence</div>
-      <div class="mb-section-content" id="disc-vicalvi-content">
-        ${vicalvi
-          ? mdToHtml(vicalvi)
-          : `<div style="color:var(--text3);font-size:13px;line-height:1.6;margin-bottom:14px">Run the Vicalvi research prompt in Claude each morning — Italian, French, Portuguese & UK hospitality leads — then paste below.</div>`}
-      </div>
-      <div style="margin-top:12px">
-        <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
-          <i class="ti ti-clipboard" style="font-size:13px"></i> ${vicalvi ? 'Update leads' : 'Paste today\'s leads'}
-        </button>
-      </div>
-      <div class="mb-paste-area" id="disc-paste-area" style="display:none;margin-top:12px">
-        <textarea id="disc-paste-input" placeholder="Paste Vicalvi leads here…">${vicalvi || ''}</textarea>
-        <div class="mb-paste-actions">
-          <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
-          <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
+      <!-- PODCASTS -->
+      <div class="disc-section open" id="ds-podcasts">
+        <div class="disc-section-header" onclick="toggleDiscSection('ds-podcasts')">
+          <div class="disc-section-icon" style="background:#E8EDE5;color:var(--sage)"><i class="ti ti-headphones"></i></div>
+          <div class="disc-section-meta">
+            <div class="disc-section-title">Podcasts</div>
+            <div class="disc-section-sub">${C.podcasts.length} picks · daily & weekly</div>
+          </div>
+          <i class="ti ti-chevron-down disc-chevron"></i>
+        </div>
+        <div class="disc-section-body">
+          <div style="padding:4px 16px 16px">${podcastsHtml}</div>
         </div>
       </div>
-    </div>
 
-    <div class="briefing-updated">Curated content · Updated ${C.updated}</div>
-  `;
+      <!-- DAILY NEWS -->
+      <div class="disc-section open" id="ds-news">
+        <div class="disc-section-header" onclick="toggleDiscSection('ds-news')">
+          <div class="disc-section-icon" style="background:#EDE8E3;color:var(--rust)"><i class="ti ti-world"></i></div>
+          <div class="disc-section-meta">
+            <div class="disc-section-title">Daily News</div>
+            <div class="disc-section-sub">BBC · The Economist</div>
+          </div>
+          <i class="ti ti-chevron-down disc-chevron"></i>
+        </div>
+        <div class="disc-section-body">
+          <div style="padding:8px 16px 4px">
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:18px;height:2px;background:#B91C1C;border-radius:1px"></span>BBC World News</div>
+            ${bbcHtml}
+            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin:16px 0 8px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:18px;height:2px;background:#B45309;border-radius:1px"></span>The Economist</div>
+            ${econHtml}
+          </div>
+        </div>
+      </div>
+
+      <!-- VICALVI -->
+      <div class="disc-section open" id="ds-vicalvi">
+        <div class="disc-section-header" onclick="toggleDiscSection('ds-vicalvi')">
+          <div class="disc-section-icon" style="background:#E5E8ED;color:#4A5E7A"><i class="ti ti-building"></i></div>
+          <div class="disc-section-meta">
+            <div class="disc-section-title">Work — Vicalvi</div>
+            <div class="disc-section-sub">${vicalvi ? 'Leads updated today' : 'Paste today\'s leads'}</div>
+          </div>
+          <i class="ti ti-chevron-down disc-chevron"></i>
+        </div>
+        <div class="disc-section-body">
+          <div style="padding:12px 16px 16px">
+            ${vicalvi
+              ? `<div class="mb-section-content" style="margin-bottom:14px">${mdToHtml(vicalvi)}</div>`
+              : `<div style="font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:16px">Run the Vicalvi prompt in Claude — search Italian, French, Portuguese & UK hospitality owners and developers needing renovation. Paste the output here.</div>`}
+            <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
+              <i class="ti ti-clipboard" style="font-size:13px"></i> ${vicalvi ? 'Update leads' : 'Paste today\'s leads'}
+            </button>
+            <div id="disc-paste-area" style="display:none;margin-top:12px">
+              <textarea id="disc-paste-input" style="width:100%;min-height:160px;padding:12px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.5" placeholder="Paste Vicalvi leads here…">${vicalvi || ''}</textarea>
+              <div class="mb-paste-actions" style="margin-top:8px">
+                <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
+                <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="briefing-updated">Updated ${C.updated}</div>
+    </div>`;
 }
 
 function showDiscPasteArea() {
