@@ -188,6 +188,17 @@
     .week-stat-val { font-size:20px; font-weight:500; color:var(--text); }
     .week-stat-label { font-size:10px; color:var(--text3); margin-top:2px; }
 
+    /* weekly history groups */
+    .hist-week { border:0.5px solid var(--border2); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; }
+    .hist-week-header { display:flex; align-items:center; gap:10px; padding:13px 16px; background:var(--bg2); cursor:pointer; user-select:none; }
+    .hist-week-label { flex:1; font-size:14px; font-weight:500; color:var(--text); }
+    .hist-week-km { font-size:18px; font-weight:600; color:#F97316; }
+    .hist-week-sub { font-size:11px; color:var(--text3); margin-top:1px; }
+    .hist-week-chevron { font-size:14px; color:var(--text3); transition:transform 0.2s; }
+    .hist-week.open .hist-week-chevron { transform:rotate(180deg); }
+    .hist-week-body { display:none; border-top:0.5px solid var(--border); }
+    .hist-week.open .hist-week-body { display:block; }
+
     /* bottom nav */
     .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:10; background:rgba(255,255,255,0.92); backdrop-filter:blur(12px); border-top:0.5px solid var(--border2); display:flex; justify-content:space-around; padding:10px 0 max(10px,env(safe-area-inset-bottom)); }
     .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; font-size:10px; color:var(--text3); padding:4px 12px; border-radius:10px; transition:color 0.15s; }
@@ -785,22 +796,29 @@ function renderWeeklyRuns() {
     </div>
     <div class="wr-calendar-label">This week — assign your runs</div>
     <div class="wr-calendar" id="wr-calendar" style="display:flex;flex-direction:column;gap:5px">
-      ${DAYS.map(day => {
+      ${DAYS.map((day, i) => {
         const assigned = plan[day];
         const sess = SESSION_OPTIONS.find(s=>s.value===assigned);
         const isToday = day === todayName;
         const isRC = runClubDays.includes(day);
+        // check if a run was actually logged on this date this week
+        const dates = weekDates();
+        const dayDate = dates[i];
+        const loggedRun = (data.runLog||[]).find(r => r.date === dayDate);
+        const hasActivity = assigned || loggedRun;
         return `
-          <div class="wr-day ${isToday?'today-day':''} ${assigned?'has-session':''}" onclick="assignDay('${day}')" id="wr-day-${day}">
+          <div class="wr-day ${isToday?'today-day':''} ${hasActivity?'has-session':''}" onclick="assignDay('${day}')" id="wr-day-${day}">
             <span class="wr-day-name">${day}</span>
             ${isToday?'<span class="wr-today-badge">today</span>':''}
-            ${isRC&&!assigned?'<span style="font-size:10px;color:#A855F7;font-weight:500">run club</span>':''}
+            ${isRC&&!assigned&&!loggedRun?'<span style="font-size:10px;color:#A855F7;font-weight:500">club</span>':''}
             <div class="wr-day-content" style="flex:1">
-              ${assigned && sess
-                ? `<span class="wr-session-pill" style="background:${sess.bg};color:${sess.text};padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:${sess.dot};display:inline-block"></span>${sess.label}</span>`
-                : `<span style="font-size:12px;color:var(--text3)">— rest</span>`}
+              ${loggedRun
+                ? `<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#16A34A"><span style="width:6px;height:6px;border-radius:50%;background:#16A34A;display:inline-block"></span>${loggedRun.dist.toFixed(1)}km · ${loggedRun.pace||loggedRun.time||''}</span>`
+                : assigned && sess
+                  ? `<span class="wr-session-pill" style="background:${sess.bg};color:${sess.text};padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:${sess.dot};display:inline-block"></span>${sess.label}</span>`
+                  : `<span style="font-size:12px;color:var(--text3)">— rest</span>`}
             </div>
-            ${assigned?`<button class="wr-day-clear" onclick="clearDay(event,'${day}')" style="opacity:1;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px"><i class="ti ti-x"></i></button>`:''}
+            ${assigned&&!loggedRun?`<button class="wr-day-clear" onclick="clearDay(event,'${day}')" style="opacity:1;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px"><i class="ti ti-x"></i></button>`:''}
           </div>`;
       }).join('')}
     </div>
@@ -884,43 +902,90 @@ function deleteRun(i) {
   save(); renderRunHistory();
 }
 
+function getMonday(dateStr) {
+  const d = new Date(dateStr + 'T12:00:00');
+  const day = d.getDay();
+  const diff = (day === 0 ? -6 : 1 - day);
+  d.setDate(d.getDate() + diff);
+  return d.toISOString().slice(0,10);
+}
+
+function formatWeekLabel(mondayStr) {
+  const d = new Date(mondayStr + 'T12:00:00');
+  const sun = new Date(d); sun.setDate(d.getDate() + 6);
+  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const startLabel = `${d.getDate()} ${mo[d.getMonth()]}`;
+  const endLabel = `${sun.getDate()} ${mo[sun.getMonth()]} ${sun.getFullYear()}`;
+  return `${startLabel} – ${endLabel}`;
+}
+
 function renderRunHistory() {
   const runs = data.runLog || [];
   const hist = document.getElementById('run-history');
 
-  // weekly stats
-  const weekStart = new Date();
-  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1);
-  const weekKey = weekStart.toISOString().slice(0,10);
-  const weekRuns = runs.filter(r => r.date >= weekKey);
-  const weekKm = weekRuns.reduce((s,r)=>s+(r.dist||0),0);
+  // top stats — current week
+  const thisMonday = getMonday(todayKey());
+  const weekRuns = runs.filter(r => getMonday(r.date) === thisMonday);
+  const weekKm = weekRuns.reduce((s,r) => s + (r.dist||0), 0);
+  const totalKm = runs.reduce((s,r) => s + (r.dist||0), 0);
   document.getElementById('week-stats').innerHTML = `
     <div class="week-stat"><div class="week-stat-val">${weekKm.toFixed(1)}</div><div class="week-stat-label">km this week</div></div>
     <div class="week-stat"><div class="week-stat-val">${weekRuns.length}</div><div class="week-stat-label">runs this week</div></div>
-    <div class="week-stat"><div class="week-stat-val">${runs.length}</div><div class="week-stat-label">total runs</div></div>
+    <div class="week-stat"><div class="week-stat-val">${totalKm.toFixed(1)}</div><div class="week-stat-label">km total</div></div>
   `;
 
   if (!runs.length) { hist.innerHTML = '<div class="empty-state">No runs logged yet.<br>Log your first run above.</div>'; return; }
 
+  // group by Monday of each week
+  const weekMap = new Map();
+  runs.forEach((r, i) => {
+    const mon = getMonday(r.date);
+    if (!weekMap.has(mon)) weekMap.set(mon, []);
+    weekMap.get(mon).push({ ...r, _idx: i });
+  });
+  const sortedWeeks = [...weekMap.keys()].sort((a,b) => b.localeCompare(a));
+
   const typeClass = { easy:'type-easy', intervals:'type-intervals', tempo:'type-tempo', long:'type-long', club:'type-club', race:'type-race' };
-  hist.innerHTML = runs.map((r,i) => `
-    <div class="run-entry">
-      <div class="run-entry-top">
-        <div>
-          <span class="run-type-badge ${typeClass[r.type]||'type-easy'}">${r.type}</span>
-          <span class="run-date" style="margin-left:8px">${r.date}</span>
+  const typeLabel = { easy:'Easy', intervals:'Intervals', tempo:'Tempo', long:'Long', club:'Club', race:'Race' };
+
+  hist.innerHTML = sortedWeeks.map((mon, wi) => {
+    const wRuns = weekMap.get(mon);
+    const wKm = wRuns.reduce((s,r) => s + (r.dist||0), 0);
+    const isCurrentWeek = mon === thisMonday;
+    const runsHtml = wRuns.map(r => `
+      <div class="run-entry" style="border-bottom:0.5px solid var(--border);padding:12px 16px;margin:0">
+        <div class="run-entry-top">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span class="run-type-badge ${typeClass[r.type]||'type-easy'}">${typeLabel[r.type]||r.type}</span>
+            <span class="run-date">${r.date}</span>
+            ${r.notes ? `<span style="font-size:12px;color:var(--text2);font-style:italic">${esc(r.notes)}</span>` : ''}
+          </div>
+          <button class="run-del" onclick="deleteRun(${r._idx})" aria-label="Delete"><i class="ti ti-trash"></i></button>
         </div>
-        <button class="run-del" onclick="deleteRun(${i})" aria-label="Delete run"><i class="ti ti-trash"></i></button>
+        <div class="run-stats" style="margin-top:8px">
+          <div class="run-stat"><div class="run-stat-val">${r.dist ? r.dist.toFixed(2) : '—'}</div><div class="run-stat-label">km</div></div>
+          ${r.time ? `<div class="run-stat"><div class="run-stat-val">${esc(r.time)}</div><div class="run-stat-label">time</div></div>` : ''}
+          ${r.pace ? `<div class="run-stat"><div class="run-stat-val">${esc(r.pace)}</div><div class="run-stat-label">pace</div></div>` : ''}
+          <div class="run-stat"><div class="run-stat-val">${r.effort||'—'}/5</div><div class="run-stat-label">effort</div></div>
+        </div>
+      </div>`).join('');
+
+    return `<div class="hist-week ${isCurrentWeek ? 'open' : ''}" id="hw-${wi}">
+      <div class="hist-week-header" onclick="toggleHistWeek('hw-${wi}')">
+        <div style="flex:1">
+          <div class="hist-week-label">${isCurrentWeek ? 'This week' : formatWeekLabel(mon)}</div>
+          <div class="hist-week-sub">${wRuns.length} run${wRuns.length!==1?'s':''}</div>
+        </div>
+        <div class="hist-week-km">${wKm.toFixed(1)} km</div>
+        <i class="ti ti-chevron-down hist-week-chevron"></i>
       </div>
-      <div class="run-stats">
-        <div class="run-stat"><div class="run-stat-val">${r.dist ? r.dist.toFixed(1) : '—'}</div><div class="run-stat-label">km</div></div>
-        ${r.time ? `<div class="run-stat"><div class="run-stat-val">${esc(r.time)}</div><div class="run-stat-label">time</div></div>` : ''}
-        ${r.pace ? `<div class="run-stat"><div class="run-stat-val">${esc(r.pace)}</div><div class="run-stat-label">pace</div></div>` : ''}
-        <div class="run-stat"><div class="run-stat-val">${r.effort||'—'}/5</div><div class="run-stat-label">effort</div></div>
-      </div>
-      ${r.notes ? `<div class="run-notes">${esc(r.notes)}</div>` : ''}
-    </div>
-  `).join('');
+      <div class="hist-week-body">${runsHtml}</div>
+    </div>`;
+  }).join('');
+}
+
+function toggleHistWeek(id) {
+  document.getElementById(id).classList.toggle('open');
 }
 
 /* ── TASKS ────────────────────────────────────────────── */
