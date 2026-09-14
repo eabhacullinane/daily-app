@@ -208,7 +208,8 @@
     inset: 0;
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
+    padding: 20px;
   }
   .photo .placeholder {
     font-family: 'Josefin Sans', sans-serif;
@@ -536,10 +537,13 @@
     return parseFloat(m[0].replace(/\./g, '').replace(',', '.'));
   }
 
-  // Rows sharing the same product name + dimension are colour variants of
-  // one size — merge them into a single card listing each colour and price,
-  // instead of a separate card per row (mirrors how the old static catalogue
-  // grouped Little Bird by size).
+  // Rows sharing the same product name + dimension can be colour variants of
+  // one size (e.g. Little Bird: Oak/Walnut/Dark Blue) — merge those into a
+  // single card listing each colour and price. Only kicks in at 3+ variants,
+  // so a simple two-colour product (Porta Table Lamp, Obi Espresso Cup) stays
+  // as separate cards with its dimension in the usual place.
+  var MIN_VARIANTS_TO_GROUP = 3;
+
   function groupItems(rawItems) {
     var order = [];
     var byKey = {};
@@ -549,16 +553,19 @@
       if (!byKey[key]) { byKey[key] = []; order.push(key); }
       byKey[key].push(item);
     });
-    return order.map(function (key) {
+    var result = [];
+    order.forEach(function (key) {
       var variants = byKey[key];
-      if (variants.length === 1) return variants[0];
+      if (variants.length < MIN_VARIANTS_TO_GROUP) {
+        variants.forEach(function (v) { result.push(v); });
+        return;
+      }
 
       var merged = {};
       Object.keys(variants[0]).forEach(function (k) { merged[k] = variants[0][k]; });
       var dimShort = variants[0].dimension.replace(/\s*cm\s*$/i, '').trim();
       merged.name = dimShort ? variants[0].name + ' ' + dimShort : variants[0].name;
       merged.description = '';
-      merged.dimension = '';
       merged.price = '';
       merged.discountedPrice = '';
       merged.discount = '';
@@ -576,8 +583,9 @@
         var min = Math.min.apply(null, nums), max = Math.max.apply(null, nums);
         merged.priceRange = min === max ? formatEUR(min) : formatEUR(min) + ' – ' + formatEUR(max);
       }
-      return merged;
+      result.push(merged);
     });
+    return result;
   }
 
   function el(tag, attrs, children) {
