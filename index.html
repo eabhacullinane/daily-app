@@ -269,6 +269,29 @@
   }
   dl.meta dd { margin: 0; }
 
+  .colors {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    border-top: 1px solid var(--pale-gold);
+    padding-top: 12px;
+  }
+  .colors-label {
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--warm-grey);
+  }
+  .color-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #46403A;
+  }
+
   footer {
     margin-top: clamp(64px, 9vw, 120px);
     padding: 36px clamp(20px, 5vw, 88px) 0;
@@ -496,6 +519,55 @@
     };
   }
 
+  function formatEUR(n) {
+    return n.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  function parseEUR(v) {
+    var m = (v || '').replace(/\s/g, '').match(/[\d.,]+/);
+    if (!m) return NaN;
+    return parseFloat(m[0].replace(/\./g, '').replace(',', '.'));
+  }
+
+  // Rows sharing the same product name + dimension are colour variants of
+  // one size — merge them into a single card listing each colour and price,
+  // instead of a separate card per row (mirrors how the old static catalogue
+  // grouped Little Bird by size).
+  function groupItems(rawItems) {
+    var order = [];
+    var byKey = {};
+    rawItems.forEach(function (raw) {
+      var item = normalizeItem(raw);
+      var key = item.name.toLowerCase() + '|' + item.dimension.toLowerCase();
+      if (!byKey[key]) { byKey[key] = []; order.push(key); }
+      byKey[key].push(item);
+    });
+    return order.map(function (key) {
+      var variants = byKey[key];
+      if (variants.length === 1) return variants[0];
+
+      var merged = {};
+      Object.keys(variants[0]).forEach(function (k) { merged[k] = variants[0][k]; });
+      merged.description = '';
+      merged.price = '';
+      merged.discountedPrice = '';
+      merged.discount = '';
+      merged.colors = variants.map(function (v) {
+        return {
+          label: v.description || v.name,
+          price: v.discountedPrice || v.price || 'Sur devis'
+        };
+      });
+
+      var nums = merged.colors.map(function (c) { return parseEUR(c.price); }).filter(function (n) { return !isNaN(n); });
+      if (nums.length) {
+        var min = Math.min.apply(null, nums), max = Math.max.apply(null, nums);
+        merged.priceRange = min === max ? formatEUR(min) : formatEUR(min) + ' – ' + formatEUR(max);
+      }
+      return merged;
+    });
+  }
+
   function el(tag, attrs, children) {
     var e = document.createElement(tag);
     if (attrs) Object.keys(attrs).forEach(function (k) {
@@ -521,7 +593,9 @@
     }
 
     var priceBlock = el('div', { class: 'price-block' });
-    if (item.discountedPrice) {
+    if (item.colors) {
+      priceBlock.appendChild(el('span', { class: 'price-final', text: item.priceRange || 'Sur devis' }));
+    } else if (item.discountedPrice) {
       priceBlock.appendChild(el('span', { class: 'price-strike', text: item.price }));
       var finalRow = el('span', { class: 'price-final' });
       finalRow.appendChild(document.createTextNode(item.discountedPrice));
@@ -541,10 +615,22 @@
     var dl = el('dl', { class: 'meta' });
     renderMetaRow(dl, 'Fournisseur', item.supplier);
     renderMetaRow(dl, 'Dim.', item.dimension);
-    renderMetaRow(dl, 'Détails', item.description);
+    if (!item.colors) renderMetaRow(dl, 'Détails', item.description);
     renderMetaRow(dl, 'Design', item.designer);
 
-    var body = el('div', { class: 'product-body' }, [head, dl.children.length ? dl : null]);
+    var colorList = null;
+    if (item.colors) {
+      colorList = el('div', { class: 'colors' });
+      colorList.appendChild(el('span', { class: 'colors-label', text: 'Coloris' }));
+      item.colors.forEach(function (c) {
+        colorList.appendChild(el('div', { class: 'color-row' }, [
+          el('span', { text: c.label }),
+          el('span', { text: c.price })
+        ]));
+      });
+    }
+
+    var body = el('div', { class: 'product-body' }, [head, dl.children.length ? dl : null, colorList]);
 
     return el('article', { class: 'product' }, [photo, body]);
   }
@@ -575,8 +661,8 @@
     var grid = document.getElementById('grid');
     grid.innerHTML = '';
     if (!cat) return;
-    cat.items.forEach(function (raw) {
-      grid.appendChild(renderProduct(normalizeItem(raw)));
+    groupItems(cat.items).forEach(function (item) {
+      grid.appendChild(renderProduct(item));
     });
   }
 
