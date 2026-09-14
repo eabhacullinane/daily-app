@@ -335,11 +335,39 @@
 
   var HEADER_SIGNATURE = 'Nom produits';
 
-  // Known photos recovered from the previous static catalogue export —
-  // matched by exact product name until replaced by a "Photo URL" column.
-  var LOCAL_PHOTO_OVERRIDES = {
-    'vase step': 'assets/photos/vase-step-bleu.png'
-  };
+  // Official product photos sourced from suppliers' own sites, used until
+  // each row gets its own "Photo URL" column value. Matched by product name
+  // plus (when a name covers several colourways) a keyword from Description.
+  var LOCAL_PHOTO_OVERRIDES = [
+    { name: 'suspension bubba lamp', photo: 'assets/photos/suspension-bubba-lamp.jpg' },
+    { name: 'bubba lamp ceiling/wall', photo: 'assets/photos/bubba-lamp-ceiling-wall.jpg' },
+    { name: 'porta table lamp', color: 'brown', photo: 'assets/photos/porta-table-lamp-brown.jpg' },
+    { name: 'porta table lamp', color: 'green', photo: 'assets/photos/porta-table-lamp-green.jpg' },
+    { name: 'yo lamp small', photo: 'assets/photos/yo-lamp-small.jpg' },
+    { name: 'yo lamp large', photo: 'assets/photos/yo-lamp-large.jpg' },
+    { name: 'cosmic plate brown', photo: 'assets/photos/cosmic-plate-brown.jpg' },
+    { name: 'fit glass small clear', photo: 'assets/photos/fit-glass-small-clear.jpg' },
+    { name: 'whiskey glass - 2 pcs', photo: 'assets/photos/whiskey-glass.jpg' },
+    { name: 'obi bowl', photo: 'assets/photos/obi-bowl-grey.jpg' },
+    { name: 'obi espresso cup', color: 'grey', photo: 'assets/photos/obi-espresso-cup-grey.jpg' },
+    { name: 'obi espresso cup', color: 'sand', photo: 'assets/photos/obi-espresso-cup-sand.jpg' },
+    { name: 'little bird', color: 'oak', photo: 'assets/photos/little-bird-oak.jpg' },
+    { name: 'little bird', color: 'walnut', photo: 'assets/photos/little-bird-walnut.jpg' },
+    { name: 'little bird', color: 'dark blue', photo: 'assets/photos/little-bird-dark-blue.jpg' },
+    { name: 'little bird', color: 'yellow', photo: 'assets/photos/little-bird-yellow.jpg' },
+    { name: 'little bird', color: 'blue green', photo: 'assets/photos/little-bird-blue-green.jpg' },
+    { name: 'little bird', color: 'magenta', photo: 'assets/photos/little-bird-magenta.jpg' },
+    { name: 'little bird', color: 'ink blue', photo: 'assets/photos/little-bird-ink-blue.jpg' },
+    { name: 'little bird', color: 'light pink', photo: 'assets/photos/little-bird-light-pink.jpg' },
+    { name: 'vase step', photo: 'assets/photos/vase-step-brown.jpg' },
+    { name: 'miroir morning', photo: 'assets/photos/miroir-morning.jpg' },
+    { name: 'edge coffee table small travertine', photo: 'assets/photos/edge-coffee-table.jpg' },
+    { name: 'bit stool', photo: 'assets/photos/bit-stool.jpg' },
+    { name: 'pad lounge chair', photo: 'assets/photos/pad-lounge-chair.jpg' },
+    { name: 'mat armchair', photo: 'assets/photos/mat-armchair.jpg' },
+    { name: 'fauteuil drapeggi', photo: 'assets/photos/fauteuil-drapeggi.webp' },
+    { name: 'betta bois de rose', photo: 'assets/photos/betta-bois-de-rose.webp' }
+  ];
 
   var CATEGORY_LABELS = {};
 
@@ -444,8 +472,15 @@
 
     var photoUrl = findPhotoUrl(raw);
     if (!photoUrl) {
-      var override = LOCAL_PHOTO_OVERRIDES[name.trim().toLowerCase()];
-      if (override) photoUrl = override;
+      var nameKey = name.trim().toLowerCase();
+      var descKey = description.trim().toLowerCase();
+      var rule = LOCAL_PHOTO_OVERRIDES.find(function (r) {
+        return r.name === nameKey && r.color && descKey.indexOf(r.color) !== -1;
+      });
+      if (!rule) {
+        rule = LOCAL_PHOTO_OVERRIDES.find(function (r) { return r.name === nameKey && !r.color; });
+      }
+      if (rule) photoUrl = rule.photo;
     }
 
     return {
