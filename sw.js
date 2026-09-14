@@ -1,5 +1,5 @@
-const CACHE = 'daily-life-v12';
-const ASSETS = ['/', '/index.html', '/manifest.json'];
+const CACHE = 'vicalvi-v1';
+const ASSETS = ['/', '/index.html', '/manifest.json', '/icons/icon-192.png', '/icons/icon-512.png'];
 
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS)));
@@ -14,6 +14,7 @@ self.addEventListener('activate', e => {
 });
 
 self.addEventListener('fetch', e => {
+  if (new URL(e.request.url).origin !== self.location.origin) return; // let the live sheet fetch pass through untouched
   e.respondWith(
     caches.match(e.request).then(cached => cached || fetch(e.request))
   );

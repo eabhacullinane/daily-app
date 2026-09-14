@@ -1,11 +1,11 @@
 {
-  "name": "My Daily Life",
-  "short_name": "Daily Life",
-  "description": "Daily tasks, goals, motivations and visualisations",
+  "name": "VICALVI",
+  "short_name": "VICALVI",
+  "description": "Catalogue Vicalvi — mobilier, luminaires, vaisselle, accessoires et textiles.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#ffffff",
-  "theme_color": "#ffffff",
+  "background_color": "#F6F4EC",
+  "theme_color": "#F6F4EC",
   "orientation": "portrait",
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },

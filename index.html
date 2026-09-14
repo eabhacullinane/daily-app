@@ -1,1708 +1,532 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>My Daily Life</title>
-  <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#F2EDE5" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-  <meta name="apple-mobile-web-app-title" content="Daily Life" />
-  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --sage:#445E3C;    --moss:#6B8A62;   --fern:#8FAF86;
-      --stone:#9C9288;   --rust:#A0694A;   --dusty:#C9B8A8;
-      --bg:#F8F5F0;      --bg2:#F2EDE5;    --bg3:#EAE3D8;
-      --card:#FDFBF8;    --dark:#1A1815;
-      --text:#1A1815;    --text2:#5C5750;  --text3:#9C9690;
-      --border:rgba(92,87,80,0.1); --border2:rgba(92,87,80,0.18);
-      --radius:14px; --radius-sm:8px;
-    }
-    html,body { height:100%; font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); overflow-x:hidden; }
-    .serif { font-family:'Cormorant Garamond',Georgia,serif; }
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vicalvi — Sélection</title>
+<meta name="description" content="Catalogue Vicalvi — mobilier, luminaires, vaisselle, accessoires et textiles.">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#F6F4EC">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --ink: #14120F;
+    --white: #FFFFFF;
+    --taupe: #7E7067;
+    --warm-grey: #A59790;
+    --ecru: #F6F4EC;
+    --pale-gold: #E4E0C8;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: var(--ecru);
+    color: var(--ink);
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 0 0 120px;
+    min-height: 100vh;
+  }
+  a { color: var(--taupe); text-decoration: none; }
+  a:hover { color: var(--ink); }
+  .label-font { font-family: 'Josefin Sans', sans-serif; }
 
-    /* SPLASH */
-    #splash { position:fixed; inset:0; z-index:100; display:flex; flex-direction:column; align-items:center; justify-content:center; background:linear-gradient(160deg,#1A1815 0%,#263322 55%,#1A2018 100%); transition:opacity 0.8s ease,transform 0.8s ease; }
-    #splash.hidden { opacity:0; pointer-events:none; transform:scale(1.04); }
-    .sun-wrap { position:relative; width:160px; height:160px; margin-bottom:40px; animation:rise 1.6s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-    @keyframes rise { from{transform:translateY(50px);opacity:0} to{transform:translateY(0);opacity:1} }
-    .sun { position:absolute; inset:20px; border-radius:50%; background:radial-gradient(circle at 38% 38%,#D4C5A9,#B8A88A 50%,#8C7A5E); animation:pulse 4s ease-in-out infinite; }
-    @keyframes pulse { 0%,100%{box-shadow:0 0 40px 8px rgba(180,165,130,0.2),0 0 80px 20px rgba(140,122,94,0.08)} 50%{box-shadow:0 0 60px 18px rgba(180,165,130,0.3),0 0 120px 36px rgba(140,122,94,0.12)} }
-    .rays { position:absolute; inset:0; animation:spin-rays 28s linear infinite; }
-    @keyframes spin-rays { to{transform:rotate(360deg)} }
-    .ray { position:absolute; left:50%; top:50%; width:1.5px; border-radius:2px; background:linear-gradient(to top,rgba(180,165,130,0.35),transparent); transform-origin:bottom center; }
-    .horizon { position:absolute; bottom:0; left:50%; transform:translateX(-50%); width:200px; height:1px; background:linear-gradient(90deg,transparent,rgba(180,165,130,0.3),transparent); }
-    .splash-title { font-family:'Cormorant Garamond',Georgia,serif; font-size:42px; font-weight:300; letter-spacing:0.06em; color:#F2EDE5; animation:fade-up 1s 0.4s both; }
-    .splash-sub { font-size:12px; color:rgba(242,237,229,0.5); margin-top:10px; letter-spacing:0.12em; text-transform:uppercase; animation:fade-up 1s 0.6s both; }
-    @keyframes fade-up { from{opacity:0;transform:translateY(14px)} to{opacity:1;transform:translateY(0)} }
-    .enter-btn { margin-top:52px; padding:14px 44px; border-radius:2px; border:1px solid rgba(242,237,229,0.3); background:transparent; color:#F2EDE5; font-family:'Inter',sans-serif; font-size:12px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; cursor:pointer; animation:fade-up 1s 0.9s both; transition:background 0.25s,border-color 0.25s; }
-    .enter-btn:hover { background:rgba(242,237,229,0.08); border-color:rgba(242,237,229,0.5); }
-    .enter-btn:active { background:rgba(242,237,229,0.14); }
+  header {
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    padding: 44px clamp(20px, 5vw, 88px) 0;
+  }
+  .header-top {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .brand img { display: block; height: 30px; width: auto; }
+  .brand-tagline {
+    font-size: 11px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--taupe);
+  }
+  .contact-block {
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--taupe);
+    text-align: right;
+    line-height: 1.9;
+  }
+  .contact-block a { color: var(--ink); }
 
-    /* BACKGROUND */
-    #affirmations-bg { position:fixed; inset:0; z-index:0; overflow:hidden; pointer-events:none; }
-    .aff-word { position:absolute; font-size:13px; color:rgba(68,94,60,0.05); white-space:nowrap; animation:drift linear infinite; font-style:italic; font-family:'Cormorant Garamond',serif; }
-    @keyframes drift { from{transform:translateY(100vh)} to{transform:translateY(-120px)} }
+  nav {
+    display: flex;
+    gap: clamp(18px, 3vw, 40px);
+    flex-wrap: wrap;
+    border-top: 1px solid var(--pale-gold);
+    border-bottom: 1px solid var(--pale-gold);
+    padding: 18px 0;
+  }
+  nav button {
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--taupe);
+  }
+  nav button:hover { color: var(--ink); }
+  nav button[aria-selected="true"] { color: var(--ink); font-weight: 500; }
 
-    /* APP */
-    #app { position:relative; z-index:1; max-width:680px; margin:0 auto; padding:0 0 100px; opacity:0; transition:opacity 0.6s ease; display:none; }
-    #app.visible { opacity:1; }
+  .hero {
+    padding: clamp(40px, 6vw, 72px) clamp(20px, 5vw, 88px) 0;
+  }
+  .hero h1 {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 300;
+    font-size: clamp(38px, 7vw, 84px);
+    line-height: 0.98;
+    letter-spacing: -0.01em;
+  }
 
-    .app-header { padding:56px 20px 20px; background:linear-gradient(180deg,var(--bg) 0%,rgba(248,245,240,0) 100%); }
-    .app-date { font-size:11px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
-    .app-greeting { font-family:'Cormorant Garamond',Georgia,serif; font-size:32px; font-weight:300; color:var(--text); line-height:1.2; }
-    .app-greeting span { color:var(--sage); -webkit-text-fill-color:var(--sage); }
+  main {
+    padding: clamp(32px, 5vw, 56px) clamp(20px, 5vw, 88px) 0;
+  }
+  .status-msg {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    color: var(--taupe);
+    padding: 40px 0;
+  }
+  .status-msg button {
+    margin-left: 12px;
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 13px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: none;
+    border: 1px solid var(--taupe);
+    color: var(--ink);
+    padding: 6px 14px;
+    cursor: pointer;
+    border-radius: 2px;
+  }
 
-    .day-progress { margin:0 20px 20px; }
-    .progress-label { display:flex; justify-content:space-between; font-size:11px; color:var(--text3); margin-bottom:6px; letter-spacing:0.04em; }
-    .progress-track { height:3px; background:var(--bg3); border-radius:2px; overflow:hidden; }
-    .progress-fill { height:100%; border-radius:2px; background:var(--sage); transition:width 0.5s ease; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: clamp(32px, 4vw, 56px) clamp(22px, 3vw, 40px);
+  }
+  article.product {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  .photo {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    background: var(--white);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .photo img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .photo .placeholder {
+    font-family: 'Josefin Sans', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    color: var(--warm-grey);
+    text-align: center;
+    padding: 16px;
+  }
 
-    .sections { padding:0 16px; display:flex; flex-direction:column; gap:10px; }
+  .product-body { display: flex; flex-direction: column; gap: 12px; }
+  .product-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 14px;
+  }
+  .product-head h2 {
+    margin: 0;
+    font-family: 'Josefin Sans', sans-serif;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.3;
+  }
+  .price-block { text-align: right; white-space: nowrap; }
+  .price-strike {
+    display: block;
+    font-size: 12px;
+    color: var(--warm-grey);
+    text-decoration: line-through;
+  }
+  .price-final { font-size: 14px; color: var(--ink); }
+  .price-badge {
+    display: inline-block;
+    margin-left: 6px;
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    color: var(--olive, #839647);
+  }
 
-    .section-card { background:var(--card); border:0.5px solid var(--border2); border-radius:var(--radius); overflow:hidden; }
-    .section-header { display:flex; align-items:center; gap:14px; padding:16px 18px; cursor:pointer; user-select:none; }
-    .section-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
-    .icon-sport  { background:#E8EDE5; color:var(--sage); }
-    .icon-work   { background:#EDE8E3; color:var(--rust); }
-    .icon-social { background:#EDE5E8; color:#8C5E6E; }
-    .icon-daily  { background:#E5E8ED; color:#4A5E7A; }
-    .section-title { flex:1; font-size:15px; font-weight:400; letter-spacing:0.01em; color:var(--text); }
-    .section-count { font-size:11px; color:var(--text3); letter-spacing:0.04em; }
-    .section-chevron { font-size:14px; color:var(--text3); transition:transform 0.25s; }
-    .section-card.open .section-chevron { transform:rotate(180deg); }
-    .section-body { display:none; border-top:0.5px solid var(--border); }
-    .section-card.open .section-body { display:block; }
+  dl.meta {
+    margin: 0;
+    display: grid;
+    grid-template-columns: 78px minmax(0, 1fr);
+    gap: 6px 14px;
+    font-size: 12.5px;
+    line-height: 1.6;
+    color: #46403A;
+    border-top: 1px solid var(--pale-gold);
+    padding-top: 12px;
+  }
+  dl.meta dt {
+    color: var(--warm-grey);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-size: 10px;
+    padding-top: 2px;
+  }
+  dl.meta dd { margin: 0; }
 
-    /* sport sub-tabs */
-    .sub-tabs { display:flex; gap:0; border-bottom:0.5px solid var(--border); }
-    .sub-tab { flex:1; padding:10px 4px; text-align:center; font-size:11px; letter-spacing:0.04em; color:var(--text3); cursor:pointer; border:none; background:none; border-bottom:1.5px solid transparent; transition:all 0.15s; }
-    .sub-tab.active { color:var(--sage); border-bottom-color:var(--sage); font-weight:500; }
-
-    .sub-panel { display:none; padding:16px 18px 14px; }
-    .sub-panel.active { display:block; }
-
-    /* tasks */
-    .task-list { list-style:none; }
-    .task-item { display:flex; align-items:center; gap:12px; padding:11px 0; border-bottom:0.5px solid var(--border); }
-    .task-item:last-child { border-bottom:none; }
-    .task-cb { width:20px; height:20px; border-radius:50%; border:1px solid var(--border2); cursor:pointer; flex-shrink:0; display:flex; align-items:center; justify-content:center; transition:all 0.2s; background:transparent; }
-    .task-cb.done { background:var(--sage); border-color:transparent; }
-    .task-cb.done::after { content:''; width:4px; height:8px; border:1.5px solid white; border-top:none; border-left:none; transform:rotate(45deg) translateY(-1px); display:block; }
-    .task-cb.habit { border-color:var(--moss); }
-    .task-cb.habit.done { background:var(--sage); }
-    .task-text { flex:1; font-size:14px; color:var(--text); font-weight:300; }
-    .task-text.done { text-decoration:line-through; color:var(--text3); }
-    .daily-badge { font-size:9px; padding:2px 7px; border-radius:2px; background:var(--bg3); color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; }
-    .task-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:14px; opacity:0; transition:opacity 0.15s; }
-    .task-item:hover .task-del { opacity:1; }
-
-    .add-row { display:flex; gap:8px; margin-top:12px; }
-    .add-row input,
-    .add-row select { flex:1; padding:9px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg); color:var(--text); font-size:16px; outline:none; font-family:inherit; }
-    .add-row input:focus,.add-row select:focus { border-color:var(--sage); }
-    .add-row input::placeholder { color:var(--text3); }
-    .add-row button { padding:9px 14px; border-radius:var(--radius-sm); background:var(--dark); color:var(--bg); border:none; font-size:13px; cursor:pointer; white-space:nowrap; letter-spacing:0.04em; }
-
-    /* weekly runs */
-    .weekly-runs-wrap { padding:16px 18px 14px; }
-    .wr-hint { font-size:11px; color:var(--text3); margin-bottom:14px; text-align:center; letter-spacing:0.04em; }
-    .session-cards { display:flex; flex-direction:column; gap:8px; margin-bottom:20px; }
-    .session-card { display:flex; align-items:center; gap:12px; padding:12px 14px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; transition:all 0.15s; user-select:none; }
-    .session-card.active-card { border-color:var(--sage); background:var(--bg); box-shadow:0 0 0 2px rgba(68,94,60,0.1); }
-    .session-card-dot { width:10px; height:10px; border-radius:50%; flex-shrink:0; }
-    .session-card-body { flex:1; }
-    .session-card-title { font-size:14px; font-weight:400; color:var(--text); }
-    .session-card-desc { font-size:12px; color:var(--text3); margin-top:2px; }
-    .session-card-detail { font-size:11px; color:var(--text2); margin-top:4px; font-style:italic; }
-    .session-card-check { font-size:16px; color:var(--sage); opacity:0; transition:opacity 0.15s; }
-    .session-card.active-card .session-card-check { opacity:1; }
-    .wr-calendar-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:10px; }
-    .wr-calendar { display:flex; flex-direction:column; gap:6px; }
-    .wr-day { display:flex; align-items:center; gap:10px; padding:10px 12px; border:0.5px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; transition:all 0.15s; min-height:44px; }
-    .wr-day.today-day { border-color:var(--sage); background:var(--card); }
-    .wr-day.has-session { background:var(--card); }
-    .wr-day-name { font-size:12px; font-weight:500; color:var(--text2); width:28px; flex-shrink:0; letter-spacing:0.02em; }
-    .wr-day.today-day .wr-day-name { color:var(--sage); }
-    .wr-day-content { flex:1; }
-    .wr-session-pill { display:inline-flex; align-items:center; gap:6px; font-size:11px; padding:3px 8px; border-radius:2px; font-weight:500; }
-    .wr-session-dot { width:6px; height:6px; border-radius:50%; }
-    .wr-empty-slot { font-size:12px; color:var(--text3); }
-    .wr-day-clear { background:none; border:none; color:var(--text3); cursor:pointer; font-size:14px; padding:2px; opacity:0; transition:opacity 0.15s; }
-    .wr-day:hover .wr-day-clear { opacity:1; }
-    .wr-today-badge { font-size:9px; padding:1px 6px; border-radius:2px; background:var(--sage); color:white; flex-shrink:0; }
-
-    /* run training card */
-    .training-card { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius); padding:16px; margin-bottom:12px; }
-    .training-day-label { font-size:10px; font-weight:500; text-transform:uppercase; letter-spacing:0.08em; color:var(--text3); margin-bottom:8px; }
-    .training-option { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
-    .training-option:last-child { margin-bottom:0; }
-    .option-label { display:flex; align-items:center; gap:8px; margin-bottom:4px; }
-    .option-tag { font-size:9px; padding:2px 8px; border-radius:2px; font-weight:500; letter-spacing:0.06em; text-transform:uppercase; }
-    .tag-a { background:#E8EDE5; color:var(--sage); }
-    .tag-b { background:#E5E8EE; color:#3A5278; }
-    .tag-c { background:#EDE8E3; color:var(--text2); }
-    .option-title { font-size:14px; font-weight:400; color:var(--text); }
-    .option-detail { font-size:12px; color:var(--text2); margin-top:2px; }
-    .option-rationale { font-size:11px; color:var(--text3); margin-top:4px; font-style:italic; }
-    .tip-box { background:var(--bg2); border-left:2px solid var(--sage); border-radius:0 var(--radius-sm) var(--radius-sm) 0; padding:10px 14px; margin-top:12px; font-size:12px; color:var(--text2); line-height:1.6; }
-
-    /* run log form */
-    .log-form { display:flex; flex-direction:column; gap:10px; }
-    .form-row { display:flex; gap:8px; }
-    .form-row input,.form-row select,.log-form input,.log-form select,.log-form textarea { width:100%; padding:9px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text); font-size:16px; outline:none; font-family:inherit; }
-    .form-row input:focus,.form-row select:focus,.log-form input:focus,.log-form select:focus,.log-form textarea:focus { border-color:var(--sage); }
-    .form-row input::placeholder,.log-form input::placeholder,.log-form textarea::placeholder { color:var(--text3); }
-    .form-row input { flex:1; }
-    .log-form textarea { min-height:60px; resize:vertical; }
-    .form-label { font-size:10px; color:var(--text3); margin-bottom:4px; font-weight:500; text-transform:uppercase; letter-spacing:0.07em; }
-    .submit-btn { padding:12px; border-radius:var(--radius-sm); background:var(--dark); color:var(--bg); border:none; font-size:13px; font-weight:400; letter-spacing:0.06em; cursor:pointer; }
-    .effort-row { display:flex; gap:5px; }
-    .effort-btn { flex:1; padding:8px 4px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text2); font-size:12px; cursor:pointer; text-align:center; transition:all 0.15s; }
-    .effort-btn.selected { background:var(--sage); color:white; border-color:transparent; }
-
-    /* run history */
-    .run-entry { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:8px; }
-    .run-entry-top { display:flex; justify-content:space-between; align-items:flex-start; }
-    .run-date { font-size:11px; color:var(--text3); letter-spacing:0.03em; }
-    .run-type-badge { font-size:9px; padding:2px 8px; border-radius:2px; letter-spacing:0.05em; text-transform:uppercase; font-weight:500; }
-    .type-easy      { background:#E5E9E3; color:#3D5A38; }
-    .type-intervals { background:#E8E5DC; color:#5C4A28; }
-    .type-tempo     { background:#EDE3E3; color:#6B3838; }
-    .type-long      { background:#E3E8E5; color:#2E4D40; }
-    .type-race      { background:#E8E3ED; color:#4A3568; }
-    .type-club      { background:#EDE8E3; color:#5C4530; }
-    .run-stats { display:flex; gap:16px; margin-top:8px; }
-    .run-stat { text-align:left; }
-    .run-stat-val { font-family:'Cormorant Garamond',serif; font-size:20px; font-weight:400; color:var(--text); }
-    .run-stat-label { font-size:9px; color:var(--text3); letter-spacing:0.06em; text-transform:uppercase; margin-top:1px; }
-    .run-notes { font-size:12px; color:var(--text2); margin-top:8px; font-style:italic; font-family:'Cormorant Garamond',serif; font-size:15px; line-height:1.4; }
-    .run-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:14px; }
-
-    /* weekly stats bar */
-    .week-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:16px; }
-    .week-stat { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px; text-align:center; }
-    .week-stat-val { font-family:'Cormorant Garamond',serif; font-size:26px; font-weight:400; color:var(--text); }
-    .week-stat-label { font-size:9px; color:var(--text3); margin-top:2px; letter-spacing:0.06em; text-transform:uppercase; }
-
-    /* weekly history groups */
-    .hist-week { border:0.5px solid var(--border); border-radius:var(--radius); overflow:hidden; margin-bottom:8px; }
-    .hist-week-header { display:flex; align-items:center; gap:10px; padding:14px 16px; background:var(--card); cursor:pointer; user-select:none; }
-    .hist-week-label { flex:1; font-size:13px; font-weight:400; color:var(--text); letter-spacing:0.01em; }
-    .hist-week-km { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:400; color:var(--sage); }
-    .hist-week-sub { font-size:10px; color:var(--text3); margin-top:2px; letter-spacing:0.04em; }
-    .hist-week-chevron { font-size:13px; color:var(--text3); transition:transform 0.2s; }
-    .hist-week.open .hist-week-chevron { transform:rotate(180deg); }
-    .hist-week-body { display:none; border-top:0.5px solid var(--border); background:var(--bg2); }
-    .hist-week.open .hist-week-body { display:block; }
-
-    /* bottom nav */
-    .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:10; background:rgba(248,245,240,0.96); backdrop-filter:blur(16px); border-top:0.5px solid var(--border2); display:flex; align-items:flex-end; justify-content:space-around; padding:8px 0 max(10px,env(safe-area-inset-bottom)); }
-    .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; font-size:9px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text3); padding:4px 10px; transition:color 0.15s; }
-    .nav-item i { font-size:20px; }
-    .nav-item.active { color:var(--sage); }
-    .nav-fab { position:relative; top:-14px; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; padding:0; }
-    .nav-fab-ring { width:50px; height:50px; border-radius:50%; background:var(--dark); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 18px rgba(26,24,21,0.28); transition:transform 0.15s,box-shadow 0.15s; }
-    .nav-fab-ring:active { transform:scale(0.94); }
-    .nav-fab-ring svg { width:26px; height:26px; }
-    .nav-fab-label { font-size:9px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text3); margin-top:2px; }
-    .nav-fab.active .nav-fab-label { color:var(--sage); }
-    .nav-fab.active .nav-fab-ring { background:var(--sage); box-shadow:0 4px 20px rgba(68,94,60,0.35); }
-
-    .layer { display:none; }
-    .layer.active { display:block; }
-
-    .content-layer { padding:24px 16px; }
-    .layer-title { font-family:'Cormorant Garamond',serif; font-size:28px; font-weight:300; color:var(--text); margin-bottom:20px; letter-spacing:0.01em; }
-    .card { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius); padding:16px 18px; margin-bottom:12px; }
-    .quote-card { border-left:2px solid var(--sage); border-radius:0 var(--radius-sm) var(--radius-sm) 0; background:var(--card); padding:16px 18px; margin-bottom:10px; }
-    .quote-text { font-family:'Cormorant Garamond',serif; font-size:20px; font-style:italic; color:var(--text); line-height:1.6; font-weight:300; }
-    .quote-attr { font-size:11px; color:var(--text3); margin-top:8px; letter-spacing:0.06em; text-transform:uppercase; }
-    .editable-list { list-style:none; }
-    .editable-list li { display:flex; gap:10px; align-items:flex-start; padding:12px 0; border-bottom:0.5px solid var(--border); }
-    .editable-list li:last-child { border-bottom:none; }
-    .list-dot { width:5px; height:5px; border-radius:50%; flex-shrink:0; margin-top:9px; background:var(--sage); }
-    .list-text { flex:1; font-size:14px; color:var(--text); line-height:1.6; font-weight:300; }
-    .list-del { background:none; border:none; color:var(--text3); cursor:pointer; font-size:14px; opacity:0; transition:opacity 0.15s; }
-    .editable-list li:hover .list-del { opacity:1; }
-    textarea { width:100%; padding:10px 12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--card); color:var(--text); font-size:16px; resize:vertical; min-height:80px; font-family:inherit; outline:none; }
-    textarea:focus { border-color:var(--sage); }
-    textarea::placeholder { color:var(--text3); }
-    .save-btn { margin-top:10px; padding:10px 20px; border-radius:2px; background:var(--dark); color:var(--bg); border:none; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; }
-    .affirmation-card { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius); padding:22px; margin-bottom:10px; }
-    .affirmation-text { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:var(--text); line-height:1.6; font-style:italic; }
-    .notif-bar { background:var(--bg2); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin:0 16px 14px; display:flex; align-items:center; gap:10px; font-size:12px; color:var(--text2); cursor:pointer; letter-spacing:0.02em; }
-    .notif-bar i { color:var(--sage); font-size:16px; }
-    .empty-state { text-align:center; padding:28px; color:var(--text3); font-size:13px; letter-spacing:0.04em; }
-
-    /* BRIEFING */
-    .briefing-toggle { margin:0 16px 14px; background:var(--card); border:0.5px solid var(--border2); border-radius:var(--radius); padding:14px 16px; cursor:pointer; user-select:none; }
-    .briefing-toggle-header { display:flex; align-items:center; justify-content:space-between; }
-    .briefing-toggle-left { display:flex; align-items:center; gap:12px; }
-    .briefing-icon { width:34px; height:34px; border-radius:8px; background:#E8EDE5; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; color:var(--sage); }
-    .briefing-toggle-title { font-size:14px; font-weight:400; color:var(--text); letter-spacing:0.01em; }
-    .briefing-toggle-sub { font-size:10px; color:var(--text3); margin-top:2px; letter-spacing:0.06em; text-transform:uppercase; }
-    .briefing-body { margin:0 16px 14px; background:var(--card); border:0.5px solid var(--border2); border-radius:0 0 var(--radius) var(--radius); border-top:none; padding:16px; display:none; }
-    .briefing-body.open { display:block; }
-    .briefing-section-label { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text3); margin-bottom:12px; margin-top:18px; }
-    .briefing-section-label:first-child { margin-top:0; }
-    .podcast-item { display:flex; gap:12px; align-items:flex-start; padding:12px 0; border-bottom:0.5px solid var(--border); }
-    .podcast-item:last-child { border-bottom:none; }
-    .podcast-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; margin-top:7px; }
-    .podcast-info { flex:1; }
-    .podcast-show { font-size:9px; color:var(--text3); font-weight:500; text-transform:uppercase; letter-spacing:0.08em; }
-    .podcast-title { font-size:14px; color:var(--text); line-height:1.4; margin:3px 0; font-weight:400; }
-    .podcast-desc { font-size:12px; color:var(--text2); line-height:1.5; font-weight:300; }
-    .briefing-link { display:inline-flex; align-items:center; gap:4px; font-size:9px; color:var(--sage); text-decoration:none; margin-top:6px; letter-spacing:0.07em; text-transform:uppercase; }
-    .briefing-link:hover { text-decoration:underline; }
-    .news-item { padding:12px 0; border-bottom:0.5px solid var(--border); }
-    .news-item:last-child { border-bottom:none; }
-    .news-source { font-size:9px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:0.08em; margin-bottom:4px; }
-    .news-headline { font-family:'Cormorant Garamond',serif; font-size:19px; font-weight:400; color:var(--text); line-height:1.3; margin-bottom:6px; }
-    .news-summary { font-size:12px; color:var(--text2); line-height:1.6; font-weight:300; }
-    .briefing-updated { font-size:9px; color:var(--text3); text-align:right; margin-top:14px; letter-spacing:0.06em; text-transform:uppercase; }
-
-    /* MORNING BRIEFING LAYER */
-    .mb-header { padding:56px 20px 16px; }
-    .mb-date-label { font-size:11px; color:var(--text3); letter-spacing:0.1em; text-transform:uppercase; margin-bottom:6px; }
-    .mb-title { font-family:'Cormorant Garamond',serif; font-size:32px; font-weight:300; color:var(--text); }
-    .mb-body { padding:0 16px 120px; }
-    .mb-empty { text-align:center; padding:40px 20px; }
-    .mb-empty-icon { font-size:40px; margin-bottom:16px; opacity:0.4; }
-    .mb-empty-title { font-family:'Cormorant Garamond',serif; font-size:22px; font-weight:300; color:var(--text); margin-bottom:10px; }
-    .mb-empty-sub { font-size:13px; color:var(--text3); line-height:1.6; margin-bottom:28px; font-weight:300; }
-    .mb-paste-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:2px; background:var(--dark); color:var(--bg); border:none; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; }
-    .mb-section-card { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius); padding:18px; margin-bottom:12px; }
-    .mb-section-emoji { font-size:18px; margin-bottom:6px; }
-    .mb-section-title { font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:0.1em; color:var(--text3); margin-bottom:12px; }
-    .mb-section-content { font-size:13px; color:var(--text2); line-height:1.7; font-weight:300; }
-    .mb-section-content strong { color:var(--text); font-weight:500; }
-    .mb-section-content a { color:var(--sage); text-decoration:none; }
-    .mb-section-content a:hover { text-decoration:underline; }
-    .mb-section-content ul { list-style:none; padding:0; margin:8px 0; }
-    .mb-section-content li { padding:4px 0; padding-left:14px; position:relative; }
-    .mb-section-content li::before { content:'·'; position:absolute; left:0; color:var(--text3); }
-    .mb-paste-area { margin-top:12px; }
-    .mb-paste-area textarea { width:100%; min-height:200px; padding:12px; border:0.5px solid var(--border2); border-radius:var(--radius-sm); background:var(--bg2); color:var(--text); font-size:14px; font-family:inherit; outline:none; resize:vertical; line-height:1.5; }
-    .mb-paste-area textarea:focus { border-color:var(--sage); }
-    .mb-paste-actions { display:flex; gap:8px; margin-top:8px; }
-    .mb-save-btn { flex:1; padding:11px; border-radius:2px; background:var(--sage); color:white; border:none; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; cursor:pointer; }
-    .mb-cancel-btn { padding:11px 16px; border-radius:2px; background:transparent; color:var(--text3); border:0.5px solid var(--border2); font-size:12px; letter-spacing:0.06em; cursor:pointer; }
-    .mb-footer-bar { position:sticky; bottom:90px; left:0; right:0; padding:0 16px; pointer-events:none; }
-    .mb-footer-inner { display:flex; justify-content:flex-end; pointer-events:all; }
-    .mb-edit-btn { display:inline-flex; align-items:center; gap:6px; padding:10px 18px; border-radius:2px; background:var(--dark); color:var(--bg); border:none; font-size:11px; letter-spacing:0.07em; text-transform:uppercase; cursor:pointer; box-shadow:0 4px 16px rgba(26,24,21,0.25); }
-    .mb-today-card { margin:0 16px 14px; background:var(--card); border:0.5px solid var(--border2); border-radius:var(--radius); padding:14px 16px; cursor:pointer; user-select:none; }
-    .mb-today-header { display:flex; align-items:center; justify-content:space-between; }
-    .mb-today-left { display:flex; align-items:center; gap:12px; }
-    .mb-today-icon { width:34px; height:34px; border-radius:8px; background:#E8EDE5; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; color:var(--sage); }
-    .mb-today-badge { font-size:9px; padding:2px 7px; border-radius:2px; background:#E8EDE5; color:var(--sage); letter-spacing:0.05em; text-transform:uppercase; }
-    .mb-today-pending { font-size:9px; padding:2px 7px; border-radius:2px; background:var(--bg3); color:var(--text3); letter-spacing:0.05em; text-transform:uppercase; }
-
-    /* PROGRESS LAYER */
-    .progress-ring-wrap { display:flex; flex-direction:column; align-items:center; padding:28px 0 16px; }
-    .progress-ring-svg { width:160px; height:160px; }
-    .prog-pct-text { font-family:'Cormorant Garamond',serif; font-size:38px; font-weight:300; fill:var(--text); }
-    .prog-done-text { font-size:11px; fill:var(--text3); letter-spacing:0.04em; }
-    .prog-sections { padding:0 16px 20px; display:flex; flex-direction:column; gap:8px; }
-    .prog-section-row { display:flex; align-items:center; gap:14px; padding:13px 16px; background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius-sm); }
-    .prog-section-name { font-size:10px; color:var(--text3); width:52px; flex-shrink:0; letter-spacing:0.07em; text-transform:uppercase; }
-    .prog-mini-track { flex:1; height:2px; background:var(--bg3); border-radius:1px; overflow:hidden; }
-    .prog-mini-fill { height:100%; border-radius:1px; transition:width 0.6s ease; }
-    .prog-section-count { font-family:'Cormorant Garamond',serif; font-size:18px; color:var(--text3); width:36px; text-align:right; flex-shrink:0; }
-
-    /* BOTTOM NAV — 5 items with center FAB */
-    .bottom-nav { position:fixed; bottom:0; left:0; right:0; z-index:10; background:rgba(248,245,240,0.96); backdrop-filter:blur(16px); border-top:0.5px solid var(--border2); display:flex; align-items:flex-end; justify-content:space-around; padding:8px 0 max(10px,env(safe-area-inset-bottom)); }
-    .nav-item { display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; font-size:9px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text3); padding:4px 10px; transition:color 0.15s; }
-    .nav-item i { font-size:20px; }
-    .nav-item.active { color:var(--sage); }
-    .nav-fab { position:relative; top:-14px; display:flex; flex-direction:column; align-items:center; gap:3px; background:none; border:none; cursor:pointer; padding:0; }
-    .nav-fab-ring { width:50px; height:50px; border-radius:50%; background:var(--dark); display:flex; align-items:center; justify-content:center; box-shadow:0 4px 18px rgba(26,24,21,0.28); transition:transform 0.15s,box-shadow 0.15s; }
-    .nav-fab-ring:active { transform:scale(0.94); }
-    .nav-fab-ring svg { width:26px; height:26px; }
-    .nav-fab-label { font-size:9px; letter-spacing:0.05em; text-transform:uppercase; color:var(--text3); margin-top:2px; }
-    .nav-fab.active .nav-fab-label { color:var(--sage); }
-    .nav-fab.active .nav-fab-ring { background:var(--sage); box-shadow:0 4px 20px rgba(68,94,60,0.35); }
-
-    /* COMPACT WEEKLY RUNS */
-    .wr-runclub-box { background:var(--card); border:0.5px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; margin-bottom:14px; }
-    .wr-runclub-label { font-size:9px; font-weight:500; color:var(--text3); text-transform:uppercase; letter-spacing:0.09em; margin-bottom:10px; }
-    .wr-runclub-days { display:flex; gap:6px; flex-wrap:wrap; }
-    .wr-rc-day { padding:5px 10px; border-radius:2px; border:0.5px solid var(--border2); background:var(--bg); font-size:11px; color:var(--text2); cursor:pointer; transition:all 0.15s; user-select:none; letter-spacing:0.03em; }
-    .wr-rc-day.selected { background:var(--sage); color:white; border-color:transparent; }
-    .session-pills { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
-    .session-pill { display:inline-flex; align-items:center; gap:6px; padding:7px 12px; border:0.5px solid var(--border2); border-radius:2px; background:var(--bg2); cursor:pointer; font-size:11px; font-weight:400; color:var(--text2); transition:all 0.15s; user-select:none; white-space:nowrap; letter-spacing:0.02em; }
-    .session-pill-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
-    .session-pill.active-pill { border-color:var(--sage); background:var(--card); color:var(--sage); }
-    .wr-day { display:flex; align-items:center; gap:8px; padding:8px 12px; border:0.5px solid var(--border); border-radius:var(--radius-sm); background:var(--bg2); cursor:pointer; transition:all 0.15s; min-height:42px; }
-    .wr-day.today-day { border-color:var(--sage); background:var(--card); }
-    .wr-day.has-session { background:var(--card); }
-    .wr-day-name { font-size:12px; font-weight:500; color:var(--text2); width:28px; flex-shrink:0; letter-spacing:0.02em; }
-    .wr-day.today-day .wr-day-name { color:var(--sage); }
-    .wr-today-badge { font-size:9px; padding:1px 5px; border-radius:2px; background:var(--sage); color:white; flex-shrink:0; letter-spacing:0.04em; }
-
-    /* DISCOVER SECTIONS */
-    .disc-section { background:var(--card); border:0.5px solid var(--border2); border-radius:var(--radius); overflow:hidden; margin-bottom:10px; }
-    .disc-section-header { display:flex; align-items:center; gap:12px; padding:14px 16px; cursor:pointer; user-select:none; }
-    .disc-section-icon { width:34px; height:34px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
-    .disc-section-meta { flex:1; }
-    .disc-section-title { font-size:14px; font-weight:400; color:var(--text); letter-spacing:0.01em; }
-    .disc-section-sub { font-size:10px; color:var(--text3); margin-top:2px; letter-spacing:0.04em; }
-    .disc-chevron { font-size:14px; color:var(--text3); transition:transform 0.25s; }
-    .disc-section.open .disc-chevron { transform:rotate(180deg); }
-    .disc-section-body { display:none; border-top:0.5px solid var(--border); background:var(--bg2); }
-    .disc-section.open .disc-section-body { display:block; }
-  </style>
+  footer {
+    margin-top: clamp(64px, 9vw, 120px);
+    padding: 36px clamp(20px, 5vw, 88px) 0;
+    border-top: 1px solid var(--pale-gold);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 56px;
+    justify-content: space-between;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--taupe);
+  }
+  footer .updated { color: var(--warm-grey); font-size: 11px; margin-top: 4px; }
+</style>
 </head>
 <body>
 
-<div id="affirmations-bg"></div>
-
-<div id="splash">
-  <div class="sun-wrap" id="sun-wrap">
-    <div class="rays" id="rays"></div>
-    <div class="sun"></div>
-    <div class="horizon"></div>
-  </div>
-  <div class="splash-title">My Daily Life</div>
-  <div class="splash-sub">Begin with intention</div>
-  <button class="enter-btn" onclick="enterApp()">Begin your day</button>
-</div>
-
-<div id="app">
-
-  <!-- TODAY -->
-  <div id="layer-today" class="layer active">
-    <div class="app-header">
-      <div class="app-date" id="app-date"></div>
-      <div class="app-greeting">Good <span id="time-of-day">morning</span>, Eabha</div>
-    </div>
-    <div id="notif-prompt" class="notif-bar" onclick="requestNotifications()" style="display:none">
-      <i class="ti ti-bell"></i>
-      <span>Tap to enable 8am daily reminders</span>
-    </div>
-
-    <!-- MORNING BRIEFING CARD -->
-    <div class="mb-today-card" id="mb-today-card" onclick="showLayer('briefing', document.querySelector('.nav-item[data-layer=briefing]'))">
-      <div class="mb-today-header">
-        <div class="mb-today-left">
-          <div class="mb-today-icon"><i class="ti ti-sun"></i></div>
-          <div>
-            <div class="briefing-toggle-title">Morning Briefing</div>
-            <div class="briefing-toggle-sub" id="mb-today-sub">Tap to view today's briefing</div>
-          </div>
-        </div>
-        <span id="mb-today-status" class="mb-today-pending">Pending</span>
+  <header>
+    <div class="header-top">
+      <div class="brand">
+        <img src="assets/logo_black.png" alt="Vicalvi">
+        <span class="brand-tagline label-font">Aménager les beaux espaces</span>
       </div>
-      <div id="mb-today-prompt" style="font-family:'Cormorant Garamond',serif;font-size:16px;font-style:italic;color:var(--text2);margin-top:10px;line-height:1.5;display:none"></div>
-    </div>
-
-    <div class="sections">
-
-      <!-- SPORT -->
-      <div class="section-card" id="sec-sport">
-        <div class="section-header" onclick="toggleSection('sport')">
-          <div class="section-icon icon-sport"><i class="ti ti-run" aria-hidden="true"></i></div>
-          <span class="section-title">Sport & Training</span>
-          <span class="section-count" id="count-sport"></span>
-          <i class="ti ti-chevron-down section-chevron"></i>
-        </div>
-        <div class="section-body">
-          <div class="sub-tabs">
-            <button class="sub-tab active" onclick="showSubTab('sport','tasks',this)">Tasks</button>
-            <button class="sub-tab" onclick="showSubTab('sport','weekly',this)">Weekly Runs</button>
-            <button class="sub-tab" onclick="showSubTab('sport','log',this)">Log Run</button>
-            <button class="sub-tab" onclick="showSubTab('sport','history',this)">History</button>
-          </div>
-
-          <div id="sport-tasks" class="sub-panel active">
-            <ul class="task-list" id="list-sport"></ul>
-            <div class="add-row">
-              <input type="text" id="input-sport" placeholder="Add training task…" onkeydown="if(event.key==='Enter')addTask('sport')" />
-              <button onclick="addTask('sport')"><i class="ti ti-plus"></i></button>
-            </div>
-          </div>
-
-          <div id="sport-weekly" class="sub-panel">
-            <div id="weekly-runs-view"></div>
-          </div>
-
-          <div id="sport-log" class="sub-panel">
-            <div class="log-form">
-              <div>
-                <div class="form-label">Date</div>
-                <input type="date" id="log-date" />
-              </div>
-              <div class="form-row">
-                <div style="flex:1">
-                  <div class="form-label">Distance (km)</div>
-                  <input type="number" id="log-dist" placeholder="5.2" step="0.1" min="0" />
-                </div>
-                <div style="flex:1">
-                  <div class="form-label">Time (mm:ss)</div>
-                  <input type="text" id="log-time" placeholder="28:30" />
-                </div>
-              </div>
-              <div>
-                <div class="form-label">Type</div>
-                <select id="log-type">
-                  <option value="easy">Easy</option>
-                  <option value="intervals">Intervals</option>
-                  <option value="tempo">Tempo</option>
-                  <option value="long">Long run</option>
-                  <option value="club">Run club</option>
-                  <option value="race">Race</option>
-                </select>
-              </div>
-              <div>
-                <div class="form-label">Effort</div>
-                <div class="effort-row" id="effort-row">
-                  <button class="effort-btn" onclick="setEffort(1,this)">1</button>
-                  <button class="effort-btn" onclick="setEffort(2,this)">2</button>
-                  <button class="effort-btn" onclick="setEffort(3,this)">3</button>
-                  <button class="effort-btn" onclick="setEffort(4,this)">4</button>
-                  <button class="effort-btn" onclick="setEffort(5,this)">5</button>
-                </div>
-                <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--text3);margin-top:3px"><span>Very easy</span><span>Max effort</span></div>
-              </div>
-              <div>
-                <div class="form-label">Notes</div>
-                <textarea id="log-notes" placeholder="How did it feel? Any PRs? Route?"></textarea>
-              </div>
-              <button class="submit-btn" onclick="logRun()">Save run</button>
-            </div>
-          </div>
-
-          <div id="sport-history" class="sub-panel">
-            <div class="week-stats" id="week-stats"></div>
-            <div id="run-history"></div>
-          </div>
-        </div>
-      </div>
-
-      <!-- WORK -->
-      <div class="section-card" id="sec-work">
-        <div class="section-header" onclick="toggleSection('work')">
-          <div class="section-icon icon-work"><i class="ti ti-briefcase" aria-hidden="true"></i></div>
-          <span class="section-title">Work</span>
-          <span class="section-count" id="count-work"></span>
-          <i class="ti ti-chevron-down section-chevron"></i>
-        </div>
-        <div class="section-body">
-          <div class="sub-panel active" style="padding:16px 18px 14px">
-            <ul class="task-list" id="list-work"></ul>
-            <div class="add-row">
-              <input type="text" id="input-work" placeholder="Add work task…" onkeydown="if(event.key==='Enter')addTask('work')" />
-              <button onclick="addTask('work')"><i class="ti ti-plus"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SOCIAL -->
-      <div class="section-card" id="sec-social">
-        <div class="section-header" onclick="toggleSection('social')">
-          <div class="section-icon icon-social"><i class="ti ti-users" aria-hidden="true"></i></div>
-          <span class="section-title">Social</span>
-          <span class="section-count" id="count-social"></span>
-          <i class="ti ti-chevron-down section-chevron"></i>
-        </div>
-        <div class="section-body">
-          <div class="sub-panel active" style="padding:16px 18px 14px">
-            <ul class="task-list" id="list-social"></ul>
-            <div class="add-row">
-              <input type="text" id="input-social" placeholder="Add social task…" onkeydown="if(event.key==='Enter')addTask('social')" />
-              <button onclick="addTask('social')"><i class="ti ti-plus"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- DAILY -->
-      <div class="section-card" id="sec-daily">
-        <div class="section-header" onclick="toggleSection('daily')">
-          <div class="section-icon icon-daily"><i class="ti ti-sun" aria-hidden="true"></i></div>
-          <span class="section-title">Daily Tasks</span>
-          <span class="section-count" id="count-daily"></span>
-          <i class="ti ti-chevron-down section-chevron"></i>
-        </div>
-        <div class="section-body">
-          <div class="sub-panel active" style="padding:16px 18px 14px">
-            <ul class="task-list" id="list-daily"></ul>
-            <div class="add-row">
-              <input type="text" id="input-daily" placeholder="Add daily task…" onkeydown="if(event.key==='Enter')addTask('daily')" />
-              <button onclick="addTask('daily')"><i class="ti ti-plus"></i></button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <!-- MORNING BRIEFING LAYER -->
-  <div id="layer-briefing" class="layer">
-    <div class="mb-header">
-      <div class="mb-date-label" id="mb-date-label"></div>
-      <div class="mb-title">Morning Briefing</div>
-    </div>
-    <div class="mb-body" id="mb-body"></div>
-  </div>
-
-  <!-- DISCOVER LAYER -->
-  <div id="layer-discover" class="layer">
-    <div class="mb-header">
-      <div class="mb-date-label" id="disc-date-label"></div>
-      <div class="mb-title">Discover</div>
-    </div>
-    <div class="mb-body" id="disc-body"></div>
-  </div>
-
-  <!-- MOTIVATIONS -->
-  <div id="layer-motivations" class="layer">
-    <div class="content-layer">
-      <div class="layer-title">Motivations</div>
-      <div id="motivations-list"></div>
-      <div class="card">
-        <textarea id="motivation-input" placeholder="Write something that motivates you…"></textarea>
-        <button class="save-btn" onclick="addMotivation()">Save</button>
+      <div class="contact-block">
+        Vicalvi · 12-14 Rue Saint-Nicolas, 75012 Paris<br>
+        <a href="tel:+33143454050">+33 (0)1 43 45 40 50</a> · <a href="mailto:info@vicalvi.fr">info@vicalvi.fr</a>
       </div>
     </div>
-  </div>
+    <nav id="tabs" aria-label="Catégories"></nav>
+  </header>
 
-  <!-- AFFIRM + VISION (merged) -->
-  <div id="layer-affirm" class="layer">
-    <div class="content-layer">
-      <div class="layer-title">Affirm & Vision</div>
+  <section class="hero">
+    <h1 id="page-title" class="label-font"></h1>
+  </section>
 
-      <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px">Daily Affirmations</div>
-      <div id="affirmations-list"></div>
-      <div class="card" style="margin-bottom:28px">
-        <textarea id="affirmation-input" placeholder="I am strong, focused and full of purpose…"></textarea>
-        <button class="save-btn" onclick="addAffirmation()">Save</button>
-      </div>
+  <main>
+    <div id="status" class="status-msg" hidden></div>
+    <div id="grid" class="grid"></div>
+  </main>
 
-      <div style="font-size:10px;font-weight:500;letter-spacing:0.1em;text-transform:uppercase;color:var(--text3);margin-bottom:14px">Visualisations</div>
-      <div id="visualisations-list"></div>
-      <div class="card">
-        <textarea id="vis-input" placeholder="Describe your ideal future self or life in vivid detail…"></textarea>
-        <button class="save-btn" onclick="addVis()">Save</button>
-      </div>
+  <footer>
+    <div>Vicalvi · 12-14 Rue Saint-Nicolas, 75012 Paris<br>+33 (0)1 43 45 40 50 · info@vicalvi.fr
+      <div class="updated" id="updated-note"></div>
     </div>
-  </div>
-
-  <!-- PROGRESS LAYER -->
-  <div id="layer-progress" class="layer">
-    <div class="app-header" style="padding-bottom:10px">
-      <div class="app-date" id="prog-date-label"></div>
-      <div class="app-greeting">Today's <span>Progress</span></div>
-    </div>
-    <div class="progress-ring-wrap">
-      <svg class="progress-ring-svg" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#6B8A62"/>
-            <stop offset="50%" stop-color="#445E3C"/>
-            <stop offset="100%" stop-color="#2E4030"/>
-          </linearGradient>
-        </defs>
-        <circle cx="60" cy="60" r="50" fill="none" stroke="#FFF1E6" stroke-width="10"/>
-        <circle id="prog-ring-circle" cx="60" cy="60" r="50" fill="none" stroke="url(#ringGrad)" stroke-width="10" stroke-linecap="round" stroke-dasharray="314" stroke-dashoffset="314" transform="rotate(-90 60 60)" style="transition:stroke-dashoffset 0.7s ease"/>
-        <text id="prog-pct" x="60" y="56" text-anchor="middle" class="prog-pct-text">0%</text>
-        <text id="prog-done-txt" x="60" y="72" text-anchor="middle" class="prog-done-text">0 of 0 done</text>
-      </svg>
-    </div>
-    <div class="prog-sections" id="prog-sections"></div>
-  </div>
-
-  <nav class="bottom-nav">
-    <button class="nav-item active" onclick="showLayer('today',this)" data-layer="today"><i class="ti ti-calendar"></i>Today</button>
-    <button class="nav-item" onclick="showLayer('motivations',this)" data-layer="motivations"><i class="ti ti-flame"></i>Motivate</button>
-    <button class="nav-fab" id="nav-fab-progress" onclick="showLayerFab('progress')">
-      <div class="nav-fab-ring">
-        <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="14" cy="14" r="11" stroke="rgba(255,255,255,0.4)" stroke-width="2.5"/>
-          <circle id="nav-ring" cx="14" cy="14" r="11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-dasharray="69.1" stroke-dashoffset="69.1" transform="rotate(-90 14 14)" style="transition:stroke-dashoffset 0.5s ease"/>
-        </svg>
-      </div>
-      <span class="nav-fab-label">Progress</span>
-    </button>
-    <button class="nav-item" onclick="showLayer('discover',this)" data-layer="discover"><i class="ti ti-compass"></i>Discover</button>
-    <button class="nav-item" onclick="showLayer('affirm',this)" data-layer="affirm"><i class="ti ti-heart"></i>Affirm</button>
-  </nav>
-</div>
+    <div style="text-align:right;">Prix TTC, susceptibles de modification.<br>Délais et disponibilités sur demande.</div>
+  </footer>
 
 <script>
-const KEY = 'daily_life_v5';
-const CW_HABITS = [
-  { id:'cw1', text:'Meditate', section:'daily' },
-  { id:'cw2', text:'Work out / Run', section:'sport' }
-];
+(function () {
+  'use strict';
 
-let data = JSON.parse(localStorage.getItem(KEY) || 'null') || {
-  sport:[], work:[], social:[], daily:[],
-  cwDone:{}, lastDay:'',
-  runLog:[],
-  selectedEffort: 3,
-  motivations:[{ text:"Every action you take today is a vote for the person you want to become.", attr:"James Clear" }],
-  affirmations:[],
-  visualisations:[],
-  morningBriefings:{},
-  vicalviLeads:{}
-};
+  var SHEET_ID = '1F8mt2cpGM-gS0Ek-n_VW3WKvJwbh8LwnD_oCbsKPyWk';
+  var SHEET_GID = '0';
+  var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + SHEET_GID;
 
-function save() { localStorage.setItem(KEY, JSON.stringify(data)); }
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function todayKey() { return new Date().toISOString().slice(0,10); }
+  var HEADER_SIGNATURE = 'Nom produits';
 
-// Full Strava run history — merged non-destructively on each load
-const SEED_RUNS = [
-  { date:'2026-06-14', dist:4.29, time:'26:35', pace:'6:12/km', type:'easy',      effort:3, notes:"Run when I thought I wouldn't ❤️💪" },
-  { date:'2026-06-12', dist:5.51, time:'34:48', pace:'6:19/km', type:'easy',      effort:3, notes:'' },
-  { date:'2026-06-11', dist:8.00, time:'50:40', pace:'6:20/km', type:'long',      effort:4, notes:'Long runnn' },
-  { date:'2026-06-09', dist:6.09, time:'34:30', pace:'5:40/km', type:'intervals', effort:4, notes:'Wowww really good pace!!! interval seshhhh' },
-  { date:'2026-06-07', dist:4.34, time:'27:29', pace:'6:20/km', type:'club',      effort:3, notes:'KIIN Run Club Paris' },
-  { date:'2026-06-05', dist:8.00, time:'49:36', pace:'6:12/km', type:'long',      effort:4, notes:'8kkkkkkk OMGGG 🎉' },
-  { date:'2026-06-02', dist:5.20, time:'31:06', pace:'5:59/km', type:'intervals', effort:4, notes:'First intervallll run' },
-  { date:'2026-05-31', dist:4.50, time:'28:57', pace:'6:26/km', type:'easy',      effort:3, notes:'Runnn (20th activity on Strava!)' },
-  { date:'2026-05-29', dist:5.39, time:'40:04', pace:'7:26/km', type:'easy',      effort:2, notes:'Evening Run' },
-  { date:'2026-05-28', dist:3.00, time:'17:51', pace:'5:57/km', type:'easy',      effort:3, notes:'Back to it' },
-  { date:'2026-05-10', dist:4.01, time:'24:00', pace:'5:59/km', type:'club',      effort:3, notes:'4k!! Run & Coffee with Paris 11 RC' },
-  { date:'2026-05-05', dist:5.00, time:'29:10', pace:'5:50/km', type:'easy',      effort:3, notes:'Wohoooo' },
-  { date:'2026-04-29', dist:2.45, time:'14:39', pace:'5:59/km', type:'easy',      effort:2, notes:'Morning Run' },
-  { date:'2026-04-21', dist:6.01, time:'35:51', pace:'5:58/km', type:'long',      effort:3, notes:'6kkkkkkk' },
-  { date:'2026-04-17', dist:5.04, time:'31:04', pace:'6:10/km', type:'easy',      effort:3, notes:'FIRST 5kkkk OMGGGG 🎉' },
-  { date:'2026-04-14', dist:3.07, time:'17:29', pace:'5:42/km', type:'easy',      effort:3, notes:"Runnnnn when I thought I wouldn't" },
-  { date:'2026-04-11', dist:4.01, time:'24:07', pace:'6:01/km', type:'easy',      effort:3, notes:'Afternoon Run' },
-  { date:'2026-04-07', dist:2.98, time:'19:16', pace:'6:28/km', type:'easy',      effort:2, notes:'Evening Run' },
-  { date:'2026-03-30', dist:3.55, time:'18:48', pace:'5:18/km', type:'easy',      effort:3, notes:'Lunch Run' },
-  { date:'2026-03-28', dist:2.76, time:'15:32', pace:'5:38/km', type:'easy',      effort:3, notes:'Lunch Run' },
-  { date:'2026-03-25', dist:2.52, time:'12:40', pace:'5:02/km', type:'easy',      effort:4, notes:'Morning Run' },
-  { date:'2026-03-23', dist:2.68, time:'14:14', pace:'5:19/km', type:'easy',      effort:3, notes:'Evening Run' },
-  { date:'2026-03-20', dist:2.51, time:'14:30', pace:'5:47/km', type:'easy',      effort:3, notes:'Morning Run' },
-  { date:'2026-03-12', dist:2.49, time:'14:56', pace:'6:00/km', type:'easy',      effort:2, notes:'Lunch Ride' },
-  { date:'2026-03-05', dist:2.16, time:'17:01', pace:'7:53/km', type:'easy',      effort:2, notes:'Morning Run' },
-  { date:'2026-02-25', dist:1.55, time:'10:27', pace:'6:45/km', type:'easy',      effort:2, notes:'Morning Ride' },
-  { date:'2026-02-25', dist:1.79, time:'10:38', pace:'5:57/km', type:'easy',      effort:2, notes:'Afternoon Run' },
-];
+  // Known photos recovered from the previous static catalogue export —
+  // matched by exact product name until replaced by a "Photo URL" column.
+  var LOCAL_PHOTO_OVERRIDES = {
+    'vase step': 'assets/photos/vase-step-bleu.png'
+  };
 
-function seedRunLogIfEmpty() {
-  if (!data.runLog) data.runLog = [];
-  // Merge: add any seed run whose date+dist combo doesn't already exist
-  const existing = new Set(data.runLog.map(r => r.date + '|' + r.dist));
-  const toAdd = SEED_RUNS.filter(r => !existing.has(r.date + '|' + r.dist));
-  if (toAdd.length > 0) {
-    data.runLog = [...data.runLog, ...toAdd];
-    data.runLog.sort((a, b) => b.date.localeCompare(a.date));
-    save();
-  }
-}
+  var CATEGORY_LABELS = {};
 
-function resetIfNewDay() {
-  if (data.lastDay !== todayKey()) {
-    ['sport','work','social','daily'].forEach(s => { data[s]=(data[s]||[]).map(t=>({...t,done:false})); });
-    data.cwDone={};
-    data.lastDay=todayKey();
-    save();
-  }
-}
-
-function enterApp() {
-  document.getElementById('splash').classList.add('hidden');
-  const app = document.getElementById('app');
-  app.style.display = 'block';
-  setTimeout(() => app.classList.add('visible'), 50);
-  resetIfNewDay();
-  seedRunLogIfEmpty();
-  renderAll();
-  startAffirmationBg();
-  checkNotificationPrompt();
-  scheduleEightAmNotification();
-}
-
-function showLayer(id, btn) {
-  document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('nav-fab-progress').classList.remove('active');
-  document.getElementById('layer-'+id).classList.add('active');
-  if (btn) btn.classList.add('active');
-  if (id === 'briefing') renderBriefingLayer();
-  if (id === 'discover') renderDiscoverLayer();
-}
-
-function showLayerFab(id) {
-  document.querySelectorAll('.layer').forEach(l=>l.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
-  document.getElementById('layer-'+id).classList.add('active');
-  document.getElementById('nav-fab-progress').classList.add('active');
-  if (id==='progress') renderProgressLayer();
-}
-
-function toggleSection(id) {
-  document.getElementById('sec-'+id).classList.toggle('open');
-}
-
-function showSubTab(section, tab, btn) {
-  const body = document.getElementById('sec-'+section).querySelector('.section-body');
-  body.querySelectorAll('.sub-tab').forEach(b=>b.classList.remove('active'));
-  body.querySelectorAll('.sub-panel').forEach(p=>p.classList.remove('active'));
-  document.getElementById(section+'-'+tab).classList.add('active');
-  btn.classList.add('active');
-  if (tab==='weekly') renderWeeklyRuns();
-  if (tab==='history') renderRunHistory();
-  if (tab==='log') { document.getElementById('log-date').value = todayKey(); }
-}
-
-/* ── TRAINING PLAN ──────────────────────────────────────── */
-const TRAINING_PLAN = {
-  0: { // Sunday — KIIN Run Club
-    label: 'Sunday — Long Run / KIIN Run Club',
-    options: [
-      { tag:'A', cls:'tag-a', title:'KIIN Run Club long run', detail:'8–10km at easy conversational pace (6:30–7:00/km)', rationale:'Build your long run base. This is your big aerobic session of the week.' },
-      { tag:'B', cls:'tag-b', title:'Easy 6km', detail:'6km at relaxed pace (6:45–7:15/km)', rationale:'If energy is low, still get the long run stimulus at reduced volume.' },
-      { tag:'C', cls:'tag-c', title:'Rest', detail:'Full rest or 20 min walk', rationale:'Take it if your legs are heavy from Saturday\'s run club.' }
-    ],
-    tip: '10K training tip: Long runs should be truly easy — you should be able to hold a full conversation. Running too fast on long runs is the most common mistake and slows your overall progress.'
-  },
-  1: { // Monday
-    label: 'Monday — Rest or Active Recovery',
-    options: [
-      { tag:'A', cls:'tag-a', title:'Active recovery walk', detail:'20–30 min easy walk or yoga', rationale:'Light movement clears lactate from the weekend and primes you for Tuesday intervals.' },
-      { tag:'B', cls:'tag-b', title:'Very easy jog', detail:'3km at very easy pace (7:00+/km)', rationale:'Keep the legs moving gently if you feel good.' },
-      { tag:'C', cls:'tag-c', title:'Full rest', detail:'Rest completely', rationale:'You ran Sat + Sun — your body has earned it.' }
-    ],
-    tip: '10K training tip: Research shows that full rest days are as important as training days. Your aerobic capacity improves during recovery, not during the run itself.'
-  },
-  2: { // Tuesday — INTERVALS
-    label: 'Tuesday — Interval Session',
-    options: [
-      { tag:'A', cls:'tag-a', title:'6 × 400m intervals', detail:'6 reps of 400m at 5K race pace (~5:40/km) with 90 sec rest between each', rationale:'This is your PR-making session. You\'ve improved with every interval session — trust it.' },
-      { tag:'B', cls:'tag-b', title:'4 × 400m intervals', detail:'4 reps at 5K pace with 2 min rest', rationale:'Same quality, less volume — good when you\'re a bit tired.' },
-      { tag:'C', cls:'tag-c', title:'Easy 4km', detail:'4km easy (6:30–7:00/km) with 4 × 20 sec strides at end', rationale:'If intervals feel too hard today, strides still give a speed stimulus.' }
-    ],
-    tip: '10K training tip: Interval training at or slightly faster than 5K pace is the single most effective tool for improving your 10K time. Aim for consistent splits across all reps, not fast-then-fade.'
-  },
-  3: { // Wednesday
-    label: 'Wednesday — Easy Run',
-    options: [
-      { tag:'A', cls:'tag-a', title:'5km easy', detail:'5km at easy conversational pace (6:30–7:00/km)', rationale:'Aerobic base building. Keep it truly easy to absorb Tuesday\'s intervals.' },
-      { tag:'B', cls:'tag-b', title:'3–4km easy', detail:'Shorter easy run at same pace', rationale:'Volume reduction if legs are still heavy from intervals.' },
-      { tag:'C', cls:'tag-c', title:'Rest', detail:'Skip today', rationale:'If you\'re unusually sore or fatigued, rest is the correct choice.' }
-    ],
-    tip: '10K training tip: 80% of your weekly running should be at easy pace. Most runners run their easy runs too fast, which blunts the benefit of hard sessions.'
-  },
-  4: { // Thursday
-    label: 'Thursday — Rest or Easy',
-    options: [
-      { tag:'A', cls:'tag-a', title:'Easy 4km + drills', detail:'4km easy + 10 min of running drills (high knees, A-skips, bounding)', rationale:'Midweek easy day. Drills improve form and efficiency which directly improves 10K time.' },
-      { tag:'B', cls:'tag-b', title:'Easy 3km', detail:'Short easy run to keep momentum', rationale:'Lighter version for when energy is moderate.' },
-      { tag:'C', cls:'tag-c', title:'Full rest', detail:'Rest day', rationale:'Rest now so you\'re fresh for Friday + Saturday.' }
-    ],
-    tip: '10K training tip: Running form drills 2–3 times a week can improve running economy by up to 5% over 8 weeks, translating directly to faster times without extra fitness.'
-  },
-  5: { // Friday
-    label: 'Friday — Easy Shakeout',
-    options: [
-      { tag:'A', cls:'tag-a', title:'4km easy shakeout', detail:'4km very easy (6:45–7:15/km) with 4 × 15 sec strides at end', rationale:'Keeps legs fresh and loose before Saturday run club.' },
-      { tag:'B', cls:'tag-b', title:'20 min easy jog', detail:'Very light jog, no pressure on pace', rationale:'Just move — the goal is to feel good for Saturday.' },
-      { tag:'C', cls:'tag-c', title:'Rest', detail:'Save everything for Saturday run club', rationale:'If tomorrow is a big run club session, full rest today is valid.' }
-    ],
-    tip: '10K training tip: A short easy run the day before a key session or race (a "shakeout") has been shown to reduce stiffness and improve next-day performance compared to full rest.'
-  },
-  6: { // Saturday — Paris 11 RC
-    label: 'Saturday — Paris 11 Run Club',
-    options: [
-      { tag:'A', cls:'tag-a', title:'Paris 11 RC — push the pace', detail:'Run with the group, aim to hold a slightly uncomfortable but sustainable pace', rationale:'Run club gives you a social speed stimulus you can\'t replicate alone. Use the group.' },
-      { tag:'B', cls:'tag-b', title:'Paris 11 RC — easy effort', detail:'Run at the back or with slower group, focus on enjoying it', rationale:'Social run at easy effort still counts as a quality session.' },
-      { tag:'C', cls:'tag-c', title:'Solo easy 5km', detail:'Skip club, do solo easy 5km', rationale:'If you\'re not feeling social or are under the weather.' }
-    ],
-    tip: '10K training tip: Group running consistently produces faster paces than solo running at equivalent effort. The social element suppresses perceived exertion — lean into it.'
-  }
-};
-
-
-/* ── WEEKLY RUNS ──────────────────────────────────────── */
-const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
-
-function weekKey() {
-  const d = new Date();
-  const mon = new Date(d);
-  mon.setDate(d.getDate() - ((d.getDay()+6)%7));
-  return mon.toISOString().slice(0,10);
-}
-
-function weekDates() {
-  const mon = new Date(weekKey());
-  return DAYS.map((_,i) => { const d=new Date(mon); d.setDate(mon.getDate()+i); return d.toISOString().slice(0,10); });
-}
-
-const SESSION_OPTIONS = [
-  { value:'intervals', label:'Interval session', desc:'6×400m at 5K pace with 90 sec rest', detail:'Warm up 1km → 6×400m at ~5:35/km → cool down 1km', dot:'#F59E0B', bg:'#FEF3C7', text:'#92400E' },
-  { value:'tempo',     label:'Tempo run',        desc:'20–25 min at comfortably hard pace',  detail:'1km easy → 20 min at 5:50–6:10/km → 1km cool down', dot:'#FB7185', bg:'#FFE4E6', text:'#881337' },
-  { value:'long',      label:'Long run',          desc:'7–10km at easy conversational pace',  detail:'Keep pace easy — 6:30–7:00/km, build distance week by week', dot:'#34D399', bg:'#D1FAE5', text:'#065F46' },
-  { value:'easy',      label:'Easy run',          desc:'4–5km at fully conversational pace',  detail:'6:30–7:00/km, no pressure — aerobic base building', dot:'#60A5FA', bg:'#DBEAFE', text:'#1E40AF' },
-  { value:'club',      label:'Run club',          desc:'Group run — Paris 11 or KIIN',        detail:'Run with the group at a sustainable effort, enjoy the social energy', dot:'#C084FC', bg:'#F3E8FF', text:'#6B21A8' }
-];
-
-let activeSessionType = null;
-
-function getWeekPlan() { return ((data.weekPlans||{})[weekKey()]) || {}; }
-
-function saveAssignment(dayName, type) {
-  if (!data.weekPlans) data.weekPlans = {};
-  if (!data.weekPlans[weekKey()]) data.weekPlans[weekKey()] = {};
-  if (type === null) delete data.weekPlans[weekKey()][dayName];
-  else data.weekPlans[weekKey()][dayName] = type;
-  save();
-}
-
-function renderWeeklyRuns() {
-  activeSessionType = null;
-  const plan = getWeekPlan();
-  const runClubDays = plan._runClubDays || [];
-  const todayName = DAYS[(new Date().getDay()+6)%7];
-
-  const wrap = document.getElementById('weekly-runs-view');
-  wrap.innerHTML = `<div class="weekly-runs-wrap">
-    <div class="wr-runclub-box">
-      <div class="wr-runclub-label">Run clubs this week?</div>
-      <div class="wr-runclub-days">
-        ${DAYS.map(d=>`<div class="wr-rc-day ${runClubDays.includes(d)?'selected':''}" onclick="toggleRunClubDay('${d}')">${d}</div>`).join('')}
-      </div>
-    </div>
-    <p class="wr-hint" style="margin-bottom:10px">Tap a session type, then tap a day to assign</p>
-    <div class="session-pills" id="wr-session-pills">
-      ${SESSION_OPTIONS.map(s=>`
-        <div class="session-pill" id="sc-${s.value}" onclick="selectSessionCard('${s.value}')">
-          <span class="session-pill-dot" style="background:${s.dot}"></span>${s.label}
-        </div>`).join('')}
-    </div>
-    <div class="wr-calendar-label">This week — assign your runs</div>
-    <div class="wr-calendar" id="wr-calendar" style="display:flex;flex-direction:column;gap:5px">
-      ${DAYS.map((day, i) => {
-        const assigned = plan[day];
-        const sess = SESSION_OPTIONS.find(s=>s.value===assigned);
-        const isToday = day === todayName;
-        const isRC = runClubDays.includes(day);
-        // check if a run was actually logged on this date this week
-        const dates = weekDates();
-        const dayDate = dates[i];
-        const loggedRun = (data.runLog||[]).find(r => r.date === dayDate);
-        const hasActivity = assigned || loggedRun;
-        return `
-          <div class="wr-day ${isToday?'today-day':''} ${hasActivity?'has-session':''}" onclick="assignDay('${day}')" id="wr-day-${day}">
-            <span class="wr-day-name">${day}</span>
-            ${isToday?'<span class="wr-today-badge">today</span>':''}
-            ${isRC&&!assigned&&!loggedRun?'<span style="font-size:10px;color:#A855F7;font-weight:500">club</span>':''}
-            <div class="wr-day-content" style="flex:1">
-              ${loggedRun
-                ? `<span style="display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:500;color:#16A34A"><span style="width:6px;height:6px;border-radius:50%;background:#16A34A;display:inline-block"></span>${loggedRun.dist.toFixed(1)}km · ${loggedRun.pace||loggedRun.time||''}</span>`
-                : assigned && sess
-                  ? `<span class="wr-session-pill" style="background:${sess.bg};color:${sess.text};padding:3px 8px;border-radius:10px;font-size:11px;font-weight:500;display:inline-flex;align-items:center;gap:4px"><span style="width:6px;height:6px;border-radius:50%;background:${sess.dot};display:inline-block"></span>${sess.label}</span>`
-                  : `<span style="font-size:12px;color:var(--text3)">— rest</span>`}
-            </div>
-            ${assigned&&!loggedRun?`<button class="wr-day-clear" onclick="clearDay(event,'${day}')" style="opacity:1;background:none;border:none;color:var(--text3);cursor:pointer;font-size:14px;padding:2px"><i class="ti ti-x"></i></button>`:''}
-          </div>`;
-      }).join('')}
-    </div>
-  </div>`;
-}
-
-function toggleRunClubDay(day) {
-  if(!data.weekPlans) data.weekPlans={};
-  if(!data.weekPlans[weekKey()]) data.weekPlans[weekKey()]={};
-  const plan=data.weekPlans[weekKey()];
-  const days=plan._runClubDays||[];
-  const idx=days.indexOf(day);
-  if(idx>-1) days.splice(idx,1); else days.push(day);
-  plan._runClubDays=days;
-  save();
-  renderWeeklyRuns();
-  if(activeSessionType) document.getElementById('sc-'+activeSessionType)?.classList.add('active-pill');
-}
-
-function selectSessionCard(type) {
-  activeSessionType = activeSessionType === type ? null : type;
-  document.querySelectorAll('.session-pill').forEach(c => c.classList.remove('active-pill'));
-  if (activeSessionType) document.getElementById('sc-' + activeSessionType)?.classList.add('active-pill');
-}
-
-function assignDay(dayName) {
-  if (!activeSessionType) return;
-  saveAssignment(dayName, activeSessionType);
-  renderWeeklyRuns();
-  document.getElementById('sc-' + activeSessionType)?.classList.add('active-card');
-  activeSessionType = activeSessionType;
-}
-
-function clearDay(e, dayName) {
-  e.stopPropagation();
-  saveAssignment(dayName, null);
-  renderWeeklyRuns();
-}
-
-/* ── RUN LOG ──────────────────────────────────────────── */
-let selectedEffort = 3;
-function setEffort(val, btn) {
-  selectedEffort = val;
-  document.querySelectorAll('.effort-btn').forEach(b=>b.classList.remove('selected'));
-  btn.classList.add('selected');
-}
-
-function parsePace(dist, timeStr) {
-  if (!dist || !timeStr) return null;
-  const parts = timeStr.split(':');
-  if (parts.length < 2) return null;
-  const totalSecs = parseInt(parts[0])*60 + parseInt(parts[1]);
-  const paceSecPerKm = totalSecs / parseFloat(dist);
-  const paceMin = Math.floor(paceSecPerKm/60);
-  const paceSec = Math.round(paceSecPerKm%60);
-  return `${paceMin}:${paceSec.toString().padStart(2,'0')}/km`;
-}
-
-function logRun() {
-  const date = document.getElementById('log-date').value;
-  const dist = parseFloat(document.getElementById('log-dist').value);
-  const time = document.getElementById('log-time').value.trim();
-  const type = document.getElementById('log-type').value;
-  const notes = document.getElementById('log-notes').value.trim();
-  if (!date || !dist) { alert('Please enter at least a date and distance.'); return; }
-  const pace = parsePace(dist, time);
-  const run = { date, dist, time, type, effort: selectedEffort, notes, pace };
-  if (!data.runLog) data.runLog = [];
-  data.runLog.unshift(run);
-  save();
-  document.getElementById('log-dist').value = '';
-  document.getElementById('log-time').value = '';
-  document.getElementById('log-notes').value = '';
-  document.querySelectorAll('.effort-btn').forEach(b=>b.classList.remove('selected'));
-  showSubTab('sport','history', document.querySelector('#sec-sport .sub-tab:nth-child(4)'));
-  document.getElementById('sec-sport').classList.add('open');
-}
-
-function deleteRun(i) {
-  data.runLog.splice(i,1);
-  save(); renderRunHistory();
-}
-
-function getMonday(dateStr) {
-  const d = new Date(dateStr + 'T12:00:00');
-  const day = d.getDay();
-  const diff = (day === 0 ? -6 : 1 - day);
-  d.setDate(d.getDate() + diff);
-  return d.toISOString().slice(0,10);
-}
-
-function formatWeekLabel(mondayStr) {
-  const d = new Date(mondayStr + 'T12:00:00');
-  const sun = new Date(d); sun.setDate(d.getDate() + 6);
-  const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const startLabel = `${d.getDate()} ${mo[d.getMonth()]}`;
-  const endLabel = `${sun.getDate()} ${mo[sun.getMonth()]} ${sun.getFullYear()}`;
-  return `${startLabel} – ${endLabel}`;
-}
-
-function renderRunHistory() {
-  const runs = data.runLog || [];
-  const hist = document.getElementById('run-history');
-
-  // top stats — current week
-  const thisMonday = getMonday(todayKey());
-  const weekRuns = runs.filter(r => getMonday(r.date) === thisMonday);
-  const weekKm = weekRuns.reduce((s,r) => s + (r.dist||0), 0);
-  const totalKm = runs.reduce((s,r) => s + (r.dist||0), 0);
-  document.getElementById('week-stats').innerHTML = `
-    <div class="week-stat"><div class="week-stat-val">${weekKm.toFixed(1)}</div><div class="week-stat-label">km this week</div></div>
-    <div class="week-stat"><div class="week-stat-val">${weekRuns.length}</div><div class="week-stat-label">runs this week</div></div>
-    <div class="week-stat"><div class="week-stat-val">${totalKm.toFixed(1)}</div><div class="week-stat-label">km total</div></div>
-  `;
-
-  if (!runs.length) { hist.innerHTML = '<div class="empty-state">No runs logged yet.<br>Log your first run above.</div>'; return; }
-
-  // group by Monday of each week
-  const weekMap = new Map();
-  runs.forEach((r, i) => {
-    const mon = getMonday(r.date);
-    if (!weekMap.has(mon)) weekMap.set(mon, []);
-    weekMap.get(mon).push({ ...r, _idx: i });
-  });
-  const sortedWeeks = [...weekMap.keys()].sort((a,b) => b.localeCompare(a));
-
-  const typeClass = { easy:'type-easy', intervals:'type-intervals', tempo:'type-tempo', long:'type-long', club:'type-club', race:'type-race' };
-  const typeLabel = { easy:'Easy', intervals:'Intervals', tempo:'Tempo', long:'Long', club:'Club', race:'Race' };
-
-  hist.innerHTML = sortedWeeks.map((mon, wi) => {
-    const wRuns = weekMap.get(mon);
-    const wKm = wRuns.reduce((s,r) => s + (r.dist||0), 0);
-    const isCurrentWeek = mon === thisMonday;
-    const runsHtml = wRuns.map(r => `
-      <div class="run-entry" style="border-bottom:0.5px solid var(--border);padding:12px 16px;margin:0">
-        <div class="run-entry-top">
-          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-            <span class="run-type-badge ${typeClass[r.type]||'type-easy'}">${typeLabel[r.type]||r.type}</span>
-            <span class="run-date">${r.date}</span>
-            ${r.notes ? `<span style="font-size:12px;color:var(--text2);font-style:italic">${esc(r.notes)}</span>` : ''}
-          </div>
-          <button class="run-del" onclick="deleteRun(${r._idx})" aria-label="Delete"><i class="ti ti-trash"></i></button>
-        </div>
-        <div class="run-stats" style="margin-top:8px">
-          <div class="run-stat"><div class="run-stat-val">${r.dist ? r.dist.toFixed(2) : '—'}</div><div class="run-stat-label">km</div></div>
-          ${r.time ? `<div class="run-stat"><div class="run-stat-val">${esc(r.time)}</div><div class="run-stat-label">time</div></div>` : ''}
-          ${r.pace ? `<div class="run-stat"><div class="run-stat-val">${esc(r.pace)}</div><div class="run-stat-label">pace</div></div>` : ''}
-          <div class="run-stat"><div class="run-stat-val">${r.effort||'—'}/5</div><div class="run-stat-label">effort</div></div>
-        </div>
-      </div>`).join('');
-
-    return `<div class="hist-week ${isCurrentWeek ? 'open' : ''}" id="hw-${wi}">
-      <div class="hist-week-header" onclick="toggleHistWeek('hw-${wi}')">
-        <div style="flex:1">
-          <div class="hist-week-label">${isCurrentWeek ? 'This week' : formatWeekLabel(mon)}</div>
-          <div class="hist-week-sub">${wRuns.length} run${wRuns.length!==1?'s':''}</div>
-        </div>
-        <div class="hist-week-km">${wKm.toFixed(1)} km</div>
-        <i class="ti ti-chevron-down hist-week-chevron"></i>
-      </div>
-      <div class="hist-week-body">${runsHtml}</div>
-    </div>`;
-  }).join('');
-}
-
-function toggleHistWeek(id) {
-  document.getElementById(id).classList.toggle('open');
-}
-
-/* ── TASKS ────────────────────────────────────────────── */
-function renderHeader() {
-  const d = new Date();
-  const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('app-date').textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
-  const h = d.getHours();
-  document.getElementById('time-of-day').textContent = h<12?'morning':h<17?'afternoon':'evening';
-}
-
-function renderTasks() {
-  const sections=['sport','work','social','daily'];
-  let totalDone=0, totalAll=0;
-  sections.forEach(sec => {
-    const list = document.getElementById('list-'+sec);
-    list.innerHTML='';
-    const habits = CW_HABITS.filter(h=>h.section===sec);
-    habits.forEach(habit => {
-      const done=!!(data.cwDone&&data.cwDone[habit.id]);
-      if(done) totalDone++; totalAll++;
-      const li=document.createElement('li'); li.className='task-item';
-      li.innerHTML=`<div class="task-cb habit ${done?'done':''}" onclick="toggleCW('${habit.id}')" tabindex="0"></div><span class="task-text ${done?'done':''}">${esc(habit.text)}</span><span class="daily-badge">daily</span>`;
-      list.appendChild(li);
+  function toTitleCase(str) {
+    if (CATEGORY_LABELS[str]) return CATEGORY_LABELS[str];
+    return str.replace(/\w\S*/g, function (t) {
+      return t.charAt(0).toUpperCase() + t.slice(1).toLowerCase();
     });
-    (data[sec]||[]).forEach((t,i) => {
-      if(t.done) totalDone++; totalAll++;
-      const li=document.createElement('li'); li.className='task-item';
-      li.innerHTML=`<div class="task-cb ${t.done?'done':''}" onclick="toggleTask('${sec}',${i})" tabindex="0"></div><span class="task-text ${t.done?'done':''}">${esc(t.text)}</span><button class="task-del" onclick="deleteTask('${sec}',${i})" aria-label="Delete"><i class="ti ti-x"></i></button>`;
-      list.appendChild(li);
-    });
-    const count=habits.length+(data[sec]||[]).length;
-    const done=habits.filter(h=>data.cwDone&&data.cwDone[h.id]).length+(data[sec]||[]).filter(t=>t.done).length;
-    document.getElementById('count-'+sec).textContent=count?`${done}/${count}`:'';
-  });
-  const pct=totalAll?Math.round(totalDone/totalAll*100):0;
-  // update nav FAB ring
-  const circumNav=69.1;
-  const navRing=document.getElementById('nav-ring');
-  if(navRing) navRing.style.strokeDashoffset=circumNav-(circumNav*pct/100);
-  // store for progress layer
-  window._progState={totalDone,totalAll,pct,sections:{}};
-  sections.forEach(sec=>{
-    const habits=CW_HABITS.filter(h=>h.section===sec);
-    const hDone=habits.filter(h=>data.cwDone&&data.cwDone[h.id]).length;
-    const tDone=(data[sec]||[]).filter(t=>t.done).length;
-    const total=habits.length+(data[sec]||[]).length;
-    window._progState.sections[sec]={done:hDone+tDone,total};
-  });
-}
-
-function toggleCW(id) { if(!data.cwDone)data.cwDone={}; data.cwDone[id]=!data.cwDone[id]; save(); renderTasks(); }
-function addTask(sec) { const inp=document.getElementById('input-'+sec); const text=inp.value.trim(); if(!text)return; if(!data[sec])data[sec]=[]; data[sec].push({text,done:false}); inp.value=''; save(); renderTasks(); }
-function toggleTask(sec,i) { data[sec][i].done=!data[sec][i].done; save(); renderTasks(); }
-function deleteTask(sec,i) { data[sec].splice(i,1); save(); renderTasks(); }
-
-/* ── MOTIVATIONS ───────────────────────────────────────── */
-function renderMotivations() {
-  const cont=document.getElementById('motivations-list'); cont.innerHTML='';
-  (data.motivations||[]).forEach((m,i)=>{
-    const d=document.createElement('div'); d.className='quote-card';
-    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p class="quote-text">"${esc(m.text)}"</p><button onclick="deleteMotivation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>${m.attr?`<p class="quote-attr">— ${esc(m.attr)}</p>`:''}`;
-    cont.appendChild(d);
-  });
-}
-function addMotivation() { const inp=document.getElementById('motivation-input'); const text=inp.value.trim(); if(!text)return; if(!data.motivations)data.motivations=[]; data.motivations.push({text}); inp.value=''; save(); renderMotivations(); startAffirmationBg(); }
-function deleteMotivation(i) { data.motivations.splice(i,1); save(); renderMotivations(); }
-
-/* ── AFFIRMATIONS ──────────────────────────────────────── */
-function renderAffirmations() {
-  const cont=document.getElementById('affirmations-list'); cont.innerHTML='';
-  (data.affirmations||[]).forEach((a,i)=>{
-    const d=document.createElement('div'); d.className='affirmation-card';
-    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p class="affirmation-text">${esc(a)}</p><button onclick="deleteAffirmation(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>`;
-    cont.appendChild(d);
-  });
-}
-function addAffirmation() { const inp=document.getElementById('affirmation-input'); const text=inp.value.trim(); if(!text)return; if(!data.affirmations)data.affirmations=[]; data.affirmations.push(text); inp.value=''; save(); renderAffirmations(); startAffirmationBg(); }
-function deleteAffirmation(i) { data.affirmations.splice(i,1); save(); renderAffirmations(); }
-
-/* ── VISUALISATIONS ────────────────────────────────────── */
-function renderVis() {
-  const cont=document.getElementById('visualisations-list'); cont.innerHTML='';
-  (data.visualisations||[]).forEach((v,i)=>{
-    const d=document.createElement('div'); d.className='card';
-    d.innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-start"><p style="font-size:15px;color:var(--text);line-height:1.6;flex:1">${esc(v)}</p><button onclick="deleteVis(${i})" style="background:none;border:none;color:var(--text3);cursor:pointer;font-size:18px;margin-left:10px"><i class="ti ti-x"></i></button></div>`;
-    cont.appendChild(d);
-  });
-}
-function addVis() { const inp=document.getElementById('vis-input'); const text=inp.value.trim(); if(!text)return; if(!data.visualisations)data.visualisations=[]; data.visualisations.push(text); inp.value=''; save(); renderVis(); }
-function deleteVis(i) { data.visualisations.splice(i,1); save(); renderVis(); }
-
-/* ── BACKGROUND ────────────────────────────────────────── */
-function startAffirmationBg() {
-  const bg=document.getElementById('affirmations-bg'); bg.innerHTML='';
-  const words=[...(data.motivations||[]).map(m=>m.text.split(' ').slice(0,4).join(' ')), ...(data.affirmations||[]).map(a=>a.split(' ').slice(0,4).join(' ')),'focus','strength','intention','growth','presence','clarity','courage','joy','consistency','progress'];
-  words.forEach((word,i)=>{
-    const el=document.createElement('div'); el.className='aff-word'; el.textContent=word;
-    el.style.cssText=`left:${5+(i*17)%85}%;animation-duration:${18+(i*2.3)%14}s;animation-delay:-${(i*3.7)%25}s;`;
-    bg.appendChild(el);
-  });
-}
-
-/* ── NOTIFICATIONS ─────────────────────────────────────── */
-function checkNotificationPrompt() {
-  if ('Notification' in window && Notification.permission === 'default') {
-    document.getElementById('notif-prompt').style.display = 'flex';
   }
-}
 
-function requestNotifications() {
-  if (!('Notification' in window)) return;
-  Notification.requestPermission().then(perm => {
-    document.getElementById('notif-prompt').style.display = 'none';
-    if (perm === 'granted') scheduleEightAmNotification();
-  });
-}
-
-function scheduleEightAmNotification() {
-  if (!('Notification' in window) || Notification.permission !== 'granted') return;
-  const now = new Date();
-  const next8am = new Date(now);
-  next8am.setHours(8, 0, 0, 0);
-  if (next8am <= now) next8am.setDate(next8am.getDate() + 1);
-  const msUntil = next8am - now;
-  clearTimeout(window._notifTimer);
-  window._notifTimer = setTimeout(() => {
-    new Notification('Good morning, Eabha ☀️', {
-      body: "Your day is ready. Open the app to see today's tasks and training plan.",
-      icon: '/icons/icon-192.png'
-    });
-    scheduleEightAmNotification();
-  }, msUntil);
-}
-
-/* ── PROGRESS LAYER ────────────────────────────────────── */
-function renderProgressLayer() {
-  const s=window._progState||{totalDone:0,totalAll:0,pct:0,sections:{}};
-  const circ=314;
-  const offset=circ-(circ*s.pct/100);
-  const ring=document.getElementById('prog-ring-circle');
-  if(ring) { ring.style.strokeDashoffset=offset; }
-  const pctEl=document.getElementById('prog-pct'); if(pctEl) pctEl.textContent=s.pct+'%';
-  const doneEl=document.getElementById('prog-done-txt'); if(doneEl) doneEl.textContent=`${s.totalDone} of ${s.totalAll} done`;
-  const dateEl=document.getElementById('prog-date-label'); if(dateEl){
-    const d=new Date(); const days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    dateEl.textContent=`${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
-  }
-  const sectionMeta={sport:{label:'Sport',color:'#445E3C'},work:{label:'Work',color:'#A0694A'},social:{label:'Social',color:'#7A5068'},daily:{label:'Daily',color:'#4A5E7A'}};
-  const cont=document.getElementById('prog-sections'); if(!cont)return;
-  cont.innerHTML=Object.entries(sectionMeta).map(([key,meta])=>{
-    const sec=s.sections[key]||{done:0,total:0};
-    const pct=sec.total?Math.round(sec.done/sec.total*100):0;
-    return `<div class="prog-section-row">
-      <span class="prog-section-name">${meta.label}</span>
-      <div class="prog-mini-track"><div class="prog-mini-fill" style="width:${pct}%;background:${meta.color}"></div></div>
-      <span class="prog-section-count">${sec.done}/${sec.total||0}</span>
-    </div>`;
-  }).join('');
-}
-
-/* ── MORNING BRIEFING ─────────────────────────────────── */
-const BRIEFING_SECTIONS = [
-  { key:'listen',    emoji:'🎧', label:'Today\'s Listen' },
-  { key:'news',      emoji:'🌍', label:'Morning News Digest' },
-  { key:'pe',        emoji:'💼', label:'PE & Impact Investing' },
-  { key:'training',  emoji:'🏃', label:'Training Today' },
-  { key:'prompt',    emoji:'🌿', label:'Morning Prompt' },
-];
-
-function mdToHtml(text) {
-  return text
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/\[([^\]]+)\]\((https?:\/\/[^\)]+)\)/g, '<a href="$2" target="_blank" rel="noopener">$1</a>')
-    .replace(/^[-•]\s+(.+)$/gm, '<li>$1</li>')
-    .replace(/(<li>.*<\/li>)/gs, m => `<ul>${m}</ul>`)
-    .replace(/\n{2,}/g, '</p><p>')
-    .replace(/^(?!<[uol]|<p|<\/p)(.+)$/gm, '$1<br>')
-    .trim();
-}
-
-function parseBriefingText(raw) {
-  const sections = {};
-  const lines = raw.split('\n');
-  let current = null, buf = [];
-
-  const flush = () => { if (current) sections[current] = buf.join('\n').trim(); };
-
-  lines.forEach(line => {
-    const stripped = line.replace(/^#+\s*/, '').trim();
-    const found = BRIEFING_SECTIONS.find(s =>
-      stripped.startsWith(s.emoji) || stripped.toLowerCase().includes(s.label.toLowerCase())
-    );
-    if (found) { flush(); current = found.key; buf = []; }
-    else if (current) buf.push(line);
-  });
-  flush();
-  return sections;
-}
-
-function getTodayBriefing() {
-  return (data.morningBriefings || {})[todayKey()] || null;
-}
-
-function saveBriefingText(raw) {
-  if (!data.morningBriefings) data.morningBriefings = {};
-  data.morningBriefings[todayKey()] = raw.trim();
-  save();
-  renderBriefingLayer();
-  updateMbTodayCard();
-}
-
-async function fetchBriefingJson() {
-  try {
-    const resp = await fetch('/briefing.json?v=' + todayKey(), { cache: 'no-store' });
-    if (!resp.ok) return;
-    const json = await resp.json();
-    if (json.date === todayKey() && json.content) {
-      saveBriefingText(json.content);
-    }
-  } catch (e) {
-    // Network error or invalid JSON — silently ignore, paste fallback still works
-  }
-}
-
-function updateMbTodayCard() {
-  const card = document.getElementById('mb-today-card');
-  if (!card) return;
-  const sub = document.getElementById('mb-today-sub');
-  const status = document.getElementById('mb-today-status');
-  const prompt = document.getElementById('mb-today-prompt');
-  const raw = getTodayBriefing();
-  if (raw) {
-    const sections = parseBriefingText(raw);
-    sub.textContent = 'Today\'s briefing is ready';
-    status.textContent = 'Ready';
-    status.className = 'mb-today-badge';
-    if (sections.prompt) {
-      const clean = sections.prompt.replace(/\*\*/g,'').replace(/^[-•]\s+/gm,'').split('\n').filter(Boolean)[0] || '';
-      prompt.textContent = clean;
-      prompt.style.display = 'block';
-    }
-  } else {
-    sub.textContent = 'Tap to paste today\'s CoWork briefing';
-    status.textContent = 'Pending';
-    status.className = 'mb-today-pending';
-    prompt.style.display = 'none';
-  }
-}
-
-function renderBriefingLayer() {
-  const body = document.getElementById('mb-body');
-  const dateEl = document.getElementById('mb-date-label');
-  if (!body) return;
-  const d = new Date();
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  if (dateEl) dateEl.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
-
-  const raw = getTodayBriefing();
-
-  if (!raw) {
-    // Show loading state and try to fetch automatically
-    body.innerHTML = `
-      <div class="mb-empty" id="mb-loading-state">
-        <div class="mb-empty-icon" style="animation:pulse 2s ease-in-out infinite">☀️</div>
-        <div class="mb-empty-title">Loading today's briefing…</div>
-        <div class="mb-empty-sub">Checking for this morning's update.</div>
-      </div>`;
-
-    fetchBriefingJson().then(() => {
-      // If fetch succeeded and saved, renderBriefingLayer re-runs automatically via saveBriefingText
-      // If still no briefing after fetch, show the fallback UI
-      if (!getTodayBriefing()) {
-        const hour = new Date().getHours();
-        const notYetMsg = hour < 8
-          ? 'Your briefing generates automatically at 8am.'
-          : 'Today\'s briefing is generating — check back in a few minutes.';
-        body.innerHTML = `
-          <div class="mb-empty">
-            <div class="mb-empty-icon">☀️</div>
-            <div class="mb-empty-title">Briefing not ready yet</div>
-            <div class="mb-empty-sub">${notYetMsg}</div>
-            <button class="mb-paste-btn" onclick="renderBriefingLayer()" style="margin-bottom:12px">
-              <i class="ti ti-refresh" style="font-size:15px"></i> Retry
-            </button>
-            <div style="margin-top:8px;font-size:12px;color:var(--text3)">Or paste manually:</div>
-          </div>
-          <div style="padding:0 0 20px">
-            <textarea id="mb-paste-input" placeholder="Paste briefing here…" style="width:100%;min-height:160px;padding:12px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.5"></textarea>
-            <div class="mb-paste-actions" style="margin-top:8px">
-              <button class="mb-save-btn" onclick="submitBriefingPaste()" style="flex:1">Save</button>
-            </div>
-          </div>`;
+  function parseCSV(text) {
+    var rows = [], row = [], field = '', inQuotes = false;
+    for (var i = 0; i < text.length; i++) {
+      var c = text[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (text[i + 1] === '"') { field += '"'; i++; }
+          else { inQuotes = false; }
+        } else field += c;
+      } else {
+        if (c === '"') inQuotes = true;
+        else if (c === ',') { row.push(field); field = ''; }
+        else if (c === '\n') { row.push(field); rows.push(row); row = []; field = ''; }
+        else if (c === '\r') { /* skip */ }
+        else field += c;
       }
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    return rows;
+  }
+
+  function isBlankRow(row) {
+    return row.every(function (c) { return !c || !c.trim(); });
+  }
+
+  function buildCatalogue(rows) {
+    var categories = [];
+    var current = null;
+    var headerCols = null;
+
+    for (var i = 0; i < rows.length; i++) {
+      var row = rows[i];
+      if (isBlankRow(row)) continue;
+      var first = (row[0] || '').trim();
+      var restEmpty = row.slice(1).every(function (c) { return !c || !c.trim(); });
+
+      if (first === HEADER_SIGNATURE) {
+        headerCols = row.map(function (c) { return c.trim(); });
+        continue;
+      }
+
+      if (restEmpty && first) {
+        var next1 = rows[i + 1] || [];
+        var next2 = rows[i + 2] || [];
+        var next1IsHeader = (next1[0] || '').trim() === HEADER_SIGNATURE;
+        var next2IsHeader = (next2[0] || '').trim() === HEADER_SIGNATURE;
+        if (next1IsHeader || (isBlankRow(next1) && next2IsHeader)) {
+          current = { name: first, items: [] };
+          categories.push(current);
+        }
+        continue;
+      }
+
+      if (current && headerCols) {
+        var obj = {};
+        headerCols.forEach(function (h, idx) { obj[h] = (row[idx] || '').trim(); });
+        current.items.push(obj);
+      }
+    }
+    return categories;
+  }
+
+  function findField(obj, candidates) {
+    for (var i = 0; i < candidates.length; i++) {
+      var key = Object.keys(obj).find(function (k) {
+        return k.toLowerCase() === candidates[i].toLowerCase();
+      });
+      if (key && obj[key]) return obj[key];
+    }
+    return '';
+  }
+
+  function findPhotoUrl(obj) {
+    var key = Object.keys(obj).find(function (k) { return /photo/i.test(k); });
+    return key ? obj[key].trim() : '';
+  }
+
+  function cleanPrice(v) {
+    return (v || '').replace(/\s+/g, ' ').trim();
+  }
+
+  function normalizeItem(raw) {
+    var name = findField(raw, ['Nom produits', 'Nom']);
+    var supplier = findField(raw, ['Fournisseur']);
+    var dimension = findField(raw, ['Dimension']);
+    var description = findField(raw, ['Description']);
+    var designer = findField(raw, ['Designer']);
+    var price = cleanPrice(findField(raw, ['Prix']));
+    var discount = findField(raw, ['Remise']);
+    var discountedPrice = cleanPrice(findField(raw, ['Prix remisé', 'Prix remise']));
+    var hasDiscount = discount && discount.trim() !== '_' && discountedPrice;
+
+    var photoUrl = findPhotoUrl(raw);
+    if (!photoUrl) {
+      var override = LOCAL_PHOTO_OVERRIDES[name.trim().toLowerCase()];
+      if (override) photoUrl = override;
+    }
+
+    return {
+      name: name || 'Sans nom',
+      supplier: supplier,
+      dimension: dimension,
+      description: description,
+      designer: designer,
+      price: price,
+      discount: (discount && discount.trim() !== '_') ? discount : '',
+      discountedPrice: hasDiscount ? discountedPrice : '',
+      photoUrl: photoUrl
+    };
+  }
+
+  function el(tag, attrs, children) {
+    var e = document.createElement(tag);
+    if (attrs) Object.keys(attrs).forEach(function (k) {
+      if (k === 'text') e.textContent = attrs[k];
+      else e.setAttribute(k, attrs[k]);
     });
-    return;
+    (children || []).forEach(function (c) { if (c) e.appendChild(c); });
+    return e;
   }
 
-  const sections = parseBriefingText(raw);
-  const cards = BRIEFING_SECTIONS.map(s => {
-    const content = sections[s.key];
-    if (!content) return '';
-    return `<div class="mb-section-card">
-      <div class="mb-section-emoji">${s.emoji}</div>
-      <div class="mb-section-title">${s.label}</div>
-      <div class="mb-section-content">${mdToHtml(content)}</div>
-    </div>`;
-  }).join('');
-
-  body.innerHTML = `
-    ${cards}
-    <div class="briefing-updated" style="margin-bottom:20px">Auto-generated · ${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}</div>`;
-}
-
-function showPasteArea() {
-  const el = document.getElementById('mb-paste-area');
-  if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior:'smooth', block:'start' }); }
-}
-function hidePasteArea() {
-  const el = document.getElementById('mb-paste-area');
-  if (el) el.style.display = 'none';
-}
-function submitBriefingPaste() {
-  const val = document.getElementById('mb-paste-input')?.value?.trim();
-  if (!val) return;
-  saveBriefingText(val);
-}
-
-/* ── DISCOVER LAYER ───────────────────────────────────── */
-const DISCOVER_CONTENT = {
-  updated: '17 Jun 2026',
-  podcasts: [
-    {
-      show: 'The Daily — NYT',
-      title: 'Today\'s top story, in depth',
-      desc: 'The New York Times flagship daily — one major story explored in 20 minutes. Essential morning listen.',
-      url: 'https://www.nytimes.com/column/the-daily',
-      dot: '#1C1917',
-      tag: 'Daily · 20 min'
-    },
-    {
-      show: 'BBC Global News Podcast',
-      title: 'World news & analysis',
-      desc: 'Comprehensive daily wrap of global politics, economics and breaking news from BBC correspondents worldwide.',
-      url: 'https://www.bbc.co.uk/programmes/p02nq0gn/episodes/downloads',
-      dot: '#B91C1C',
-      tag: 'Daily · 30 min'
-    },
-    {
-      show: 'Huberman Lab',
-      title: 'Andy Stumpf: Discipline, Resilience & Mental Clarity',
-      desc: 'Retired Navy SEAL breaks down battle-tested mental frameworks — discipline as a skill you build, not a trait you\'re born with.',
-      url: 'https://www.hubermanlab.com/podcast',
-      dot: '#0D9488',
-      tag: 'Latest episode · 2h'
-    },
-    {
-      show: 'Diary of a CEO — Steven Bartlett',
-      title: 'Graham Hancock: Lost civilizations',
-      desc: 'Archaeological findings that challenge mainstream history. Long-form and gripping — perfect for a commute or long run.',
-      url: 'https://www.stevenbartlett.com/the-diary-of-a-ceo-podcast/',
-      dot: '#7C3AED',
-      tag: 'Latest episode · 2h 20 min'
-    },
-    {
-      show: 'Planet Money — NPR',
-      title: 'The economy, explained',
-      desc: 'NPR\'s economics storytelling — always accessible, always surprising. Great context for PE and impact investing.',
-      url: 'https://www.npr.org/podcasts/510289/planet-money',
-      dot: '#D97706',
-      tag: 'Weekly'
-    },
-    {
-      show: 'Invest Like the Best',
-      title: 'PE, VC & private markets deep dives',
-      desc: 'Patrick O\'Shaughnessy interviews the world\'s top investors — private equity, growth, venture and impact. Indispensable for the industry.',
-      url: 'https://www.joincolossus.com/episodes?prod=invest-like-the-best',
-      dot: '#1D4ED8',
-      tag: 'Weekly'
-    }
-  ],
-  bbc: [
-    {
-      headline: 'Iran blockade diplomacy escalates',
-      summary: 'US tightening pressure on Iranian ports; Iran threatening Strait of Hormuz shipping. Significant implications for global oil and supply chains.',
-      url: 'https://www.bbc.com/news/world-middle-east'
-    },
-    {
-      headline: 'World Cup 2026: Portugal & England in action today',
-      summary: 'Portugal vs DR Congo and England vs Croatia are today\'s Group Stage fixtures. Messi already equalled the all-time World Cup scoring record (16 goals) with a hat-trick against Algeria.',
-      url: 'https://www.bbc.com/sport/football/world-cup'
-    },
-    {
-      headline: 'Climate finance gap: pledges vs reality',
-      summary: 'Despite COP pledges, flows of climate finance to developing nations remain far below what\'s needed. Impact capital increasingly being called on to fill the gap.',
-      url: 'https://www.bbc.com/news/science-environment'
-    }
-  ],
-  economist: [
-    {
-      headline: 'US-China tariffs: 3 months in, importers absorb 64% of the burden',
-      summary: 'Since "Liberation Day" tariffs in April, American importers — not Chinese exporters — are bearing most of the cost. Geoeconomic confrontation now rated the most likely trigger of a global crisis.',
-      url: 'https://www.economist.com/finance-and-economics'
-    },
-    {
-      headline: 'Global trade routes are being redrawn',
-      summary: 'New geopolitical alignments are reshaping supply chains. Emerging markets are capturing manufacturing share previously held by China — significant implications for private capital allocation.',
-      url: 'https://www.economist.com/international'
-    },
-    {
-      headline: 'VivaTech Paris: Europe defines "sovereign technology"',
-      summary: 'France and Germany announced a joint definition of sovereign technology at VivaTech (June 17–20) — a major shift in EU AI policy with real consequences for where digital infrastructure capital flows.',
-      url: 'https://www.economist.com/europe'
-    }
-  ]
-};
-
-function getVicalviLeads() {
-  return (data.vicalviLeads || {})[todayKey()] || null;
-}
-
-function saveVicalviLeads(raw) {
-  if (!data.vicalviLeads) data.vicalviLeads = {};
-  data.vicalviLeads[todayKey()] = raw.trim();
-  save();
-  renderDiscoverLayer();
-}
-
-function toggleDiscSection(id) {
-  document.getElementById(id).classList.toggle('open');
-}
-
-function renderDiscoverLayer() {
-  const body = document.getElementById('disc-body');
-  const dateEl = document.getElementById('disc-date-label');
-  if (!body) return;
-  const d = new Date();
-  const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-  if (dateEl) dateEl.textContent = `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}`;
-
-  const vicalvi = getVicalviLeads();
-  const C = DISCOVER_CONTENT;
-
-  const podcastsHtml = C.podcasts.map(p => `
-    <div class="podcast-item">
-      <div class="podcast-dot" style="background:${p.dot}"></div>
-      <div class="podcast-info">
-        <div class="podcast-show">${esc(p.show)} <span style="font-weight:300;color:var(--text3)">· ${esc(p.tag)}</span></div>
-        <div class="podcast-title">${esc(p.title)}</div>
-        <div class="podcast-desc">${esc(p.desc)}</div>
-        <a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen</a>
-      </div>
-    </div>`).join('');
-
-  const bbcHtml = C.bbc.map(n => `
-    <div class="news-item">
-      <div class="news-headline">${esc(n.headline)}</div>
-      <div class="news-summary">${esc(n.summary)}</div>
-      <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read on BBC</a>
-    </div>`).join('');
-
-  const econHtml = C.economist.map(n => `
-    <div class="news-item">
-      <div class="news-headline">${esc(n.headline)}</div>
-      <div class="news-summary">${esc(n.summary)}</div>
-      <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read on The Economist</a>
-    </div>`).join('');
-
-  body.innerHTML = `
-    <div style="padding:0 0 100px">
-
-      <!-- PODCASTS -->
-      <div class="disc-section open" id="ds-podcasts">
-        <div class="disc-section-header" onclick="toggleDiscSection('ds-podcasts')">
-          <div class="disc-section-icon" style="background:#E8EDE5;color:var(--sage)"><i class="ti ti-headphones"></i></div>
-          <div class="disc-section-meta">
-            <div class="disc-section-title">Podcasts</div>
-            <div class="disc-section-sub">${C.podcasts.length} picks · daily & weekly</div>
-          </div>
-          <i class="ti ti-chevron-down disc-chevron"></i>
-        </div>
-        <div class="disc-section-body">
-          <div style="padding:4px 16px 16px">${podcastsHtml}</div>
-        </div>
-      </div>
-
-      <!-- DAILY NEWS -->
-      <div class="disc-section open" id="ds-news">
-        <div class="disc-section-header" onclick="toggleDiscSection('ds-news')">
-          <div class="disc-section-icon" style="background:#EDE8E3;color:var(--rust)"><i class="ti ti-world"></i></div>
-          <div class="disc-section-meta">
-            <div class="disc-section-title">Daily News</div>
-            <div class="disc-section-sub">BBC · The Economist</div>
-          </div>
-          <i class="ti ti-chevron-down disc-chevron"></i>
-        </div>
-        <div class="disc-section-body">
-          <div style="padding:8px 16px 4px">
-            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:8px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:18px;height:2px;background:#B91C1C;border-radius:1px"></span>BBC World News</div>
-            ${bbcHtml}
-            <div style="font-size:9px;font-weight:600;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin:16px 0 8px;display:flex;align-items:center;gap:8px"><span style="display:inline-block;width:18px;height:2px;background:#B45309;border-radius:1px"></span>The Economist</div>
-            ${econHtml}
-          </div>
-        </div>
-      </div>
-
-      <!-- VICALVI -->
-      <div class="disc-section open" id="ds-vicalvi">
-        <div class="disc-section-header" onclick="toggleDiscSection('ds-vicalvi')">
-          <div class="disc-section-icon" style="background:#E5E8ED;color:#4A5E7A"><i class="ti ti-building"></i></div>
-          <div class="disc-section-meta">
-            <div class="disc-section-title">Work — Vicalvi</div>
-            <div class="disc-section-sub">${vicalvi ? 'Leads updated today' : 'Paste today\'s leads'}</div>
-          </div>
-          <i class="ti ti-chevron-down disc-chevron"></i>
-        </div>
-        <div class="disc-section-body">
-          <div style="padding:12px 16px 16px">
-            ${vicalvi
-              ? `<div class="mb-section-content" style="margin-bottom:14px">${mdToHtml(vicalvi)}</div>`
-              : `<div style="font-size:13px;color:var(--text3);line-height:1.7;margin-bottom:16px">Run the Vicalvi prompt in Claude — search Italian, French, Portuguese & UK hospitality owners and developers needing renovation. Paste the output here.</div>`}
-            <button class="mb-paste-btn" onclick="showDiscPasteArea()" style="font-size:11px;padding:9px 18px">
-              <i class="ti ti-clipboard" style="font-size:13px"></i> ${vicalvi ? 'Update leads' : 'Paste today\'s leads'}
-            </button>
-            <div id="disc-paste-area" style="display:none;margin-top:12px">
-              <textarea id="disc-paste-input" style="width:100%;min-height:160px;padding:12px;border:0.5px solid var(--border2);border-radius:var(--radius-sm);background:var(--bg2);color:var(--text);font-size:14px;font-family:inherit;outline:none;resize:vertical;line-height:1.5" placeholder="Paste Vicalvi leads here…">${vicalvi || ''}</textarea>
-              <div class="mb-paste-actions" style="margin-top:8px">
-                <button class="mb-cancel-btn" onclick="hideDiscPasteArea()">Cancel</button>
-                <button class="mb-save-btn" onclick="submitDiscoverPaste()">Save</button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="briefing-updated">Updated ${C.updated}</div>
-    </div>`;
-}
-
-function showDiscPasteArea() {
-  const el = document.getElementById('disc-paste-area');
-  if (el) { el.style.display = 'block'; el.scrollIntoView({ behavior:'smooth', block:'start' }); }
-}
-function hideDiscPasteArea() {
-  const el = document.getElementById('disc-paste-area');
-  if (el) el.style.display = 'none';
-}
-function submitDiscoverPaste() {
-  const val = document.getElementById('disc-paste-input')?.value?.trim();
-  if (!val) return;
-  saveVicalviLeads(val);
-}
-
-/* ── STATIC BRIEFING FALLBACK ──────────────────────────── */
-const BRIEFING = {
-  updated: '17 Jun 2026',
-  podcasts: [
-    { show:'BBC Global News Podcast', title:'The latest world news and analysis', desc:'Comprehensive 30-min daily wrap of global politics, economics and breaking news. Perfect morning listen.', url:'https://www.bbc.co.uk/programmes/p02nq0gn/episodes/downloads', dot:'#3B82F6' },
-    { show:'The Daily — NYT', title:'Today\'s top story in depth', desc:'The New York Times flagship daily podcast — one major story explored deeply in 20 minutes.', url:'https://www.nytimes.com/column/the-daily', dot:'#1C1917' },
-    { show:'Huberman Lab', title:'Science-based tools for everyday life', desc:'Professor Andrew Huberman (Stanford) breaks down neuroscience, sleep, performance and health with rigorous sourcing.', url:'https://www.hubermanlab.com/podcast', dot:'#0D9488' },
-    { show:'Diary of a CEO — Steven Bartlett', title:'The habits of world-class performers', desc:'Candid, long-form conversations with entrepreneurs, scientists and leaders on what actually drives success.', url:'https://www.stevenbartlett.com/the-diary-of-a-ceo-podcast/', dot:'#A855F7' },
-    { show:'Planet Money — NPR', title:'The economy, explained', desc:'NPR\'s brilliant economics storytelling — accessible, smart and always surprising. Great for PE/investing context.', url:'https://www.npr.org/podcasts/510289/planet-money', dot:'#F59E0B' }
-  ],
-  news: [
-    { source:'The Economist', headline:'Global trade routes are being redrawn', summary:'New geopolitical alignments are reshaping supply chains, with emerging markets capturing manufacturing share previously held by China. The implications for private capital are significant.', url:'https://www.economist.com/international' },
-    { source:'BBC World News', headline:'Climate finance gap remains a critical challenge', summary:'Despite COP pledges, the gap between climate finance commitments and actual flows to developing nations remains vast — an area where impact investing is increasingly being called upon.', url:'https://www.bbc.com/news/science-environment' },
-    { source:'Financial Times', headline:'Private equity pivots to operational value creation', summary:'With higher interest rates compressing leverage-driven returns, top PE firms are doubling down on operational improvements. ESG and impact metrics are increasingly part of value creation plans.', url:'https://www.ft.com/private-equity' }
-  ]
-};
-
-function toggleBriefing() {
-  const body=document.getElementById('briefing-body');
-  const chevron=document.getElementById('briefing-chevron');
-  const isOpen=body.classList.contains('open');
-  if(!isOpen) renderBriefing();
-  body.classList.toggle('open');
-  chevron.style.transform=isOpen?'':'rotate(180deg)';
-}
-
-function renderBriefing() {
-  const cont=document.getElementById('briefing-content');
-  cont.innerHTML=`
-    <div class="briefing-section-label">🎧 Recommended Listens</div>
-    ${BRIEFING.podcasts.map(p=>`
-      <div class="podcast-item">
-        <div class="podcast-dot" style="background:${p.dot}"></div>
-        <div class="podcast-info">
-          <div class="podcast-show">${esc(p.show)}</div>
-          <div class="podcast-title">${esc(p.title)}</div>
-          <div class="podcast-desc">${esc(p.desc)}</div>
-          <a class="briefing-link" href="${p.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Listen / Subscribe</a>
-        </div>
-      </div>`).join('')}
-    <div class="briefing-section-label">🌍 News Highlights</div>
-    ${BRIEFING.news.map(n=>`
-      <div class="news-item">
-        <div class="news-source">${esc(n.source)}</div>
-        <div class="news-headline">${esc(n.headline)}</div>
-        <div class="news-summary">${esc(n.summary)}</div>
-        <a class="briefing-link" href="${n.url}" target="_blank" rel="noopener"><i class="ti ti-external-link" style="font-size:11px"></i> Read more</a>
-      </div>`).join('')}
-    <div class="briefing-updated">Curated content · Updated ${BRIEFING.updated}</div>`;
-}
-
-/* ── INIT ──────────────────────────────────────────────── */
-function renderAll() { renderHeader(); renderTasks(); renderMotivations(); renderAffirmations(); renderVis(); updateMbTodayCard(); }
-if (!data.vicalviLeads) { data.vicalviLeads = {}; }
-
-function buildSunRays() {
-  const rays=document.getElementById('rays');
-  for(let i=0;i<12;i++){
-    const ray=document.createElement('div'); ray.className='ray';
-    const len=30+(i%3)*12;
-    ray.style.cssText=`height:${len}px;transform:rotate(${i*30}deg) translateX(-50%);margin-left:50%;margin-top:calc(50% - ${len}px);`;
-    rays.appendChild(ray);
+  function renderMetaRow(dl, label, value) {
+    if (!value) return;
+    dl.appendChild(el('dt', { text: label }));
+    dl.appendChild(el('dd', { text: value }));
   }
-}
 
-buildSunRays();
-startAffirmationBg();
+  function renderProduct(item) {
+    var photo = el('div', { class: 'photo' });
+    if (item.photoUrl) {
+      photo.appendChild(el('img', { src: item.photoUrl, alt: item.name, loading: 'lazy' }));
+    } else {
+      photo.appendChild(el('div', { class: 'placeholder label-font', text: item.name }));
+    }
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/sw.js').catch(()=>{});
-}
+    var priceBlock = el('div', { class: 'price-block' });
+    if (item.discountedPrice) {
+      priceBlock.appendChild(el('span', { class: 'price-strike', text: item.price }));
+      var finalRow = el('span', { class: 'price-final' });
+      finalRow.appendChild(document.createTextNode(item.discountedPrice));
+      if (item.discount) {
+        finalRow.appendChild(el('span', { class: 'price-badge', text: '−' + item.discount }));
+      }
+      priceBlock.appendChild(finalRow);
+    } else {
+      priceBlock.appendChild(el('span', { class: 'price-final', text: item.price || 'Sur devis' }));
+    }
+
+    var head = el('div', { class: 'product-head' }, [
+      el('h2', { text: item.name }),
+      priceBlock
+    ]);
+
+    var dl = el('dl', { class: 'meta' });
+    renderMetaRow(dl, 'Fournisseur', item.supplier);
+    renderMetaRow(dl, 'Dim.', item.dimension);
+    renderMetaRow(dl, 'Détails', item.description);
+    renderMetaRow(dl, 'Design', item.designer);
+
+    var body = el('div', { class: 'product-body' }, [head, dl.children.length ? dl : null]);
+
+    return el('article', { class: 'product' }, [photo, body]);
+  }
+
+  var state = { categories: [], activeIndex: 0 };
+
+  function renderTabs() {
+    var nav = document.getElementById('tabs');
+    nav.innerHTML = '';
+    state.categories.forEach(function (cat, idx) {
+      var btn = el('button', {
+        type: 'button',
+        'aria-selected': idx === state.activeIndex ? 'true' : 'false',
+        text: toTitleCase(cat.name)
+      });
+      btn.addEventListener('click', function () {
+        state.activeIndex = idx;
+        renderTabs();
+        renderActiveCategory();
+      });
+      nav.appendChild(btn);
+    });
+  }
+
+  function renderActiveCategory() {
+    var cat = state.categories[state.activeIndex];
+    document.getElementById('page-title').textContent = cat ? toTitleCase(cat.name) : '';
+    var grid = document.getElementById('grid');
+    grid.innerHTML = '';
+    if (!cat) return;
+    cat.items.forEach(function (raw) {
+      grid.appendChild(renderProduct(normalizeItem(raw)));
+    });
+  }
+
+  function setStatus(msg, showRetry) {
+    var box = document.getElementById('status');
+    if (!msg) { box.hidden = true; box.innerHTML = ''; return; }
+    box.hidden = false;
+    box.textContent = msg;
+    if (showRetry) {
+      var btn = el('button', { type: 'button', text: 'Réessayer' });
+      btn.addEventListener('click', load);
+      box.appendChild(btn);
+    }
+  }
+
+  function load() {
+    setStatus('Chargement du catalogue…', false);
+    document.getElementById('grid').innerHTML = '';
+    fetch(CSV_URL + '&_=' + Date.now())
+      .then(function (res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function (text) {
+        var rows = parseCSV(text);
+        var categories = buildCatalogue(rows);
+        if (!categories.length) throw new Error('empty');
+        state.categories = categories;
+        if (state.activeIndex >= categories.length) state.activeIndex = 0;
+        setStatus(null);
+        renderTabs();
+        renderActiveCategory();
+        document.getElementById('updated-note').textContent =
+          'Catalogue mis à jour en continu · ' + new Date().toLocaleString('fr-FR');
+      })
+      .catch(function (err) {
+        console.error('[vicalvi] load failed', err);
+        setStatus('Impossible de charger le catalogue pour le moment.', true);
+      });
+  }
+
+  load();
+
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function () {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    });
+  }
+})();
 </script>
+
 </body>
 </html>
