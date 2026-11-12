@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vicalvi — Sélection</title>
+<title>Vicalvi — Black Friday</title>
 <meta name="description" content="Catalogue Vicalvi — mobilier, luminaires, vaisselle, accessoires et textiles.">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#F6F4EC">
+<meta name="theme-color" content="#14120F">
 <link rel="icon" href="icons/icon-192.png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -313,9 +313,68 @@
     color: var(--taupe);
   }
   footer .updated { color: var(--warm-grey); font-size: 11px; margin-top: 4px; }
+
+  /* ===== BLACK FRIDAY THEME (active only while body.bf is set) ===== */
+  :root { --bf-accent: #FF681A; --bf-ink: #14120F; --bf-ecru: #F6F4EC; --bf-gold: #DDDCB5; }
+  body.bf { background: var(--bf-ink); color: var(--bf-ecru); }
+  body.bf #splash { background: var(--bf-ink); }
+  body.bf .splash-logo, body.bf .brand img { filter: invert(1); }
+  body.bf .wing-half img { filter: invert(1) sepia(1) saturate(4) hue-rotate(-12deg) brightness(1.05); }
+  body.bf .splash-sub { color: var(--bf-accent); }
+  body.bf .brand-tagline, body.bf .contact-block, body.bf footer { color: var(--warm-grey); }
+  body.bf .contact-block a, body.bf a:hover { color: var(--bf-ecru); }
+  body.bf nav { border-color: #2E2A25; }
+  body.bf nav button { color: var(--warm-grey); }
+  body.bf nav button:hover, body.bf nav button[aria-selected="true"] { color: var(--bf-ecru); }
+  body.bf nav button.bf-tab { color: var(--bf-accent); }
+  body.bf nav button.bf-tab[aria-selected="true"] { color: var(--bf-accent); border-bottom: 1px solid var(--bf-accent); }
+  body.bf .photo { background: #FFFFFF; }
+  body.bf .product-head h2, body.bf .price-final { color: var(--bf-ecru); }
+  body.bf dl.meta, body.bf .color-row { color: #CFC7BB; border-color: #2E2A25; }
+  body.bf .colors { border-color: #2E2A25; }
+  body.bf .price-strike, body.bf .price-strike-sm { color: #8C8178; }
+  body.bf .price-badge {
+    color: var(--bf-ink); background: var(--bf-accent);
+    padding: 2px 7px 1px; border-radius: 20px; font-weight: 500; font-size: 10.5px;
+  }
+  body.bf .status-msg { color: var(--warm-grey); }
+  body.bf .status-msg button { color: var(--bf-ecru); }
+  body.bf footer { border-color: #2E2A25; }
+  .photo-tag { display: none; }
+  body.bf .photo-tag {
+    display: block; position: absolute; top: 14px; left: 14px; z-index: 2;
+    background: var(--bf-ink); color: var(--bf-ecru);
+    font-family: 'Josefin Sans', sans-serif; font-size: 11px; letter-spacing: 0.18em;
+    text-transform: uppercase; padding: 7px 11px 5px;
+  }
+  body.bf .photo-tag b { color: var(--bf-accent); font-weight: 500; }
+
+  .bf-ribbon { display: none; }
+  body.bf .bf-ribbon {
+    display: block; overflow: hidden; white-space: nowrap;
+    background: var(--bf-accent); color: var(--bf-ink);
+    font-family: 'Josefin Sans', sans-serif; font-size: 12px; letter-spacing: 0.24em;
+    text-transform: uppercase; padding: 10px 0 8px;
+  }
+  .bf-ribbon span { display: inline-block; padding-left: 100%; animation: bf-scroll 28s linear infinite; }
+  @keyframes bf-scroll { from { transform: translateX(0); } to { transform: translateX(-100%); } }
+  @media (prefers-reduced-motion: reduce) { .bf-ribbon span { animation: none; padding-left: 20px; } }
+
+  .bf-kicker { display: none; }
+  body.bf .bf-kicker {
+    display: block; font-family: 'Josefin Sans', sans-serif; font-size: 12px;
+    letter-spacing: 0.32em; text-transform: uppercase; color: var(--bf-accent); margin-bottom: 14px;
+  }
+  .bf-intro { display: none; }
+  body.bf .bf-intro {
+    display: block; max-width: 560px; margin-top: 18px; font-size: 14px; line-height: 1.7; color: #CFC7BB;
+  }
+  body.bf .hero h1 .bf-word { font-weight: 500; }
 </style>
 </head>
-<body>
+<body class="bf">
+
+  <div class="bf-ribbon" aria-hidden="true"><span id="bf-ribbon-text"></span></div>
 
   <div id="splash">
     <div class="wing-stage">
@@ -323,7 +382,7 @@
       <div class="wing-half wing-right"><img src="assets/butterfly_motif.gif" alt=""></div>
     </div>
     <img class="splash-logo" src="assets/logo_black.png" alt="Vicalvi">
-    <div class="splash-sub label-font">Aménager les beaux espaces</div>
+    <div class="splash-sub label-font" id="splash-sub">Aménager les beaux espaces</div>
   </div>
 
   <header>
@@ -341,7 +400,9 @@
   </header>
 
   <section class="hero">
+    <div class="bf-kicker" id="bf-kicker">Black Friday · au pied du sapin</div>
     <h1 id="page-title" class="label-font"></h1>
+    <p class="bf-intro" id="bf-intro">Nos pièces en showroom changent de place : luminaires, vaisselle, objets et mobilier sont à prix doux, à emporter au 12-14 rue Saint-Nicolas. Jusqu'à épuisement du stock.</p>
   </section>
 
   <main>
@@ -365,6 +426,35 @@
   var CSV_URL = 'https://docs.google.com/spreadsheets/d/' + SHEET_ID + '/export?format=csv&gid=' + SHEET_GID;
 
   var HEADER_SIGNATURE = 'Nom produits';
+
+  // ===== BLACK FRIDAY SETTINGS =====
+  // The theme turns on automatically between BF_START and BF_END (Paris time),
+  // then the page goes back to its usual look by itself. Add ?bf=1 to the URL
+  // to preview it outside those dates, or ?bf=0 to switch it off.
+  var BF_START = '2026-11-01T00:00:00+01:00';
+  var BF_END   = '2026-12-01T00:00:00+01:00';
+  var BF_TOP_TAB_LABEL = 'Les −30 %';
+  var BF_TOP_MIN_DISCOUNT = 30;
+  var BF_RIBBON = 'Black Friday chez Vicalvi · au pied du sapin · 12-14 rue Saint-Nicolas, Paris 12e · jusqu’à −30 % sur une sélection · jusqu’à épuisement du stock · ';
+
+  function bfActive() {
+    var q = (location.search.match(/[?&]bf=([01])/) || [])[1];
+    if (q === '1') return true;
+    if (q === '0') return false;
+    var now = Date.now();
+    return now >= Date.parse(BF_START) && now < Date.parse(BF_END);
+  }
+  var BF = bfActive();
+  if (BF) {
+    document.body.classList.add('bf');
+    document.title = 'Vicalvi — Black Friday';
+    document.getElementById('bf-ribbon-text').textContent = BF_RIBBON + BF_RIBBON;
+    document.getElementById('splash-sub').textContent = 'Black Friday · au pied du sapin';
+  } else {
+    document.body.classList.remove('bf');
+    document.title = 'Vicalvi — Sélection';
+  }
+
 
   // Official product photos sourced from suppliers' own sites, used until
   // each row gets its own "Photo URL" column value. Matched by product name
@@ -625,6 +715,13 @@
     } else {
       photo.appendChild(el('div', { class: 'placeholder label-font', text: item.name }));
     }
+    var tagDiscount = item.discount || (item.colors && item.colors[0] && item.colors[0].discount) || '';
+    if (BF && tagDiscount) {
+      var tag = el('div', { class: 'photo-tag' });
+      tag.appendChild(document.createTextNode('Black Friday '));
+      tag.appendChild(el('b', { text: '−' + tagDiscount }));
+      photo.appendChild(tag);
+    }
 
     var priceBlock = el('div', { class: 'price-block' });
     if (item.colors) {
@@ -686,8 +783,9 @@
       var btn = el('button', {
         type: 'button',
         'aria-selected': idx === state.activeIndex ? 'true' : 'false',
-        text: toTitleCase(cat.name)
+        text: cat.isBF ? cat.name : toTitleCase(cat.name)
       });
+      if (cat.isBF) btn.classList.add('bf-tab');
       btn.addEventListener('click', function () {
         state.activeIndex = idx;
         renderTabs();
@@ -699,7 +797,17 @@
 
   function renderActiveCategory() {
     var cat = state.categories[state.activeIndex];
-    document.getElementById('page-title').textContent = cat ? toTitleCase(cat.name) : '';
+    var titleEl = document.getElementById('page-title');
+    titleEl.textContent = '';
+    if (cat && BF && cat.isBF) {
+      titleEl.appendChild(el('span', { class: 'bf-word', text: 'Black Friday' }));
+      titleEl.appendChild(document.createElement('br'));
+      titleEl.appendChild(document.createTextNode('jusqu\u2019à −30 %'));
+    } else if (cat) {
+      titleEl.textContent = toTitleCase(cat.name);
+    }
+    var intro = document.getElementById('bf-intro');
+    if (intro) intro.style.display = (cat && cat.isBF) ? '' : 'none';
     var grid = document.getElementById('grid');
     grid.innerHTML = '';
     if (!cat) return;
@@ -732,6 +840,17 @@
         var rows = parseCSV(text);
         var categories = buildCatalogue(rows);
         if (!categories.length) throw new Error('empty');
+        if (BF) {
+          var top = { name: BF_TOP_TAB_LABEL, items: [], isBF: true };
+          categories.forEach(function (cat) {
+            cat.items.forEach(function (raw) {
+              var it = normalizeItem(raw);
+              var pct = parseFloat((it.discount || '').replace(',', '.'));
+              if (it.discountedPrice && pct >= BF_TOP_MIN_DISCOUNT) top.items.push(raw);
+            });
+          });
+          if (top.items.length) categories.unshift(top);
+        }
         state.categories = categories;
         if (state.activeIndex >= categories.length) state.activeIndex = 0;
         setStatus(null);
